@@ -1,0 +1,19 @@
+﻿@model List<Movie>
+@{
+    ViewData["Title"] = "Home";
+}
+
+<div align="center">
+    
+    <h1>Currently showing:</h1>
+    <ul class="movieposters">
+        @foreach (var movie in Model)
+        {
+            <li>
+                <a href="/movies/@Uri.EscapeUriString(movie.UrlTitle)">
+                    <img src="/img/posters/@Uri.EscapeUriString(movie.Image)"/>
+                </a><span>@movie.Title</span>
+            </li>
+        }
+    </ul>
+</div>

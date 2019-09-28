@@ -1,0 +1,47 @@
+﻿@model Movie
+@{
+    ViewBag.Layout = "FullPage";
+}
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        var theWindow        = $(window),
+            $bg              = $('#bgImage'),
+            aspectRatio      = $bg.width() / $bg.height();
+	    			    		
+        function resizeBg() {
+
+            if ( (theWindow.width() / theWindow.height()) < aspectRatio ) {
+                $bg
+                    .removeClass()
+                    .addClass('bgheight');
+            } else {
+                $bg
+                    .removeClass()
+                    .addClass('bgwidth');
+            }
+					
+        }
+	                   			
+        theWindow.resize(resizeBg).trigger("resize");
+
+    });
+</script>
+<div class="fullpage">
+    <div id="bgContainer" class="fullpage_background">
+        <img id="bgImage" class="background-image" src="/img/background/@Model.Image" />
+    </div>
+    <div class="fullpage_container">
+        <div class="fullpage_top">
+            <button class="trailer_button"></button>
+        </div>
+        <div class="fullpage_bottom">
+            <div class="container">
+                Second part<br />
+                Second part<br />
+                Second part<br />
+                Second part<br />
+            </div>
+        </div>
+    </div>
+</div>

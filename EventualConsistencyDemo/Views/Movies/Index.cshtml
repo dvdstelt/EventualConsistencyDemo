@@ -1,0 +1,24 @@
+﻿@using System.Net
+@using System.Web
+@model List<EventualConsistencyDemo.Models.Movie>
+@{
+    ViewData["Title"] = "Home";
+}
+
+<ul class="movies">
+    @foreach (var movie in Model)
+    {
+        <li>
+            <div class="moviedetails">
+                <div class="movieposter">
+                    <a href="/movies/@Uri.EscapeUriString(movie.UrlTitle)">
+                        <img src="/img/posters/@Uri.EscapeUriString(movie.Image)" />
+                    </a>
+                </div>
+                <div class="title"><h2>@movie.Title</h2></div>
+                <div class="description">@HttpUtility.HtmlDecode(movie.Description)</div>
+            </div>
+            
+        </li>
+    }
+</ul>
