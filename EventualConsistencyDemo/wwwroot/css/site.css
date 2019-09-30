@@ -7,6 +7,7 @@ ul {
 
 .navbar {
     background-color: #e30b1a !important;
+    z-index: 10;
 }
 
 .navbar-light .navbar-brand {
@@ -108,7 +109,21 @@ a.navbar-brand {
     display: block;
     overflow: hidden;
     position: relative;
+    background-image: linear-gradient(to bottom,rgba(0,0,0,0),black);
+    background-color: transparent;
+    content: '';
 }
+
+    .fullpage_background:after {
+        background-image: linear-gradient(to bottom,rgba(0,0,0,0),black);
+        background-color: transparent;
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 50%;
+        content: '';
+    }
 
     .fullpage_background img {
         /*height: auto;*/
@@ -120,36 +135,41 @@ a.navbar-brand {
 
 .fullpage_container {
     position: absolute;
-    display: flex;
-    flex-direction: column;
+    /*display: flex;
+    flex-direction: column;*/
+    display: block;
     bottom: 0;
     left: 0;
     right: 0;
     top: 0;
     width: 100%;
     height: 100%;
+    z-index: 0;
 }
 
 .fullpage_top {
     z-index: 1;
-    flex: 1 0 auto;
+    /*flex: 1 0 auto;*/
     position: relative;
     display: block;
 }
 
 .fullpage_bottom {
-    display: flex;
+    display: /*flex*/;
     position: relative;
     bottom: 64px;
     left: 0;
     right: 0;
+    z-index: 1;
+    padding-bottom: 25px;
 }
 
 .trailer_button {
-    top: 50%;
+    top: 40%;
     height: 80px;
     width: 80px;
     border-radius: 40px;
+    border: 0;
     padding: 3px 8px;
     background-color: rgba(0, 0, 0, .32);
     color: #ffc426;
@@ -162,12 +182,63 @@ a.navbar-brand {
 }
 
     .trailer_button:before {
-        background-image: url(/img/icon-play.svg);
+        background-image: url('/img/icon-play.svg');
         background-size: 23px 37px;
+        width: 23px;
+        height: 37px;
         display: inline-block;
         overflow: visible;
-        margin: 0;
+        margin: 18px 23px;
+        content: '';
     }
+
+.movietitle {
+    color: #fff;
+    font-weight: bold;
+    font-size: 50px;
+    line-height: 52px;
+    letter-spacing: 0.05em;
+    font-family: 'Pathway Gothic One', sans-serif;
+    text-transform: uppercase;
+}
+
+.movie_button_container {
+    max-width: 360px;
+    min-width: 360px;
+    width: 360px;
+    margin-top: 20px;
+}
+
+a.movie_button {
+    display: inline-block;
+    height: 50px;
+    max-width: 360px;
+    width: 100%;
+    background-color: #ffc426;
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#f7da66),to(#ffc426));
+    background-image: -webkit-linear-gradient(top,#f7da66,#ffc426);
+    background-image: -moz-linear-gradient(top,#f7da66,#ffc426);
+    background-image: -o-linear-gradient(top,#f7da66,#ffc426);
+    background-image: linear-gradient(to bottom,#f7da66,#ffc426);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Pathway Gothic One', sans-serif;
+    font-weight: bold;
+    color: #000;
+    letter-spacing: 0.05em;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    padding: 15px;
+}
+
+.darkbackground {
+    background-color: #000;
+    width: 100%;
+    color: #fff;
+}
 
 /* Sticky footer styles
 -------------------------------------------------- */
