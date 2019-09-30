@@ -87,13 +87,106 @@ a.navbar-brand {
     padding: 0;
 }
 
-.fullpage_background {
-    height: calc(100vh - 109px);
+/* Movie details page 
+-------------------------------------------------- */
+
+.movie_header {
+    height: calc(100vh - 60px);
+    position: relative;
+    display: block;
 }
 
-.fullpage_background img {
-    min-height: 100%;
-    min-width: 100%;
+.movie_background {
+    height: calc(100vh - 60px);
+    overflow: hidden;
+}
+
+    .movie_background img {
+        min-width: 100%;
+        min-height: 100%;
+    }
+
+    .movie_background:after {
+        content: '';
+        background-image: linear-gradient(to bottom,rgba(0,0,0,0),black);
+        background-color: transparent;
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 50%;
+    }
+
+.trailer_button {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border-radius: 40px;
+    background-color: rgba(0,0,0,.32);
+    border: none;
+    padding: 3px 8px;
+}
+
+.trailer_button:before {
+    background-image: url('/img/icon-play.svg');
+    background-size: 23px 37px;
+    width: 23px;
+    height: 37px;
+    display: inline-block;
+    overflow: visible;
+    margin: 18px 23px;
+    content: '';
+}
+    
+
+.movie_header_content {
+    box-sizing: border-box;
+    position: absolute;
+    bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    margin: 0 auto;
+}
+
+.movie_header_content_top {
+    display: flex;
+    position: relative;
+    flex: 1 0 auto;
+}
+
+.movie_header_content_bottom {
+    bottom: 64px;
+    position: relative;
+    display: flex;
+    left: 0;
+    right: 0;
+    flex: none;
+}
+
+    .movie_header_content_bottom > .container {
+        display: flex;
+    }
+
+/* Bootstrap container */
+.movie_header_details {
+    display: flex;
+    margin: 0 400px;
+    width: calc(100vw - 800px);
+}
+
+.container > .poster {
+    width: 180px;
+}
+
+.container > .details {
+    margin-left: 50px;
 }
 
 .bgwidth {
@@ -103,94 +196,6 @@ a.navbar-brand {
 .bgheight {
     height: 100%;
 }
-
-.fullpage_background {
-    margin-top: 0;
-    display: block;
-    overflow: hidden;
-    position: relative;
-    background-image: linear-gradient(to bottom,rgba(0,0,0,0),black);
-    background-color: transparent;
-    content: '';
-}
-
-    .fullpage_background:after {
-        background-image: linear-gradient(to bottom,rgba(0,0,0,0),black);
-        background-color: transparent;
-        width: 100%;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        height: 50%;
-        content: '';
-    }
-
-    .fullpage_background img {
-        /*height: auto;*/
-        top: auto;
-        /*transform-origin: 50% 0;
-    left: 50%;
-    transform: translateX(-50%);*/
-    }
-
-.fullpage_container {
-    position: absolute;
-    /*display: flex;
-    flex-direction: column;*/
-    display: block;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-}
-
-.fullpage_top {
-    z-index: 1;
-    /*flex: 1 0 auto;*/
-    position: relative;
-    display: block;
-}
-
-.fullpage_bottom {
-    display: /*flex*/;
-    position: relative;
-    bottom: 64px;
-    left: 0;
-    right: 0;
-    z-index: 1;
-    padding-bottom: 25px;
-}
-
-.trailer_button {
-    top: 40%;
-    height: 80px;
-    width: 80px;
-    border-radius: 40px;
-    border: 0;
-    padding: 3px 8px;
-    background-color: rgba(0, 0, 0, .32);
-    color: #ffc426;
-    text-align: center;
-    display: inline-block;
-    position: absolute;
-    left: 50%;
-    margin-left: -40px;
-    margin-top: -40px;
-}
-
-    .trailer_button:before {
-        background-image: url('/img/icon-play.svg');
-        background-size: 23px 37px;
-        width: 23px;
-        height: 37px;
-        display: inline-block;
-        overflow: visible;
-        margin: 18px 23px;
-        content: '';
-    }
 
 .movietitle {
     color: #fff;
@@ -234,11 +239,24 @@ a.movie_button {
     padding: 15px;
 }
 
+.down_arrow {
+    background-image: url('/img/arrow-down.svg');
+    background-size: 100% 100%;
+    height: 16px;
+    width: 26px;
+    bottom: 20px;
+    display: block;
+    left: 50%;
+    margin-left: -13px;
+    position: absolute;
+}
+
 .darkbackground {
     background-color: #000;
     width: 100%;
     color: #fff;
 }
+
 
 /* Sticky footer styles
 -------------------------------------------------- */

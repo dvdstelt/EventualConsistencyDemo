@@ -13,10 +13,6 @@
             var navbarHeight = $('.navbar').first().outerHeight();
             var theWindowHeight = theWindow.height() - navbarHeight;
 
-            var container = $('.fullpage_container').first();
-            container.css('top', navbarHeight + 'px');
-            $('.fullpage_bottom').first().css('bottom', navbarHeight + 76 + 'px');
-
             if ((theWindow.width() / theWindowHeight) < aspectRatio) {
                 $bg
                     .removeClass()
@@ -29,22 +25,22 @@
 
         }
 
-        //theWindow.resize(resizeBg).trigger("resize");
+        theWindow.resize(resizeBg).trigger("resize");
 
     });
 </script>
-<div class="fullpage row">
-    <div id="bgContainer" class="fullpage_background">
-        <img id="bgImage" class="background-image" src="/img/background/@Model.Image" />
+<section class="movie_header">
+    <div id="bgContainer" class="movie_background">
+        <img id="bgImage" src="/img/background/@Model.Image" />
     </div>
-    <div class="fullpage_container">
-        <div class="fullpage_top">
+    <div class="movie_header_content">
+        <div class="movie_header_content_top">
             <button class="trailer_button"></button>
         </div>
-        <div class="fullpage_bottom">
+        <div class="movie_header_content_bottom">
             <div class="container">
-                <div class="movieposter"><img src="/img/posters/@Model.Image" width="200" /></div>
-                <div class="row">
+                <div class="poster"><img src="/img/posters/@Model.Image" width="200" /></div>
+                <div class="details">
                     <div>
                         <h1>
                             <span class="movietitle">@Model.Title</span>
@@ -57,7 +53,8 @@
             </div>
         </div>
     </div>
-</div>
+    <span class="down_arrow"></span>
+</section>
 <div class="darkbackground">
     <div class="container">
         <img src="/img/posters/@Model.Image"/>
