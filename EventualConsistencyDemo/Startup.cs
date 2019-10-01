@@ -12,6 +12,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NServiceBus;
+using NServiceBus.Routing;
+using static Shared.Configuration.Configuration;
 
 namespace EventualConsistencyDemo
 {
@@ -23,6 +26,7 @@ namespace EventualConsistencyDemo
         }
 
         public IConfiguration Configuration { get; }
+        private IEndpointInstance endpointInstance;
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -64,6 +68,13 @@ namespace EventualConsistencyDemo
 
 
             });
+        }
+
+        private void StartEndpoint()
+        {
+            var endpointConfiguration = ConfigureEndpoint("EventualConsistencyDemo");
+
+            endpointInstance = NServiceBus.Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
         }
     }
 }
