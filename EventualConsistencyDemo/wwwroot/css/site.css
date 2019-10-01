@@ -6,8 +6,9 @@ ul {
 }
 
 .navbar {
-    background-color: #e30b1a !important;
+    background-color: #ffc426 !important;
     z-index: 10;
+    margin-bottom: 0 !important;
 }
 
 .navbar-light .navbar-brand {
@@ -16,7 +17,7 @@ ul {
 }
 
 a.nav-link {
-    color: #fac70c !important;
+    color: #000 !important;
     width: 90px;
     text-align: center;
 }
@@ -79,10 +80,6 @@ a.navbar-brand {
 
 /* Movie page */
 
-.navbar {
-    margin-bottom: 0 !important;
-}
-
 .container-fluid {
     padding: 0;
 }
@@ -129,17 +126,17 @@ a.navbar-brand {
     padding: 3px 8px;
 }
 
-.trailer_button:before {
-    background-image: url('/img/icon-play.svg');
-    background-size: 23px 37px;
-    width: 23px;
-    height: 37px;
-    display: inline-block;
-    overflow: visible;
-    margin: 18px 23px;
-    content: '';
-}
-    
+    .trailer_button:before {
+        background-image: url('/img/icon-play.svg');
+        background-size: 23px 37px;
+        width: 23px;
+        height: 37px;
+        display: inline-block;
+        overflow: visible;
+        margin: 18px 23px;
+        content: '';
+    }
+
 
 .movie_header_content {
     box-sizing: border-box;
@@ -173,6 +170,12 @@ a.navbar-brand {
     .movie_header_content_bottom > .container {
         display: flex;
     }
+
+/* Dennis */
+.dennis_owns_this_shit {
+    padding: 50px 0;
+    text-align: center;
+}
 
 /* Bootstrap container */
 .movie_header_details {
@@ -239,6 +242,31 @@ a.movie_button {
     padding: 15px;
 }
 
+a.movie_button_disabled {
+    display: inline-block;
+    height: 50px;
+    max-width: 360px;
+    width: 100%;
+    background-color: #aaa;
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#aaa),to(#999));
+    background-image: -webkit-linear-gradient(top,#aaa,#999);
+    background-image: -moz-linear-gradient(top,#aaa,#999);
+    background-image: -o-linear-gradient(top,#aaa,#999);
+    background-image: linear-gradient(to bottom,#aaa,#999);
+    border: none;
+    border-radius: 6px;
+    cursor: default;
+    font-family: 'Pathway Gothic One', sans-serif;
+    font-weight: bold;
+    color: #000;
+    letter-spacing: 0.05em;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    padding: 15px;
+}
+
 .down_arrow {
     background-image: url('/img/arrow-down.svg');
     background-size: 100% 100%;
@@ -251,12 +279,168 @@ a.movie_button {
     position: absolute;
 }
 
+/* Movie details bottom */
+
 .darkbackground {
     background-color: #000;
     width: 100%;
     color: #fff;
 }
 
+.rating {
+    padding: 50px 0;
+}
+
+/* Theaters and movie times
+-------------------------------------------------- */
+.title {
+    font-family: 'Pathway Gothic One', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 18px;
+    font-weight: bold;
+    display: block;
+}
+
+.inputGroup {
+    background-color: #D1D7DC;
+    display: block;
+    margin: 10px 0;
+    position: relative;
+}
+
+    .inputGroup label {
+        padding: 12px 30px;
+        width: 100%;
+        display: block;
+        text-align: left;
+        color: #3C454C;
+        cursor: pointer;
+        position: relative;
+        z-index: 2;
+        transition: color 200ms ease-in;
+        overflow: hidden;
+    }
+
+        .inputGroup label:before {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            content: '';
+            background-color: #ffc426;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            -webkit-transform: translate(-50%, -50%) scale3d(1, 1, 1);
+            transform: translate(-50%, -50%) scale3d(1, 1, 1);
+            transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            z-index: -1;
+        }
+
+        .inputGroup label:after {
+            width: 32px;
+            height: 32px;
+            content: '';
+            border: 2px solid #D1D7DC;
+            background-color: #fff;
+            background-image: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5.414 11L4 12.414l5.414 5.414L20.828 6.414 19.414 5l-10 10z' fill='%23fff' fill-rule='nonzero'/%3E%3C/svg%3E ");
+            background-repeat: no-repeat;
+            background-position: 2px 3px;
+            border-radius: 50%;
+            z-index: 2;
+            position: absolute;
+            right: 30px;
+            top: 50%;
+            -webkit-transform: translateY(-50%);
+            transform: translateY(-50%);
+            cursor: pointer;
+            transition: all 200ms ease-in;
+        }
+
+    .inputGroup input:checked ~ label {
+        color: #fff;
+    }
+
+        .inputGroup input:checked ~ label:before {
+            -webkit-transform: translate(-50%, -50%) scale3d(56, 56, 1);
+            transform: translate(-50%, -50%) scale3d(56, 56, 1);
+            opacity: 1;
+        }
+
+        .inputGroup input:checked ~ label:after {
+            background-color: #e30b1a;
+            border-color: #e30b1a;
+        }
+
+    .inputGroup input {
+        width: 32px;
+        height: 32px;
+        order: 1;
+        z-index: 2;
+        position: absolute;
+        right: 30px;
+        top: 50%;
+        -webkit-transform: translateY(-50%);
+        transform: translateY(-50%);
+        cursor: pointer;
+        visibility: hidden;
+    }
+
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+    outline: 0;
+    box-shadow: none;
+    border: 0 !important;
+    background: #ffc426;
+    background-image: none;
+}
+
+    /* Remove IE arrow */
+    select::-ms-expand {
+        display: none;
+    }
+/* Custom Select */
+.select {
+    margin: 10px 0;
+    position: relative;
+    display: flex;
+    width: 20em;
+    height: 3em;
+    line-height: 3;
+    background: #2c3e50;
+    overflow: hidden;
+    border-radius: .25em;
+}
+
+select {
+    flex: 1;
+    padding: 0 .5em;
+    color: 000;
+    cursor: pointer;
+}
+/* Arrow */
+.select::after {
+    content: '\25BC';
+    color: #ffc426;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0 1em;
+    background: #e30b1a;
+    cursor: pointer;
+    pointer-events: none;
+    -webkit-transition: .25s all ease;
+    -o-transition: .25s all ease;
+    transition: .25s all ease;
+}
+/* Transition */
+.select:hover::after {
+    color: #fff;
+}
 
 /* Sticky footer styles
 -------------------------------------------------- */

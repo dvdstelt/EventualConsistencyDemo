@@ -6,10 +6,12 @@ namespace EventualConsistencyDemo.Controllers
 {
     public class MoviesController : Controller
     {
+        private readonly Theaters theaters;
         private readonly Movies movies;
 
-        public MoviesController(Movies movies)
+        public MoviesController(Movies movies, Theaters theaters)
         {
+            this.theaters = theaters;
             this.movies = movies;
         }
 
@@ -20,7 +22,11 @@ namespace EventualConsistencyDemo.Controllers
 
         public ActionResult Movie(string movieurl)
         {
-            return View(movies.GetMovies().Single(s => s.UrlTitle == movieurl));
+            var vm = new MovieViewModel();
+            vm.Movie = movies.GetMovies().Single(s => s.UrlTitle == movieurl);
+            vm.Theaters = theaters.GetTheaters();
+
+            return View(vm);
         }
     }
 }

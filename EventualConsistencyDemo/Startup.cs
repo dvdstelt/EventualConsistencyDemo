@@ -36,6 +36,7 @@ namespace EventualConsistencyDemo
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddMemoryCache();
             services.AddSingleton<Movies>();
+            services.AddSingleton<Theaters>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

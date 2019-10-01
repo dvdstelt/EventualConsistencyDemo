@@ -14,5 +14,9 @@ namespace EventualConsistencyDemo.Models
         public int Rating { get; set; }
         public string Description { get; set; }
         public List<string> Icons { get; set; }
+        public string MovieDetails { get; set; }
+        public DateTime ReleaseDate { get; set; }
+        public List<string> Showtimes { get; set; }
+        public double PricePerTicket { get; set; }
     }
 }
