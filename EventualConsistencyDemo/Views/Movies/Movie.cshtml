@@ -3,8 +3,26 @@
 @{
     ViewBag.Layout = "FullPage";
 }
+
+@section Scripts{
+
+    <script src="~/lib/signalr/dist/browser/signalr.js"></script>
+
+}
 <script type="text/javascript">
     $(document).ready(function () {
+
+        var connection = new signalR.HubConnectionBuilder().withUrl("/ticketHub").build();
+
+        //connection.on("sample-message", function (argA, argB) {
+            
+        //});
+
+        connection.start().then(function () {
+            //doi whatever is needed when the connection is established.
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
 
         var theWindow = $(window),
             $bg = $('#bgImage'),
