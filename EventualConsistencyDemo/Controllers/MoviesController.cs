@@ -1,5 +1,7 @@
 ﻿using System.Linq;
+using System.Text;
 using EventualConsistencyDemo.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventualConsistencyDemo.Controllers
@@ -27,6 +29,20 @@ namespace EventualConsistencyDemo.Controllers
             vm.Theaters = theaters.GetTheaters();
 
             return View(vm);
+        }
+
+        [HttpPost]
+        public string Movie(IFormCollection collection)
+        {
+            var sb = new StringBuilder();
+            foreach (var item in collection)
+            {
+                sb.Append(item + "|");
+            }
+
+            //  return JsonConvert.SerializeObject(chk);
+
+            return sb.ToString();
         }
     }
 }

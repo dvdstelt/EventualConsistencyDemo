@@ -23,7 +23,6 @@
                     .removeClass()
                     .addClass('bgwidth');
             }
-
         }
 
         $('#times').hide();
@@ -45,9 +44,28 @@
                 $('#totalPrice').text('$ ' + price);
             });
 
-
         $('#submit_button').click(function () {
             if ($(this).hasClass('movie_button_disabled')) return false;
+
+            var dataToPost = $('form#ticketForm').serialize();
+            console.log(dataToPost);
+
+            $.post('@(Url.Action("Movie", "Movies"))', dataToPost)
+                .done(function(response, status, jqxhr) {
+                    // this is the "success" callback
+                    console.log(response);
+                })
+                .fail(function(jqxhr, status, error) {
+                    console.log(error);
+                    // this is the ""error"" callback
+                });
+            
+            //$.post( 'some-url', $('form#ticketForm').serialize(), function(data) {
+            //        // ... do something with response from server
+            //        alert(data);
+            //    },
+            //    'json' // I expect a JSON response
+            //);
 
             return false;
         }); 
@@ -112,7 +130,7 @@
         <div class="dennis_owns_this_shit">
             <a href="https://compilesoftware.nl/" target="_blank"><img src="/img/banner.png" /></a>
         </div>
-        <form>
+        <form id="ticketForm">
             <div class="theaters_times" style="display: flex; padding-top: 50px;">
                 <div style="flex: 1; padding-right: 75px;" class="theaters">
                     <span class="title">Theaters</span>
@@ -121,7 +139,7 @@
                         @foreach (var theater in Model.Theaters)
                         {
                             <div class="inputGroup">
-                                <input id="@theater.Id" name="theaters_group" type="radio" />
+                                <input value="@theater.Id" id="@theater.Id" name="theaters_group" type="radio" />
                                 <label for="@theater.Id">@theater.Name</label>
                             </div>
                         }
@@ -134,7 +152,7 @@
                             @foreach (var showtime in Model.Movie.Showtimes)
                             {
                                 <div class="inputGroup">
-                                    <input id="@showtime" name="times_group" type="radio" />
+                                    <input value="@showtime" id="@showtime" name="times_group" type="radio" />
                                     <label for="@showtime">@showtime</label>
                                 </div>
                             }
