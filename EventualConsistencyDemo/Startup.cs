@@ -6,7 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NServiceBus;
-using static Shared.Configuration.Configuration;
+using NServiceBus.Extensions.DependencyInjection;
+using Shared.Configuration;
 
 namespace EventualConsistencyDemo
 {
@@ -18,7 +19,6 @@ namespace EventualConsistencyDemo
         }
 
         public IConfiguration Configuration { get; }
-        private IEndpointInstance endpointInstance;
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -28,6 +28,7 @@ namespace EventualConsistencyDemo
             services.AddMemoryCache();
             services.AddSingleton<Movies>();
             services.AddSingleton<Theaters>();
+            services.AddNServiceBus(new EndpointConfiguration("EventualConsistencyDemo").ApplyCommonConfiguration());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,13 +61,6 @@ namespace EventualConsistencyDemo
 
 
             });
-        }
-
-        private void StartEndpoint()
-        {
-            var endpointConfiguration = ConfigureEndpoint("EventualConsistencyDemo");
-
-            endpointInstance = NServiceBus.Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
         }
     }
 }
