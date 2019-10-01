@@ -50,6 +50,10 @@
             var dataToPost = $('form#ticketForm').serialize();
             console.log(dataToPost);
 
+            // Send data via SignalR
+            // Wait for SignalR to report back
+            // Replace what is down below ;-)
+
             $.post('@(Url.Action("Movie", "Movies"))', dataToPost)
                 .done(function(response, status, jqxhr) {
                     // this is the "success" callback
