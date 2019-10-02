@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using NServiceBus;
+using Shared.Commands;
 
 namespace EventualConsistencyDemo.Hubs
 {
@@ -13,9 +15,12 @@ namespace EventualConsistencyDemo.Hubs
             this.messageSession = messageSession;
         }
 
-        public async Task SendMessage(string user, string message)
+        public Task SubmitOrder(int theater, int movie, string time, int numberOfTickets)
         {
-            await Clients.All.SendAsync("ReceiveMessage", user, message);
+            return messageSession.Send(new SubmitOrder() 
+            {
+
+            });
         }
     }
 }
