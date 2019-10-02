@@ -7,9 +7,12 @@ namespace Shared.Configuration
 {
     public static class CommonConfiguration
     {
-        public static EndpointConfiguration ApplyCommonConfiguration(this EndpointConfiguration endpointConfiguration)
+        public static EndpointConfiguration ApplyCommonConfiguration(this EndpointConfiguration endpointConfiguration, Action<RoutingSettings> configureRouting = null)
         {
             var transport = endpointConfiguration.UseTransport<LearningTransport>();
+            var routing = transport.Routing();
+            configureRouting?.Invoke(routing);
+
             endpointConfiguration.UsePersistence<LearningPersistence>();
 
             var conventions = endpointConfiguration.Conventions();
