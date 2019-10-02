@@ -28,7 +28,14 @@ namespace EventualConsistencyDemo
             services.AddMemoryCache();
             services.AddSingleton<Movies>();
             services.AddSingleton<Theaters>();
-            services.AddNServiceBus(new EndpointConfiguration("EventualConsistencyDemo").ApplyCommonConfiguration());
+
+            var endpointConfiguration = new EndpointConfiguration("EventualConsistencyDemo");
+            endpointConfiguration.ApplyCommonConfiguration(routingConfig => 
+            {
+                routingConfig.RouteToEndpoint(typeof(Shared.Commands.SubmitOrder), "server");
+            });
+
+            services.AddNServiceBus(endpointConfiguration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
