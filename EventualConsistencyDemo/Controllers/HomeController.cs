@@ -5,21 +5,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using EventualConsistencyDemo.Models;
+using Shared.Entities;
 
 namespace EventualConsistencyDemo.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly Movies movies;
-
-        public HomeController(Movies movies)
-        {
-            this.movies = movies;
-        }
-
         public IActionResult Index()
         {
-            return View(movies.GetMovies());
+            return View(MoviesContext.GetMovies());
         }
 
         public IActionResult Movies()

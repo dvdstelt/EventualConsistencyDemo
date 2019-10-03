@@ -3,30 +3,31 @@ using System.Text;
 using EventualConsistencyDemo.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Entities;
 
 namespace EventualConsistencyDemo.Controllers
 {
     public class MoviesController : Controller
     {
-        private readonly Theaters theaters;
-        private readonly Movies movies;
+        //private readonly TheatersContext theatersContext;
+        //private readonly MoviesContext moviesContext;
 
-        public MoviesController(Movies movies, Theaters theaters)
-        {
-            this.theaters = theaters;
-            this.movies = movies;
-        }
+        //public MoviesController(MoviesContext moviesContext, TheatersContext theatersContext)
+        //{
+        //    this.theatersContext = theatersContext;
+        //    this.moviesContext = moviesContext;
+        //}
 
         public ActionResult Index()
         {
-            return View(movies.GetMovies());
+            return View(MoviesContext.GetMovies());
         }
 
         public ActionResult Movie(string movieurl)
         {
             var vm = new MovieViewModel();
-            vm.Movie = movies.GetMovies().Single(s => s.UrlTitle == movieurl);
-            vm.Theaters = theaters.GetTheaters();
+            vm.Movie = MoviesContext.GetMovies().Single(s => s.UrlTitle == movieurl);
+            vm.Theaters = TheatersContext.GetTheaters();
 
             return View(vm);
         }

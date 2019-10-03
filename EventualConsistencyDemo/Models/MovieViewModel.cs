@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Shared.Entities;
 
 namespace EventualConsistencyDemo.Models
 {

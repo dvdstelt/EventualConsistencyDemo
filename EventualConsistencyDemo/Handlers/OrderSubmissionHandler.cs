@@ -17,7 +17,7 @@ namespace EventualConsistencyDemo.Handlers
 
         public Task Handle(OrderSubmission message, IMessageHandlerContext context)
         {
-            return ticketHubContext.Clients.All.SendAsync("OrderSubmission", message.OrderId);
+            return ticketHubContext.Clients.All.SendAsync("OrderSubmission", message);
         }
     }
 }

@@ -137,15 +137,15 @@
             <a href="https://compilesoftware.nl/" target="_blank"><img src="/img/banner.png" /></a>
         </div>
         <form id="ticketForm">
-            <div class="theaters_times" style="display: flex; padding-top: 50px;">
-                <div style="flex: 1; padding-right: 75px;" class="theaters">
-                    <span class="title">Theaters</span>
+            <div class="theatersContext_times" style="display: flex; padding-top: 50px;">
+                <div style="flex: 1; padding-right: 75px;" class="theatersContext">
+                    <span class="title">TheatersContextContext</span>
 
                     <fieldset id="theaters_group">
                         @foreach (var theater in Model.Theaters)
                         {
                             <div class="inputGroup">
-                                <input value="@theater.Id" id="@theater.Id" name="theaters_group" type="radio" />
+                                <input value="@theater.Id" id="@theater.Id" name="theatersContext_group" type="radio" />
                                 <label for="@theater.Id">@theater.Name</label>
                             </div>
                         }
