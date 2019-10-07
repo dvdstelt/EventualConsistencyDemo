@@ -25,9 +25,9 @@ namespace EventualConsistencyDemo
             services.AddControllersWithViews();
 
             services.AddSignalR();
-            services.AddMemoryCache();
-            services.AddSingleton<Movies>();
-            services.AddSingleton<Theaters>();
+            //services.AddMemoryCache();
+            //services.AddSingleton<MoviesContext>();
+            //services.AddSingleton<TheatersContext>();
 
             var endpointConfiguration = new EndpointConfiguration("EventualConsistencyDemo");
             endpointConfiguration.ApplyCommonConfiguration(routingConfig => 
@@ -59,8 +59,8 @@ namespace EventualConsistencyDemo
 
                 endpoints.MapControllerRoute(
                     name: "movie",
-                    pattern: "movies/{movieurl}", 
-                    defaults: new { controller = "Movies", action = "Movie"});
+                    pattern: "movies/{movieurl?}", 
+                    defaults: new { controller = "Movies", action = "Movie" });
 
                 endpoints.MapControllerRoute(
                     name: "default",

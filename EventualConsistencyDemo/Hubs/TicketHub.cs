@@ -19,7 +19,10 @@ namespace EventualConsistencyDemo.Hubs
         {
             return messageSession.Send(new SubmitOrder() 
             {
-
+                Theater = theater,
+                Movie = movie,
+                Time = time,
+                NumberOfTickets = numberOfTickets
             });
         }
     }
