@@ -58,15 +58,13 @@ namespace EventualConsistencyDemo
                 endpoints.MapHub<TicketHub>("/ticketHub");
 
                 endpoints.MapControllerRoute(
-                    name: "movie",
-                    pattern: "movies/{movieurl?}", 
-                    defaults: new { controller = "Movies", action = "Movie" });
-
-                endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}");
 
-
+                endpoints.MapControllerRoute(
+                    name: "movie",
+                    pattern: "movies/{movieurl}", 
+                    defaults: new { controller = "Movies", action = "Movie" });
             });
         }
     }
