@@ -1,6 +1,7 @@
 ﻿@using System.Web
 @model MovieViewModel
 @{
+    ViewData["Title"] = Model.Movie.Title;
     ViewBag.Layout = "FullPage";
 }
 
@@ -14,8 +15,13 @@
 
         var connection = new signalR.HubConnectionBuilder().withUrl('/ticketHub').build();
 
-        connection.on('OrderSubmission', function (orderId) {
-            console.log('OrderSubmission', orderId);
+        connection.on('OrderSubmission', function (message) {
+            console.log('OrderSubmission', message);
+
+            var textArea = document.createElement('textarea');
+            textArea.innerHTML = message;
+
+            $('.overlay-content .ordering-details').html(textArea.value);
         });
 
         connection.start().then(function () {
@@ -63,18 +69,33 @@
                 $('#totalPrice').text('$ ' + price);
             });
 
-        $('#submit_button').click(function () {
+        $('#submit_button').click(function (e) {
+            e.preventDefault();
+
             if ($(this).hasClass('movie_button_disabled')) return false;
 
             var dataToPost = $('form#ticketForm').serialize();
             console.log(dataToPost);
 
-            connection.invoke("SubmitOrder", 1 /* theater */, 2 /* movie */, '19:00' /* time */, 5 /* number of tickets */).catch(function (err) {
+            // movieId
+            // theatersContext_Group
+            // times_group
+            // numberOfTickets
+            var values = {};
+            $.each($('form#ticketForm').serializeArray(), function (i, field) {
+                console.log(field.name + ' : ' + field.value);
+                values[field.name] = field.value;
+            });
+
+            connection.invoke("SubmitOrder", parseInt(values["theatersContext_group"]) /* theater */, parseInt(values["movieId"]) /* movie */, values["times_group"] /* time */, parseInt(values["numberOfTickets"]) /* number of tickets */).catch(function (err) {
+                //connection.invoke("SubmitOrder", 1 /* theater */, 2 /* movie */, '19:00' /* time */, 5 /* number of tickets */).catch(function (err) {
                 return console.error(err.toString());
             });
-            
+
+            $('#overlay').css('display', 'block');
+
             return false;
-        }); 
+        });
 
         theWindow.resize(resizeBg).trigger("resize");
 
@@ -169,27 +190,49 @@
                     </div>
                 </div>
                 <div style="flex: 1;">
-                    <span class="title">Tickets</span><span>
-                        <div id="tickets">
-                            <div class="select">
-                                <select id="numberOfTickets" name="numberOfTickets">
-                                    <option selected disabled>Number of tickets</option>
-                                    <option value="1">1 ticket</option>
-                                    <option value="2">2 tickets</option>
-                                    <option value="3">3 tickets</option>
-                                    <option value="4">4 tickets</option>
-                                </select>
-                            </div>
-                            Total price: <span id="totalPrice">$ 0</span>
-                            <div class="movie_button_container">
-                                <a href="" id="submit_button" class="movie_button_disabled">Order tickets</a>
-                            </div>
+                    <span class="title">Tickets</span>
+                    <div id="tickets">
+                        <div class="select">
+                            <select id="numberOfTickets" name="numberOfTickets">
+                                <option selected disabled>Number of tickets</option>
+                                <option value="1">1 ticket</option>
+                                <option value="2">2 tickets</option>
+                                <option value="3">3 tickets</option>
+                                <option value="4">4 tickets</option>
+                            </select>
                         </div>
-                        <div id="tickets_alternative">
-                            Select a movie and time.
+                        Total price: <span id="totalPrice">$ 0</span>
+                        <div class="movie_button_container">
+                            <a href="" id="submit_button" class="movie_button_disabled">Order tickets</a>
                         </div>
+                    </div>
+                    <div id="tickets_alternative">
+                        Select a movie and time.
+                    </div>
                 </div>
             </div>
+            <input type="hidden" id="movieId" name="movieId" value="@Model.Movie.Id" />
         </form>
     </div>
 </section>
+
+<div id="overlay" class="overlay">
+    <div class="overlay-content">
+        
+        <div class="poster"><img src="/img/posters/@Model.Movie.Image" width="200" /></div>
+        <div class="details">
+            <div>
+                <h1>
+                    <span class="movietitle">@Model.Movie.Title</span>
+                </h1>
+            </div>
+            <div class="ordering-details">
+                Please wait...
+            </div>
+            <div class="movie_button_container">
+                <a href="" class="movie_button">Back to website</a>
+            </div>
+        </div>
+
+    </div>
+</div>

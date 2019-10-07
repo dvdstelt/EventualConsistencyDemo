@@ -21,6 +21,7 @@ namespace EventualConsistencyDemo.Hubs
             {
                 Theater = theater,
                 Movie = movie,
+                Time = time,
                 NumberOfTickets = numberOfTickets
             });
         }

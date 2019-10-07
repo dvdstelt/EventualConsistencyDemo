@@ -291,6 +291,51 @@ a.movie_button_disabled {
     padding: 50px 0;
 }
 
+.overlay {
+    /* Height & width depends on how you want to reveal the overlay (see JS below) */
+    height: 100%;
+    width: 100%;
+    position: fixed; /* Stay in place */
+    z-index: 100; /* Sit on top */
+    left: 0;
+    top: 0;
+    background-color: rgb(0,0,0); /* Black fallback color */
+    background-color: rgba(0,0,0, 0.9); /* Black w/opacity */
+    overflow-x: hidden; /* Disable horizontal scroll */
+    display: none;
+    /*display: block;*/
+}
+
+.overlay-content {
+    background-color: #aaaaaa;
+    color: #ffffff;
+    position: relative;
+    top: 25%; /* 25% from the top */
+    width: 35%; /* 100% width */
+    min-width: 600px;
+    margin: auto;
+    text-align: center; /* Centered text/links */
+    margin-top: 30px; /* 30px top margin to avoid conflict with the close button on smaller screens */
+    display: flex;
+    padding: 20px;
+}
+
+    .overlay-content .poster {
+        margin-right: 20px;
+    }
+
+    .overlay-content .details {
+        text-align: left;
+    }
+
+    .overlay-content .movietitle {
+        color: #000;
+    }
+
+    .overlay-content .ordering-details {
+        color: #000;
+    }
+
 /* Theaters and movie times
 -------------------------------------------------- */
 .title {
