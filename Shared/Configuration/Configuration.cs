@@ -5,12 +5,14 @@ using NServiceBus;
 
 namespace Shared.Configuration
 {
-    public static class Configuration
+    public static class CommonConfiguration
     {
-        public static EndpointConfiguration ConfigureEndpoint(string endpointName)
+        public static EndpointConfiguration ApplyCommonConfiguration(this EndpointConfiguration endpointConfiguration, Action<RoutingSettings> configureRouting = null)
         {
-            var endpointConfiguration = new EndpointConfiguration(endpointName);
             var transport = endpointConfiguration.UseTransport<LearningTransport>();
+            var routing = transport.Routing();
+            configureRouting?.Invoke(routing);
+
             endpointConfiguration.UsePersistence<LearningPersistence>();
 
             var conventions = endpointConfiguration.Conventions();

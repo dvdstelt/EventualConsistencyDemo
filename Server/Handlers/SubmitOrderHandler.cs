@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using NServiceBus;
 using Shared.Commands;
+using Shared.Messages;
 
 namespace Server.Handlers
 {
@@ -20,7 +19,7 @@ namespace Server.Handlers
                 Console.WriteLine("Order for a regular movie.");
             }
 
-            return Task.CompletedTask;
+            return context.Reply(new OrderSubmission() { OrderId = Guid.NewGuid() });
         }
     }
 }

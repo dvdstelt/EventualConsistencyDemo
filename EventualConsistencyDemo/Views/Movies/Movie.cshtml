@@ -3,8 +3,27 @@
 @{
     ViewBag.Layout = "FullPage";
 }
+
+@section Scripts{
+
+    <script src="~/lib/signalr/dist/browser/signalr.js"></script>
+
+}
 <script type="text/javascript">
     $(document).ready(function () {
+
+        var connection = new signalR.HubConnectionBuilder().withUrl('/ticketHub').build();
+
+        connection.on('OrderSubmission', function (orderId) {
+            console.log('OrderSubmission', orderId);
+        });
+
+        connection.start().then(function () {
+            //do whatever is needed when the connection is established.
+            //e.g. enable buttons
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
 
         var theWindow = $(window),
             $bg = $('#bgImage'),
@@ -50,27 +69,10 @@
             var dataToPost = $('form#ticketForm').serialize();
             console.log(dataToPost);
 
-            // Send data via SignalR
-            // Wait for SignalR to report back
-            // Replace what is down below ;-)
-
-            $.post('@(Url.Action("Movie", "Movies"))', dataToPost)
-                .done(function(response, status, jqxhr) {
-                    // this is the "success" callback
-                    console.log(response);
-                })
-                .fail(function(jqxhr, status, error) {
-                    console.log(error);
-                    // this is the ""error"" callback
-                });
+            connection.invoke("SubmitOrder", 1 /* theater */, 2 /* movie */, '19:00' /* time */, 5 /* number of tickets */).catch(function (err) {
+                return console.error(err.toString());
+            });
             
-            //$.post( 'some-url', $('form#ticketForm').serialize(), function(data) {
-            //        // ... do something with response from server
-            //        alert(data);
-            //    },
-            //    'json' // I expect a JSON response
-            //);
-
             return false;
         }); 
 

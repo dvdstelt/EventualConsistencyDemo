@@ -8,7 +8,7 @@ namespace Shared.Commands
     {
         public int Movie { get; set; }
         public int Theater { get; set; }
-        public DateTime Time { get; set; }
+        public string Time { get; set; }
         public int NumberOfTickets { get; set; }
     }
 }

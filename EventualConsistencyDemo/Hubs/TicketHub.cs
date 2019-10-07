@@ -1,16 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using NServiceBus;
+using Shared.Commands;
 
 namespace EventualConsistencyDemo.Hubs
 {
     public class TicketHub : Hub
     {
-        public async Task SendMessage(string user, string message)
+        IMessageSession messageSession;
+
+        public TicketHub(IMessageSession messageSession)
         {
-            await Clients.All.SendAsync("ReceiveMessage", user, message);
+            this.messageSession = messageSession;
+        }
+
+        public Task SubmitOrder(int theater, int movie, string time, int numberOfTickets)
+        {
+            return messageSession.Send(new SubmitOrder() 
+            {
+
+            });
         }
     }
 }

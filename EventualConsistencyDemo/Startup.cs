@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using EventualConsistencyDemo.Hubs;
+﻿using EventualConsistencyDemo.Hubs;
 using EventualConsistencyDemo.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NServiceBus;
-using NServiceBus.Routing;
-using static Shared.Configuration.Configuration;
+using NServiceBus.Extensions.DependencyInjection;
+using Shared.Configuration;
 
 namespace EventualConsistencyDemo
 {
@@ -26,7 +19,6 @@ namespace EventualConsistencyDemo
         }
 
         public IConfiguration Configuration { get; }
-        private IEndpointInstance endpointInstance;
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -36,6 +28,14 @@ namespace EventualConsistencyDemo
             services.AddMemoryCache();
             services.AddSingleton<Movies>();
             services.AddSingleton<Theaters>();
+
+            var endpointConfiguration = new EndpointConfiguration("EventualConsistencyDemo");
+            endpointConfiguration.ApplyCommonConfiguration(routingConfig => 
+            {
+                routingConfig.RouteToEndpoint(typeof(Shared.Commands.SubmitOrder), "server");
+            });
+
+            services.AddNServiceBus(endpointConfiguration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,13 +68,6 @@ namespace EventualConsistencyDemo
 
 
             });
-        }
-
-        private void StartEndpoint()
-        {
-            var endpointConfiguration = ConfigureEndpoint("EventualConsistencyDemo");
-
-            endpointInstance = NServiceBus.Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using NServiceBus;
-using static Shared.Configuration.Configuration;
+using Shared.Configuration;
 
 namespace Server
 {
@@ -9,7 +9,7 @@ namespace Server
     {
         static async Task Main(string[] args)
         {
-            var endpointConfiguration = ConfigureEndpoint("server");
+            var endpointConfiguration = new EndpointConfiguration("server").ApplyCommonConfiguration();
 
             var endpoint = await Endpoint.Start(endpointConfiguration);
 
