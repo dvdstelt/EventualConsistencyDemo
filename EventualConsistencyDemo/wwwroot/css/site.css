@@ -64,6 +64,10 @@ a.navbar-brand {
     width: 100%;
 }
 
+.movies .reviews {
+    margin-top: 20px;
+}
+
 .movies h1 {
     font-size: 18px;
     font-weight: bold;
@@ -486,6 +490,64 @@ select {
 .select:hover::after {
     color: #fff;
 }
+
+/* Reviews
+-------------------------------------------------- */
+
+.commentsPage {
+    margin: 40px 0;
+}
+
+    .commentsPage .movieposter img {
+        width: 100%;
+    }
+
+    .commentsPage .title h2 {
+        color: #000;
+        font-weight: bold;
+        font-size: 50px;
+        line-height: 52px;
+        letter-spacing: 0.05em;
+        font-family: 'Pathway Gothic One', sans-serif;
+        text-transform: uppercase;
+    }
+
+    .commentsPage .commentForm {
+        margin: 40px 0;
+    }
+
+    .commentsPage .reviews {
+        padding-left: 0;
+    }
+
+    .commentsPage .comment {
+        display: flex;
+        /*flex-direction: row;*/
+        padding: 10px 0;
+        border-bottom: 1px solid #aaa;
+    }
+
+    /*.commentsPage .comment {
+        width: 100%;
+    }*/
+
+    .commentsPage .commentDescription {
+        min-height: 50px;
+    }
+
+    .commentsPage .commentPostDetails {
+        flex-direction: row;
+    }
+
+    .commentsPage .commentDate {
+        font-size: 11px;
+    }
+
+    .gravatar {
+        border-radius: 25px;
+        margin-right: 20px;
+    }
+
 
 /* Sticky footer styles
 -------------------------------------------------- */
