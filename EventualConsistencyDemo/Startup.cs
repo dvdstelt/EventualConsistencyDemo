@@ -65,6 +65,11 @@ namespace EventualConsistencyDemo
                     name: "movie",
                     pattern: "movies/{movieurl}", 
                     defaults: new { controller = "Movies", action = "Movie" });
+
+                endpoints.MapControllerRoute(
+                    name: "movie",
+                    pattern: "reviews/{movieurl}",
+                    defaults: new { controller = "Reviews", action = "Movie" });
             });
         }
     }

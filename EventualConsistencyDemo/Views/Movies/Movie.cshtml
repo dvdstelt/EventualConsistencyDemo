@@ -97,6 +97,11 @@
             return false;
         });
 
+        //$('#read-reviews').click(function(e) {
+        //    e.preventDefault();
+
+        //});
+
         theWindow.resize(resizeBg).trigger("resize");
 
     });
@@ -119,7 +124,7 @@
                         </h1>
                     </div>
                     <div class="movie_button_container">
-                        <a href="#tickets" class="movie_button">Order tickets</a>
+                        <a href="#ticketForm" class="movie_button">Order tickets</a>
                     </div>
                 </div>
             </div>
@@ -147,7 +152,9 @@
             <div style="flex: 2;">
                 Release: @Model.Movie.ReleaseDate.ToString("dd-MM-yyyy")<br /><br />
                 @HttpUtility.HtmlDecode(Model.Movie.Description)<br /><br />
-                <button style="line-height: 34px; color: #000; font-size: 16px; background-color: #e0e1e4; width: 164px; border-radius: 6px; border: none;">Read more</button>
+                <form action="/reviews/@Model.Movie.UrlTitle">
+                    <button id="read-reviews" style="line-height: 34px; color: #000; font-size: 16px; background-color: #e0e1e4; width: 164px; border-radius: 6px; border: none;">Reviews</button>
+                </form>
             </div>
         </div>
     </div>
@@ -218,7 +225,7 @@
 
 <div id="overlay" class="overlay">
     <div class="overlay-content">
-        
+
         <div class="poster"><img src="/img/posters/@Model.Movie.Image" width="200" /></div>
         <div class="details">
             <div>
