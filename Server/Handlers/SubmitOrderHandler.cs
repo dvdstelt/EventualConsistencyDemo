@@ -18,7 +18,7 @@ namespace Server.Handlers
 
             if (message.Movie == 1)
             {
-                log.Info("Order for game of thrones at !");
+                log.Info($"Order for game of thrones at {message.Time}!");
                 immediatelyApproved = false;
             }
             else

@@ -49,7 +49,7 @@ namespace EventualConsistencyDemo.Handlers
                 MovieTitle = movie.Title
             };
 
-            return ticketHubContext.Clients.All.SendAsync("OrderSubmission", HttpUtility.HtmlEncode(screenMessage));
+            return ticketHubContext.Clients.All.SendAsync("OrderSubmission", screenMessage);
         }
     }
 }
