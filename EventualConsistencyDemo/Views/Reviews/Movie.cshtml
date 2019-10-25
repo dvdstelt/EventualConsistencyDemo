@@ -2,30 +2,40 @@
 @{
     ViewData["Title"] = Model.Movie.Title;
 }
-<script>
 
+@section Scripts{
+    <script id="review-template" type="text/x-custom-template">
+        <li>
+            <div class="comment">
+                <div><img class="gravatar"></div>
+                <div class="commentPostDetails">
+                    <div class="commentDescription"></div>
+                    <div class="commentDate"></div>
+                </div>
+            </div>
+        </li>
+    </script>
+
+    <script type="text/javascript">
     $(document).ready(function() {
-
-        var newDate = new Date();
-
         var jsonReviews = localStorage.getItem('popcornStoredReviews');
         var allStoredReviews = JSON.parse(jsonReviews);
 
         if (Array.isArray(allStoredReviews) && allStoredReviews.length) {
-            $.each(allStoredReviews,
-                function(k, v) {
-                    if (v.MovieIdentifier == @Model.Movie.Id) {
-                        AddComment(v.Description, v.ReviewedAt);
+            $.each(allStoredReviews, function(i, item) {
+                    if (item.MovieIdentifier == @Model.Movie.Id) {
+                        AddComment(item.Description, item.ReviewedAt);
                     }
-                });
+            });
         }
 
-        $('#clearLocalStorage').click(function(e) {
+        $('#clearLocalStorage').on('click', function(e) {
             e.preventDefault();
             localStorage.removeItem('popcornStoredReviews');
+            location.reload();
         });
 
-        $('#submitReviewButton').click(function(e) {
+        $('#submitReviewButton').on('click', function(e) {
             e.preventDefault();
 
             var commentGuid = uuidv4();
@@ -50,27 +60,21 @@
             jsonReviews = JSON.stringify(allStoredReviews);
             localStorage.setItem('popcornStoredReviews', jsonReviews);
 
-            $('#commentDescription').val('');
+            $('#commentDescription').empty();
             AddComment(commentDescription, commentDateTime);
         });
 
         function AddComment(description, date) {
             date = new Date(date);
-            var email = 'dvdstelt@gmail.com';
 
-            $('#reviews').append('<li>').append(
-                $('<div>').attr('class', 'comment')
-                .append($('<div>').append(
-                    $('<img>').attr('src', 'https://gravatar.com/avatar/9300c92d4bbf31c4a96d345e9712d2a6.jpg?&s=50')
-                    .attr('class', 'gravatar')
-                ))
-                .append($('<div>').attr('class', 'commentPostDetails').append(
-                        $('<div>').attr('class', 'commentDescription').text(description)
-                    )
-                    .append($('<div>').attr('class', 'commentDate').text(email + ' | ' + formatDate(date))
-                    )
-                )
-            );
+            let email = 'dvdstelt@gmail.com';
+            let reviewTemplate = $($('#review-template').html()).clone();
+
+            $(reviewTemplate).children().find('img.gravatar').attr('src', 'https://gravatar.com/avatar/9300c92d4bbf31c4a96d345e9712d2a6.jpg?&s=50')
+            $(reviewTemplate).children().find('.commentDescription').html(description);
+            $(reviewTemplate).children().find('.commentDate').html(email + ' | ' + formatDate(date));
+
+            $('#reviews').append(reviewTemplate);
         };
 
         function formatDate(date) {
@@ -96,7 +100,8 @@
         }
 
     });
-</script>
+    </script>
+}
 
 <div class="commentsPage">
     <div class="row">
@@ -118,7 +123,6 @@
                                 <div class="commentDate">dvdstelt@gmail.com | @review.ReviewedAt</div>
                             </div>
                         </div>
-
                     </li>
                 }
             </ul>

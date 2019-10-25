@@ -15,11 +15,9 @@
               crossorigin="anonymous"
               integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" />
     </environment>
-    <link rel="stylesheet" href="~/css/site.css" />
-    <script src="~/lib/jquery/dist/jquery.js"></script>
-    <script src="~/lib/signalr/dist/browser/signalr.js"></script>
-    <script src="~/js/site.js"></script>
+
     <link href="https://fonts.googleapis.com/css?family=Pathway+Gothic+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
     <header>
@@ -39,9 +37,6 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Movies" asp-action="Index">Movies</a>
                         </li>
-                        @*<li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Reviews" asp-action="Index">Reviews</a>
-                        </li>*@
                     </ul>
                 </div>
             </div>
@@ -57,7 +52,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2019 - Dennis van der Stelt - <a href="https://dennis.bloggingabout.net/">Weblog</a> - <a href="https://twitter.com/dvdstelt">Twitter</a> - <a href="https://compilesoftware.nl/">Compile Software</a>
+            &copy; @DateTime.Now.Year - Dennis van der Stelt - <a href="https://dennis.bloggingabout.net/">Weblog</a> - <a href="https://twitter.com/dvdstelt">Twitter</a> - <a href="https://compilesoftware.nl/">Compile Software</a>
         </div>
     </footer>
 
@@ -65,6 +60,7 @@
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
     </environment>
+
     <environment exclude="Development">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
                 asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
@@ -79,7 +75,8 @@
                 integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o">
         </script>
     </environment>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script src="~/lib/signalr/dist/browser/signalr.js"></script>
 
     @RenderSection("Scripts", required: false)
 </body>
