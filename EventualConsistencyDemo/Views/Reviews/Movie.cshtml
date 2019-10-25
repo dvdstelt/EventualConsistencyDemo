@@ -60,7 +60,7 @@
             jsonReviews = JSON.stringify(allStoredReviews);
             localStorage.setItem('popcornStoredReviews', jsonReviews);
 
-            $('#commentDescription').empty();
+            $('#commentDescription').val('');
             AddComment(commentDescription, commentDateTime);
         });
 
