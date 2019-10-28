@@ -1,19 +1,52 @@
 ﻿@model List<Shared.Entities.Movie>
 @{
     ViewData["Title"] = "Home";
+    ViewBag.Layout = "FullPage";
+}
+
+@section Scripts{
+    <script type="text/javascript">
+
+        $('.movieposters li').on('mouseenter', function () {
+            var image = "/img/background/" + $(this).data("img") + "2.jpg";
+            $('#bgImage').fadeOut(200, function() {
+                $(this).attr("src", image);
+                $('#bgImage').fadeIn(200);
+            });
+                
+        }).on('mouseleave', function() {
+            $('#bgImage').fadeOut(200);
+        });
+
+    </script>
 }
 
 <div align="center">
-    
-    <h1>Currently showing:</h1>
-    <ul class="movieposters">
-        @foreach (var movie in Model)
-        {
-            <li>
-                <a href="/movies/@Uri.EscapeUriString(movie.UrlTitle)">
-                    <img src="/img/posters/@Uri.EscapeUriString(movie.Image)"/>
-                </a><span>@movie.Title</span>
-            </li>
-        }
-    </ul>
+
+    <section class="movie_header frontpage">
+        <div id="bgContainer" class="movie_background">
+            <img id="bgImage" class="bgImage" />
+        </div>
+        <div class="movie_header_content">
+            <div><h1>Currently showing:</h1></div>
+            <div class="movie_header_content_bottom">
+                <div class="container">
+
+                    <ul class="movieposters">
+                        @foreach (var movie in Model)
+                        {
+                            <li data-img="@movie.UrlTitle">
+                                <a href="/movies/@Uri.EscapeUriString(movie.UrlTitle)">
+                                    <img src="/img/posters/@Uri.EscapeUriString(movie.Image)"/>
+                                </a>
+                                <span>@movie.Title</span>
+                            </li>
+                        }
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
 </div>

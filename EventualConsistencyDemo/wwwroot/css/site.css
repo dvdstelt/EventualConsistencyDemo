@@ -40,8 +40,14 @@ a.navbar-brand {
     padding: 0 5px 0px 5px;
 }
 
+    .movieposters li span {
+        color: #fff;
+        font-size: 18px;
+    }
+
+
 .movieposters img {
-    width: 300px;
+    width: 450px;
 }
 
 .movieposters a {
@@ -51,7 +57,6 @@ a.navbar-brand {
 }
 
     .movieposters a:hover {
-        /*background-color: white;*/
         z-index: 1;
         transition: all 0.3s ease 0s;
         transform: scale(1.1);
@@ -86,6 +91,45 @@ a.navbar-brand {
 
 .container-fluid {
     padding: 0;
+}
+
+/* Movie details page 
+-------------------------------------------------- */
+
+.frontpage .movie_header_content h1 {
+    color: #ffc426;
+    font-family: 'Pathway Gothic One', sans-serif;
+    font-size: 50px;
+    letter-spacing: 0.05em;
+    /*
+    font-weight: bold;
+    line-height: 52px;
+    letter-spacing: 0.05em;
+
+    */
+    text-transform: uppercase;
+}
+
+.frontpage .movie_header_content {
+    margin-top: 40px;
+}
+
+.frontpage .movie_header_content_bottom {
+    margin-top: 110px;
+}
+
+.frontpage .container {
+    max-width: 80%;
+    width: auto;
+}
+
+.frontpage .movie_background {
+    background-color: #6d6e71;
+}
+
+.frontpage .bgImage {
+    filter: blur(15px);
+    -webkit-filter: blur(15px);
 }
 
 /* Movie details page 
@@ -543,10 +587,10 @@ select {
         font-size: 11px;
     }
 
-    .gravatar {
-        border-radius: 25px;
-        margin-right: 20px;
-    }
+.gravatar {
+    border-radius: 25px;
+    margin-right: 20px;
+}
 
 
 /* Sticky footer styles
