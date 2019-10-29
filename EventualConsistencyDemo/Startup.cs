@@ -1,5 +1,5 @@
 ﻿using EventualConsistencyDemo.Hubs;
-using EventualConsistencyDemo.Models;
+using LiteDB;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;

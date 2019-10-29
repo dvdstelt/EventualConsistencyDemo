@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Text;
 using EventualConsistencyDemo.Models;
+using LiteDB;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Entities;
@@ -9,14 +10,12 @@ namespace EventualConsistencyDemo.Controllers
 {
     public class MoviesController : Controller
     {
-        //private readonly TheatersContext theatersContext;
-        //private readonly MoviesContext moviesContext;
+        private readonly LiteRepository db;
 
-        //public MoviesController(MoviesContext moviesContext, TheatersContext theatersContext)
-        //{
-        //    this.theatersContext = theatersContext;
-        //    this.moviesContext = moviesContext;
-        //}
+        public MoviesController(LiteRepository db)
+        {
+            this.db = db;
+        }
 
         public ActionResult Index()
         {
@@ -25,6 +24,10 @@ namespace EventualConsistencyDemo.Controllers
 
         public ActionResult Movie(string movieurl)
         {
+            var movie = db.Query<Movie>()
+                            .Where(s => s.UrlTitle == movieurl)
+                            .SingleOrDefault();
+
             var vm = new MovieViewModel();
             vm.Movie = MoviesContext.GetMovies().Single(s => s.UrlTitle == movieurl);
             vm.Theaters = TheatersContext.GetTheaters();
