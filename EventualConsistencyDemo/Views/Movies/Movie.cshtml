@@ -60,10 +60,6 @@
             if ($(this).hasClass('movie_button_disabled'))
                 return;
 
-            // movieId
-            // theatersContext_Group
-            // times_group
-            // numberOfTickets
             var values = {};
             $.each($('form#ticketForm').serializeArray(), function (i, field) {
                 console.log(field.name + ' : ' + field.value);
@@ -71,8 +67,8 @@
             });
 
             connection.invoke("SubmitOrder"
-                , parseInt(values["theatersContext_group"]) /* theater */
-                , parseInt(values["movieId"]) /* movie */
+                , values["theatersContext_group"] /* theater */
+                , values["movieId"] /* movie */
                 , values["times_group"] /* time */
                 , parseInt(values["numberOfTickets"]) /* number of tickets */
             ).catch(function (err) {

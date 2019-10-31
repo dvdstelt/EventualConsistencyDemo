@@ -4,6 +4,7 @@ using EventualConsistencyDemo.Models;
 using LiteDB;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Configuration;
 using Shared.Entities;
 
 namespace EventualConsistencyDemo.Controllers
@@ -19,7 +20,9 @@ namespace EventualConsistencyDemo.Controllers
 
         public ActionResult Index()
         {
-            return View(MoviesContext.GetMovies());
+            var movies = db.Fetch<Movie>();
+
+            return View(movies);
         }
 
         public ActionResult Movie(string movieurl)
@@ -29,7 +32,7 @@ namespace EventualConsistencyDemo.Controllers
                             .SingleOrDefault();
 
             var vm = new MovieViewModel();
-            vm.Movie = MoviesContext.GetMovies().Single(s => s.UrlTitle == movieurl);
+            vm.Movie = movie;
             vm.Theaters = TheatersContext.GetTheaters();
 
             return View(vm);
@@ -43,8 +46,6 @@ namespace EventualConsistencyDemo.Controllers
             {
                 sb.Append(item + "|");
             }
-
-            //  return JsonConvert.SerializeObject(chk);
 
             return sb.ToString();
         }

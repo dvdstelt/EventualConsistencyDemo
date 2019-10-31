@@ -12,7 +12,7 @@ namespace Shared.Entities
             {
                 new Movie
                 {
-                    Id = 1,
+                    Id = Guid.Parse("daa1bd7d-af4c-4581-b25f-e0f21a8ba22b"),
                     UrlTitle = "gameofthrones",
                     Title = "Game of Thrones",
                     Image = "gameofthrones.jpg",
@@ -23,10 +23,12 @@ namespace Shared.Entities
                     ReleaseDate = new DateTime(2019, 05, 19),
                     Showtimes = new List<string> { "19:00" },
                     PricePerTicket = 0D,
+                    PopularityScore = 1000,
+                    TicketType = TicketType.DrawingTicket,
                 },
                 new Movie
                 {
-                    Id = 2,
+                    Id = Guid.Parse("0704d943-beee-4999-ba1e-c73489ead6ec"),
                     UrlTitle = "jayandsilentbobreboot",
                     Title = "Jay and Silent Bob Reboot",
                     Image = "jayandsilentbobreboot.jpg",
@@ -37,10 +39,12 @@ namespace Shared.Entities
                     ReleaseDate = new DateTime(2019, 10, 15),
                     Showtimes = new List<string> { "10:00", "15:00", "20:00" },
                     PricePerTicket = 10D,
+                    PopularityScore = 800,
+                    TicketType = TicketType.RegularTicket,
                 },
                 new Movie
                 {
-                    Id = 3,
+                    Id = Guid.Parse("ca4245ca-7d12-44ea-a421-04115414897b"),
                     UrlTitle = "riseofskywalker",
                     Title = "Star Wars : The Rise of Skywalker",
                     Image = "riseofskywalker.jpg",
@@ -51,6 +55,8 @@ namespace Shared.Entities
                     ReleaseDate = new DateTime(2019, 10, 15),
                     Showtimes = new List<string> { "10:00", "13:00", "15:00", "20:00", "23:00" },
                     PricePerTicket = 10D,
+                    PopularityScore = 600,
+                    TicketType = TicketType.RegularTicket,
                 }
             };
         }

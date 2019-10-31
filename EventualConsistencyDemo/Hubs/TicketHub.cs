@@ -15,14 +15,15 @@ namespace EventualConsistencyDemo.Hubs
             this.messageSession = messageSession;
         }
 
-        public Task SubmitOrder(int theater, int movie, string time, int numberOfTickets)
+        public Task SubmitOrder(string theater, string movie, string time, int numberOfTickets)
         {
             return messageSession.Send(new SubmitOrder() 
             {
-                Theater = theater,
-                Movie = movie,
+                Theater = Guid.Parse(theater),
+                Movie = Guid.Parse(movie),
                 Time = time,
-                NumberOfTickets = numberOfTickets
+                NumberOfTickets = numberOfTickets,
+                UserId = Guid.Parse("218d92c4-9c42-4e61-80fa-198b22461f61") // For now, no other users allowed ;-)
             });
         }
     }

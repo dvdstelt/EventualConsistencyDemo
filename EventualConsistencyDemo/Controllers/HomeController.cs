@@ -1,31 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using EventualConsistencyDemo.Models;
+using LiteDB;
 using Shared.Entities;
 
 namespace EventualConsistencyDemo.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly LiteRepository db;
+
+        public HomeController(LiteRepository db)
+        {
+            this.db = db;
+        }
+
         public IActionResult Index()
         {
-            return View(MoviesContext.GetMovies());
+            return View(db.Fetch<Movie>());
         }
-
-        public IActionResult Movies()
-        {
-            return View();
-        }
-
-        public IActionResult Theaters()
-        {
-            return View();
-        }
-
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

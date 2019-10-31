@@ -5,7 +5,7 @@ namespace Shared.Entities
 {
     public class Movie
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string UrlTitle { get; set; }
         public string Title { get; set; }
         public string Image { get; set; }
@@ -17,5 +17,14 @@ namespace Shared.Entities
         public DateTime ReleaseDate { get; set; }
         public List<string> Showtimes { get; set; }
         public double PricePerTicket { get; set; }
+        public int PopularityScore { get; set; }
+        public TicketType TicketType { get; set; }
+    }
+
+    public enum TicketType
+    {
+        RegularTicket,
+        DrawingTicket,
+        MorningTicket
     }
 }
