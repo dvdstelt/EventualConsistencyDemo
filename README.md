@@ -23,3 +23,14 @@ The usage of SignalR within this demo is used to basically trick the user into t
 Together with messaging, as a result, when the website receives high traffic from visitors, our system is able to process messages at a certain pace. Visitors might have to wait a bit longer for a response, but the back-end doesn't get flooded with requests and instead of results, provide the user with an error screen.
 
 Remember though that the user might move on or even closes the browser. As a result, the SignalR connection will be lost. Your messages in the back-end will continue processing, but no one will ever receive the response. This can become a problem if you require more information. But would it be any different if you'd be doing the traditional style of showing the user a new screen and request more data there? Unlikely.
+
+## Upcoming
+
+I plan to work more on this demo
+
+- [Add a database in the back-end](https://github.com/dvdstelt/EventualConsistencyDemo/issues/7)
+- Possibly mimic a logged-in user and allow administrative screen
+- Publish events in the back-end to show how the system would continue operating
+- Actually store comments in the database and verify if comments have been processed and remove those from local storage.
+
+If you have alternative ideas you'd like to see worked out, or maybe even contribute fixing some of my (front-end) code, I'd love to hear from you.
