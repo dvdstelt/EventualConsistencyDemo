@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NServiceBus;
-using NServiceBus.Extensions.DependencyInjection;
 using Shared.Configuration;
 
 namespace EventualConsistencyDemo
@@ -28,14 +27,6 @@ namespace EventualConsistencyDemo
             //services.AddMemoryCache();
             //services.AddSingleton<MoviesContext>();
             //services.AddSingleton<TheatersContext>();
-
-            var endpointConfiguration = new EndpointConfiguration("EventualConsistencyDemo");
-            endpointConfiguration.ApplyCommonConfiguration(routingConfig => 
-            {
-                routingConfig.RouteToEndpoint(typeof(Shared.Commands.SubmitOrder), "server");
-            });
-
-            services.AddNServiceBus(endpointConfiguration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
