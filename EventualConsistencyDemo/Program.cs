@@ -15,7 +15,7 @@ namespace EventualConsistencyDemo
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var host = Host.CreateDefaultBuilder(args);
             host.ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
@@ -32,7 +32,7 @@ namespace EventualConsistencyDemo
                 return endpointConfiguration;
             });
 
-            host.Build().RunAsync();
+            await host.Build().RunAsync();
         }
     }
 }
