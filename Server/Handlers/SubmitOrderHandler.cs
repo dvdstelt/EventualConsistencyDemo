@@ -12,7 +12,7 @@ namespace Server.Handlers
 {
     public class SubmitOrderHandler : IHandleMessages<SubmitOrder>
     {
-        static ILog log = LogManager.GetLogger<SubmitOrderHandler>();
+        static readonly ILog log = LogManager.GetLogger<SubmitOrderHandler>();
         
         private readonly LiteRepository db;
 
@@ -32,13 +32,15 @@ namespace Server.Handlers
             if (movie == null)
                 throw new ArgumentException($"Movie {message.Movie} not found in datastore", nameof(message.Movie));
 
-            var order = new Order();
-            order.Id = Guid.NewGuid();
-            order.MovieIdentifier = message.Movie;
-            order.TheaterIdentifier = message.Theater;
-            order.UserIdentifier = message.UserId;
-            order.MovieTime = message.Time;
-            order.NumberOfTickets = message.NumberOfTickets;
+            var order = new Order
+            {
+                Id = Guid.NewGuid(),
+                MovieIdentifier = message.Movie,
+                TheaterIdentifier = message.Theater,
+                UserIdentifier = message.UserId,
+                MovieTime = message.Time,
+                NumberOfTickets = message.NumberOfTickets
+            };
 
             if (movie.TicketType != TicketType.DrawingTicket)
             {
@@ -49,6 +51,7 @@ namespace Server.Handlers
                     MovieTime = message.Time,
                     Theater = message.Theater,
                     NumberOfTickets = message.NumberOfTickets,
+                    Approved = true,
                 });
             }
 
