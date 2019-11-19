@@ -20,6 +20,9 @@ namespace EventualConsistencyDemo
             var host = Host.CreateDefaultBuilder(args);
             host.ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
 
+            // Create the LiteDb database so we can work with some default movies.
+            Database.Setup();
+
             // Configure NServiceBus
             host.UseNServiceBus(hostBuilderContext =>
             {

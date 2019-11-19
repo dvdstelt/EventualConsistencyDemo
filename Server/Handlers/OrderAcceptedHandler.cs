@@ -20,7 +20,7 @@ namespace Server.Handlers
         public Task Handle(OrderAccepted message, IMessageHandlerContext context)
         {
             var order = db.Query<Order>()
-                .Where(s => s.Identifier == message.OrderId)
+                .Where(s => s.Id == message.OrderId)
                 .SingleOrDefault();
 
             var movie = db.Query<Movie>()

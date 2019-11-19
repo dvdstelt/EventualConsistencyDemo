@@ -6,7 +6,7 @@ namespace Shared.Entities
 {
     public class Order
     {
-        public Guid Identifier { get; set; }
+        public Guid Id { get; set; }
         public Guid UserIdentifier { get; set; }
         public Guid MovieIdentifier { get; set; }
         public Guid TheaterIdentifier { get; set; }

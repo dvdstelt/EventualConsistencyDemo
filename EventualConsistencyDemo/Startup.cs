@@ -24,9 +24,10 @@ namespace EventualConsistencyDemo
             services.AddControllersWithViews();
 
             services.AddSignalR();
+
+            services.AddScoped(_ => new LiteRepository(Database.DatabaseLocation));
+         
             //services.AddMemoryCache();
-            //services.AddSingleton<MoviesContext>();
-            //services.AddSingleton<TheatersContext>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -55,11 +56,6 @@ namespace EventualConsistencyDemo
                     name: "movie",
                     pattern: "{controller}/{movieurl}", 
                     defaults: new { controller = "Movies", action = "Movie" });
-
-                //endpoints.MapControllerRoute(
-                //    name: "movie",
-                //    pattern: "reviews/{movieurl}",
-                //    defaults: new { controller = "Reviews", action = "Movie" });
             });
         }
     }

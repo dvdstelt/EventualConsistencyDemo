@@ -33,7 +33,7 @@ namespace Server.Handlers
                 throw new ArgumentException($"Movie {message.Movie} not found in datastore", nameof(message.Movie));
 
             var order = new Order();
-            order.Identifier = Guid.NewGuid();
+            order.Id = Guid.NewGuid();
             order.MovieIdentifier = message.Movie;
             order.TheaterIdentifier = message.Theater;
             order.UserIdentifier = message.UserId;
@@ -54,7 +54,8 @@ namespace Server.Handlers
 
             // We could prevent publishing if it's a TicketType.DrawingTicket.
             // But what if in the future we do want to get notified? We'd have to change this handler again.
-            await context.Publish(new OrderAccepted(order.Identifier));
+            // So let's put it in right now! :-)
+            await context.Publish(new OrderAccepted(order.Id));
 
             // Insert last because it's a non-transactional resource that cannot easily be rolled back.
             db.Insert(order);
