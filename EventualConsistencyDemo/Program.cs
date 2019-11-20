@@ -18,7 +18,6 @@ namespace EventualConsistencyDemo
         public static async Task Main(string[] args)
         {
             var host = Host.CreateDefaultBuilder(args);
-            host.ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
 
             // Create the LiteDb database so we can work with some default movies.
             Database.Setup();
@@ -35,6 +34,9 @@ namespace EventualConsistencyDemo
                 return endpointConfiguration;
             });
 
+            // Configure web-host.
+            host.ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
+            
             await host.Build().RunAsync();
         }
     }
