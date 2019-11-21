@@ -5,7 +5,7 @@ using NServiceBus;
 
 namespace Shared.Configuration
 {
-    public static class CommonConfiguration
+    public static class EndpointConfigurationExtensions
     {
         public static EndpointConfiguration ApplyCommonConfiguration(this EndpointConfiguration endpointConfiguration, Action<RoutingSettings> configureRouting = null)
         {

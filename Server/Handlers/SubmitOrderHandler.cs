@@ -1,43 +1,67 @@
 ﻿using System;
 using System.Threading.Tasks;
-using System.Web;
+using LiteDB;
 using NServiceBus;
 using NServiceBus.Logging;
 using Shared.Commands;
+using Shared.Entities;
+using Shared.Events;
 using Shared.Messages;
 
 namespace Server.Handlers
 {
     public class SubmitOrderHandler : IHandleMessages<SubmitOrder>
     {
-        static ILog log = LogManager.GetLogger<SubmitOrderHandler>();
+        static readonly ILog log = LogManager.GetLogger<SubmitOrderHandler>();
+        
+        private readonly LiteRepository db;
 
-        public Task Handle(SubmitOrder message, IMessageHandlerContext context)
+        public SubmitOrderHandler(LiteRepository db)
         {
-            var immediatelyApproved = true;
+            this.db = db;
+        }
+        
+        public async Task Handle(SubmitOrder message, IMessageHandlerContext context)
+        {
+            log.Info($"Order arrived for movie {message.Movie}");
 
-            if (message.Movie == 1)
-            {
-                log.Info($"Order for game of thrones at {message.Time}!");
-                immediatelyApproved = false;
-            }
-            else
-            {
-                log.Info($"Order for a regular movie at {message.Time}.");
-            }
+            var movie = db.Query<Movie>()
+                .Where(s => s.Id == message.Movie)
+                .SingleOrDefault();
 
-            return context.Reply(new OrderSubmission()
+            if (movie == null)
+                throw new ArgumentException($"Movie {message.Movie} not found in datastore", nameof(message.Movie));
+
+            var order = new Order
             {
-                OrderId = Guid.NewGuid(),
-                Movie = message.Movie,
+                Id = Guid.NewGuid(),
+                MovieIdentifier = message.Movie,
+                TheaterIdentifier = message.Theater,
+                UserIdentifier = message.UserId,
                 MovieTime = message.Time,
-                Theater = message.Theater,
-                NumberOfTickets = message.NumberOfTickets,
-                Approved = immediatelyApproved,
-            });
+                NumberOfTickets = message.NumberOfTickets
+            };
 
-            // context.SendLocal(someNewMessage);
-            // context.Publish(OrderSubmitted);
+            if (movie.TicketType != TicketType.DrawingTicket)
+            {
+                await context.Reply(new OrderSubmission()
+                {
+                    OrderId = Guid.NewGuid(),
+                    Movie = message.Movie,
+                    MovieTime = message.Time,
+                    Theater = message.Theater,
+                    NumberOfTickets = message.NumberOfTickets,
+                    Approved = true,
+                });
+            }
+
+            // We could prevent publishing if it's a TicketType.DrawingTicket.
+            // But what if in the future we do want to get notified? We'd have to change this handler again.
+            // So let's put it in right now! :-)
+            await context.Publish(new OrderAccepted(order.Id));
+
+            // Insert last because it's a non-transactional resource that cannot easily be rolled back.
+            db.Insert(order);
         }
     }
 }

@@ -33,7 +33,7 @@
                 <div class="container">
 
                     <ul class="movieposters">
-                        @foreach (var movie in Model)
+                        @foreach (var movie in Model.OrderByDescending(m => m.PopularityScore))
                         {
                             <li data-img="@movie.UrlTitle">
                                 <a href="/movies/@Uri.EscapeUriString(movie.UrlTitle)">

@@ -6,7 +6,7 @@
 }
 
 <ul class="movies">
-    @foreach (var movie in Model)
+    @foreach (var movie in Model.OrderByDescending(m => m.PopularityScore))
     {
         <li>
             <div class="moviedetails">

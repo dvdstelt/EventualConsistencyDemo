@@ -7,6 +7,7 @@ using Shared.Messages;
 using System.Threading.Tasks;
 using System.Web;
 using EventualConsistencyDemo.Models;
+using LiteDB;
 using Shared.Entities;
 
 namespace EventualConsistencyDemo.Handlers
@@ -14,15 +15,17 @@ namespace EventualConsistencyDemo.Handlers
     public class OrderSubmissionHandler : IHandleMessages<OrderSubmission>
     {
         IHubContext<TicketHub> ticketHubContext;
+        private readonly LiteRepository db;
 
-        public OrderSubmissionHandler(IHubContext<TicketHub> ticketHubContext)
+        public OrderSubmissionHandler(IHubContext<TicketHub> ticketHubContext, LiteRepository db)
         {
             this.ticketHubContext = ticketHubContext;
+            this.db = db;
         }
 
         public Task Handle(OrderSubmission message, IMessageHandlerContext context)
         {
-            var movie = MoviesContext.GetMovies().Single(s => s.Id == message.Movie);
+            var movie = db.Query<Movie>().Where(s => s.Id == message.Movie).SingleOrDefault();
             var theater = TheatersContext.GetTheaters().Single(s => s.Id == message.Theater);
 
             var screenMessage = "Thank you for your order.<br /><br />";
