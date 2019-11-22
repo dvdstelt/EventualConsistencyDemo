@@ -23,7 +23,7 @@
 
         if (Array.isArray(allStoredReviews) && allStoredReviews.length) {
             $.each(allStoredReviews, function(i, item) {
-                    if (item.MovieIdentifier == @Model.Movie.Id) {
+                    if (item.MovieIdentifier == '@Model.Movie.Id') {
                         AddComment(item.Description, item.ReviewedAt);
                     }
             });
