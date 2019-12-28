@@ -1,0 +1,225 @@
+﻿@using System.Web
+@model MovieViewModel
+@{
+    ViewData["Title"] = Model.Movie.Title;
+    ViewBag.Layout = "FullPage";
+}
+
+@section Scripts{
+    <script type="text/javascript">
+    $(document).ready(function () {
+        var connection = new signalR.HubConnectionBuilder()
+                            .withUrl('/ticketHub')
+                            .build();
+
+        connection.on('OrderSubmission', function (message) {
+            console.log('OrderSubmission', message);
+            $('.overlay-content .ordering-details').html(message);
+        });
+
+        connection.start().catch(function (err) {
+            return console.error(err.toString());
+        });
+
+        var theWindow = $(window),
+            $bg = $('#bgImage'),
+            aspectRatio = $bg.width() / $bg.height();
+
+        function resizeBg() {
+            var navbarHeight = $('.navbar').first().outerHeight();
+            var theWindowHeight = theWindow.height() - navbarHeight;
+
+            if ((theWindow.width() / theWindowHeight) < aspectRatio) {
+                $bg.removeClass()
+                    .addClass('bgheight');
+            } else {
+                $bg.removeClass()
+                    .addClass('bgwidth');
+            }
+        }
+
+        $('#theaters_group input').click(function () {
+            $('#times_alternative').hide();
+            $('#times').show();
+        });
+
+        $('#times_group input').on("click", function () {
+            $('#tickets_alternative').hide();
+            $('#tickets').show();
+        });
+
+        $("#numberOfTickets").on("change", function () {
+                var price = $(this).val() * @Model.Movie.PricePerTicket;
+                $('#submit_button').removeClass().addClass('movie_button');
+                $('#totalPrice').text('$ ' + price);
+            });
+
+        $('#submit_button').click(function (e) {
+            e.preventDefault();
+
+            if ($(this).hasClass('movie_button_disabled'))
+                return;
+
+            var values = {};
+            $.each($('form#ticketForm').serializeArray(), function (i, field) {
+                console.log(field.name + ' : ' + field.value);
+                values[field.name] = field.value;
+            });
+
+            connection.invoke("SubmitOrder"
+                , values["theatersContext_group"] /* theater */
+                , values["movieId"] /* movie */
+                , values["times_group"] /* time */
+                , parseInt(values["numberOfTickets"]) /* number of tickets */
+            ).catch(function (err) {
+                return console.error(err.toString());
+            });
+
+            $('#overlay').show();
+        });
+
+        theWindow.scroll(function(){
+            $(".down_arrow").css("opacity", 1 - $(window).scrollTop() / 250);
+        });
+
+        theWindow.resize(resizeBg).trigger("resize");
+    });
+    </script>
+}
+
+<section class="movie_header">
+    <div id="bgContainer" class="movie_background">
+        <img id="bgImage" src="/img/background/@Model.Movie.Image" />
+    </div>
+    <div class="movie_header_content">
+        <div class="movie_header_content_top">
+            <button class="trailer_button"></button>
+        </div>
+        <div class="movie_header_content_bottom">
+            <div class="container">
+                <div class="poster"><img src="/img/posters/@Model.Movie.Image" width="200" /></div>
+                <div class="details">
+                    <div>
+                        <h1>
+                            <span class="movietitle">@Model.Movie.Title</span>
+                        </h1>
+                    </div>
+                    <div class="movie_button_container">
+                        <a href="#ticketForm" class="movie_button">Order tickets</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <span class="down_arrow"></span>
+</section>
+<section class="darkbackground">
+    <div class="container">
+        <div class="rating" style="display: flex;">
+            <div style="flex: 1;">
+                <div>
+                    @for (var i = 1; i <= 5; i++)
+                    {
+                        <img src="/img/icons/star-@(i <= Model.Movie.Rating ? "on" : "off").jpg" width="20" />
+                    }
+                </div>
+                <div style="padding-top: 10px;">
+                    @foreach (var icon in Model.Movie.Icons)
+                    {
+                        <img src="/img/icons/@(icon)-gray-32.png" style="padding-right: 5px; width: 35px;" />
+                    }
+                </div>
+            </div>
+            <div style="flex: 2;">
+                Release: @Model.Movie.ReleaseDate.ToString("dd-MM-yyyy")<br /><br />
+                @HttpUtility.HtmlDecode(Model.Movie.Description)<br /><br />
+                <form action="/reviews/@Model.Movie.UrlTitle">
+                    <button id="read-reviews" style="line-height: 34px; color: #000; font-size: 16px; background-color: #e0e1e4; width: 164px; border-radius: 6px; border: none;">Reviews</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<section>
+    <div class="container">
+        <div class="dennis_owns_this_shit">
+            <a href="https://compilesoftware.nl/" target="_blank"><img src="/img/banner.png" /></a>
+        </div>
+        <form id="ticketForm">
+            <div class="theatersContext_times" style="display: flex; padding-top: 50px;">
+                <div style="flex: 1; padding-right: 75px;" class="theatersContext">
+                    <span class="title">Theaters</span>
+
+                    <fieldset id="theaters_group">
+                        @foreach (var theater in Model.Theaters)
+                        {
+                            <div class="inputGroup">
+                                <input value="@theater.Id" id="@theater.Id" name="theatersContext_group" type="radio" />
+                                <label for="@theater.Id">@theater.Name</label>
+                            </div>
+                        }
+                    </fieldset>
+                </div>
+                <div style="flex: 1; padding-right: 75px;" class="times">
+                    <span class="title">Times</span>
+                    <div id="times" style="display:none;">
+                        <fieldset id="times_group">
+                            @foreach (var showtime in Model.Movie.Showtimes)
+                            {
+                                <div class="inputGroup">
+                                    <input value="@showtime" id="@showtime" name="times_group" type="radio" />
+                                    <label for="@showtime">@showtime</label>
+                                </div>
+                            }
+                        </fieldset>
+                    </div>
+                    <div id="times_alternative">
+                        Choose a movie theater from the list.
+                    </div>
+                </div>
+                <div style="flex: 1;">
+                    <span class="title">Tickets</span>
+                    <div id="tickets" style="display:none;">
+                        <div class="select">
+                            <select id="numberOfTickets" name="numberOfTickets">
+                                <option selected disabled>Number of tickets</option>
+                                <option value="1">1 ticket</option>
+                                <option value="2">2 tickets</option>
+                                <option value="3">3 tickets</option>
+                                <option value="4">4 tickets</option>
+                            </select>
+                        </div>
+                        Total price: <span id="totalPrice">$ 0</span>
+                        <div class="movie_button_container">
+                            <a href="" id="submit_button" class="movie_button_disabled">Order tickets</a>
+                        </div>
+                    </div>
+                    <div id="tickets_alternative">
+                        Select a movie and time.
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" id="movieId" name="movieId" value="@Model.Movie.Id" />
+        </form>
+    </div>
+</section>
+
+<div id="overlay" class="overlay">
+    <div class="overlay-content">
+        <div class="poster"><img src="/img/posters/@Model.Movie.Image" width="200" /></div>
+        <div class="details">
+            <div>
+                <h1>
+                    <span class="movietitle">@Model.Movie.Title</span>
+                </h1>
+            </div>
+            <div class="ordering-details">
+                Please wait...
+            </div>
+            <div class="movie_button_container">
+                <a href="" class="movie_button">Back to website</a>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,142 @@
+﻿@model ReviewViewModel
+@{
+    ViewData["Title"] = Model.Movie.Title;
+}
+
+@section Scripts{
+    <script id="review-template" type="text/x-custom-template">
+        <li>
+            <div class="comment">
+                <div><img class="gravatar"></div>
+                <div class="commentPostDetails">
+                    <div class="commentDescription"></div>
+                    <div class="commentDate"></div>
+                </div>
+            </div>
+        </li>
+    </script>
+
+    <script type="text/javascript">
+    $(document).ready(function() {
+        var jsonReviews = localStorage.getItem('popcornStoredReviews');
+        var allStoredReviews = JSON.parse(jsonReviews);
+
+        if (Array.isArray(allStoredReviews) && allStoredReviews.length) {
+            $.each(allStoredReviews, function(i, item) {
+                    if (item.MovieIdentifier == '@Model.Movie.Id') {
+                        AddComment(item.Description, item.ReviewedAt);
+                    }
+            });
+        }
+
+        $('#clearLocalStorage').on('click', function(e) {
+            e.preventDefault();
+            localStorage.removeItem('popcornStoredReviews');
+            location.reload();
+        });
+
+        $('#submitReviewButton').on('click', function(e) {
+            e.preventDefault();
+
+            var commentGuid = uuidv4();
+            var commentDescription = $('#commentDescription').val();
+            var commentDateTime = new Date();
+            var movieIdentifier = $('#movieId').val();
+
+            var newReview = {
+                Identifier: commentGuid,
+                MovieIdentifier: movieIdentifier,
+                ReviewedAt: commentDateTime,
+                Description: commentDescription,
+            };
+
+            var jsonReviews = localStorage.getItem('popcornStoredReviews');
+            var allStoredReviews = JSON.parse(jsonReviews);
+            if (!Array.isArray(allStoredReviews) || !allStoredReviews.length) {
+                allStoredReviews = [];
+            }
+
+            allStoredReviews.push(newReview);
+            jsonReviews = JSON.stringify(allStoredReviews);
+            localStorage.setItem('popcornStoredReviews', jsonReviews);
+
+            $('#commentDescription').val('');
+            AddComment(commentDescription, commentDateTime);
+        });
+
+        function AddComment(description, date) {
+            date = new Date(date);
+
+            let email = 'dvdstelt@gmail.com';
+            let reviewTemplate = $($('#review-template').html()).clone();
+
+            $(reviewTemplate).children().find('img.gravatar').attr('src', 'https://gravatar.com/avatar/9300c92d4bbf31c4a96d345e9712d2a6.jpg?&s=50')
+            $(reviewTemplate).children().find('.commentDescription').html(description);
+            $(reviewTemplate).children().find('.commentDate').html(email + ' | ' + formatDate(date));
+
+            $('#reviews').append(reviewTemplate);
+        };
+
+        function formatDate(date) {
+            return date.getDate() +
+                '/' +
+                (date.getMonth() + 1) +
+                '/' +
+                date.getFullYear() +
+                ' ' +
+                date.getHours() +
+                ':' +
+                date.getMinutes() +
+                ':' +
+                date.getSeconds();
+        }
+
+        function uuidv4() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,
+                function(c) {
+                    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                    return v.toString(16);
+                });
+        }
+
+    });
+    </script>
+}
+
+<div class="commentsPage">
+    <div class="row">
+        <div class="col-sm-3 movieposter">
+            <img src="/img/posters/@Uri.EscapeUriString(@Model.Movie.Image)" />
+            <a href="" id="clearLocalStorage">Clear localstorage</a>
+        </div>
+        <div class="col-sm-8">
+
+            <div class="title"><h2>@Model.Movie.Title</h2></div>
+            <ul class="reviews" id="reviews">
+                @foreach (var review in Model.Reviews)
+                {
+                    <li>
+                        <div class="comment">
+                            <div><img class="gravatar" src="https://gravatar.com/avatar/9300c92d4bbf31c4a96d345e9712d2a6.jpg?&s=50" /></div>
+                            <div class="commentPostDetails">
+                                <div class="commentDescription">@review.Description</div>
+                                <div class="commentDate">dvdstelt@gmail.com | @review.ReviewedAt</div>
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+            <form id="commentForm" class="commentForm">
+                <input type="hidden" id="movieId" name="movieId" value="@Model.Movie.Id" />
+                <div class="form-group">
+                    <label for="commentDescription">Add your comment:</label>
+                    <textarea class="form-control" id="commentDescription" rows="3"></textarea>
+                </div>
+                <div class="movie_button_container">
+                    <a id="submitReviewButton" class="movie_button">Submit review</a>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
