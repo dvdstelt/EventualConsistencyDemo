@@ -60,6 +60,21 @@ namespace Shared.Configuration
                     Showtimes = new List<string> {"10:00", "13:00", "15:00", "20:00", "23:00"},
                     PricePerTicket = 10D,
                     PopularityScore = 500,
+                },
+                new Movie
+                {
+                    Id = Guid.NewGuid(),
+                    UrlTitle = "tenet",
+                    Title = "Tenet",
+                    Image = "tenet.jpg",
+                    Rating = 4,
+                    Description = "Armed with only one word, Tenet, and fighting for the survival of the entire world, a Protagonist journeys through a twilight world of international espionage on a mission that will unfold in something beyond real time.",
+                    Icons = new List<string> {"12", "fear", "violence", "explicitlanguage" },
+                    MovieDetails = "150 minutes | English, Dutch subtitles",
+                    ReleaseDate = new DateTime(2020,08,27),
+                    Showtimes = new List<string> { "10:00","13:00","15:00", "20:00", "23:00"},
+                    PricePerTicket = 20D,
+                    PopularityScore = 500
                 }
             };
         }
