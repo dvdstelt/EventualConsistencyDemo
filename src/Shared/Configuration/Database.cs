@@ -10,13 +10,14 @@ namespace Shared.Configuration
 {
     public static class Database
     {
-        public static string DatabaseLocation
+        public static string DatabaseConnectionstring
         {
             get
             {
                 var storagePath = FindStoragePath();
                 Directory.CreateDirectory(storagePath);
                 var databaseLocation = Path.Combine(storagePath, DatabaseName);
+                databaseLocation = $"Filename={databaseLocation}; Connection=shared";
 
                 return databaseLocation;
             }
@@ -24,7 +25,7 @@ namespace Shared.Configuration
 
         public static void Setup()
         {
-            using var db = new LiteDatabase(DatabaseLocation);
+            using var db = new LiteDatabase(DatabaseConnectionstring);
             var movieCollection = db.GetCollection<Movie>("movie");
             var reviewCollection = db.GetCollection<Review>("review");
             if (movieCollection.Count() == 0)

@@ -14,7 +14,7 @@ namespace Server
 
             endpointConfiguration.RegisterComponents(s =>
             {
-                s.ConfigureComponent(() => new LiteRepository(Database.DatabaseLocation), 
+                s.ConfigureComponent(() => new LiteRepository(Database.DatabaseConnectionstring), 
                     DependencyLifecycle.InstancePerUnitOfWork);
             });
 

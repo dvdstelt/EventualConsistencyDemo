@@ -42,18 +42,17 @@ namespace Server.Handlers
                 NumberOfTickets = message.NumberOfTickets
             };
 
-            if (movie.TicketType != TicketType.DrawingTicket)
+            bool immediatelyApproved = movie.TicketType != TicketType.DrawingTicket;
+
+            await context.Reply(new OrderSubmission()
             {
-                await context.Reply(new OrderSubmission()
-                {
-                    OrderId = Guid.NewGuid(),
-                    Movie = message.Movie,
-                    MovieTime = message.Time,
-                    Theater = message.Theater,
-                    NumberOfTickets = message.NumberOfTickets,
-                    Approved = true,
-                });
-            }
+                OrderId = Guid.NewGuid(),
+                Movie = message.Movie,
+                MovieTime = message.Time,
+                Theater = message.Theater,
+                NumberOfTickets = message.NumberOfTickets,
+                Approved = immediatelyApproved,
+            });
 
             // We could prevent publishing if it's a TicketType.DrawingTicket.
             // But what if in the future we do want to get notified? We'd have to change this handler again.
