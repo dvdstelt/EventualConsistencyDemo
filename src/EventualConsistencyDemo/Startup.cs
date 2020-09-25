@@ -25,7 +25,7 @@ namespace EventualConsistencyDemo
 
             services.AddSignalR();
 
-            services.AddScoped(_ => new LiteRepository(Database.DatabaseLocation));
+            services.AddScoped(_ => new LiteRepository(Database.DatabaseConnectionstring));
          
             //services.AddMemoryCache();
         }

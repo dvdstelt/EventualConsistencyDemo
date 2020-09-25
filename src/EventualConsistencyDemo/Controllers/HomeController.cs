@@ -17,7 +17,7 @@ namespace EventualConsistencyDemo.Controllers
 
         public IActionResult Index()
         {
-            return View(db.Fetch<Movie>());
+            return View(db.Query<Movie>().ToList());
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

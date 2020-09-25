@@ -8,7 +8,7 @@ namespace EventualConsistencyDemo.Hubs
 {
     public class TicketHub : Hub
     {
-        IMessageSession messageSession;
+        readonly IMessageSession messageSession;
 
         public TicketHub(IMessageSession messageSession)
         {

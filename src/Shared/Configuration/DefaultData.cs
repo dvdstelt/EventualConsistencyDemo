@@ -27,6 +27,7 @@ namespace Shared.Configuration
                     Showtimes = new List<string> {"19:00"},
                     PricePerTicket = 0D,
                     PopularityScore = 1000,
+                    TicketType = TicketType.DrawingTicket,
                 },
                 new Movie
                 {

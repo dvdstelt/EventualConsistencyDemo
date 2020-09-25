@@ -20,9 +20,7 @@ namespace EventualConsistencyDemo.Controllers
 
         public ActionResult Index()
         {
-            var movies = db.Fetch<Movie>();
-
-            return View(movies);
+            return View(db.Query<Movie>().ToList());
         }
 
         public ActionResult Movie(string movieurl)
