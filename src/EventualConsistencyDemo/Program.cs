@@ -17,10 +17,10 @@ namespace EventualConsistencyDemo
     {
         public static async Task Main(string[] args)
         {
-            var host = Host.CreateDefaultBuilder(args);
-
             // Create the LiteDb database so we can work with some default movies.
             Database.Setup();
+
+            var host = Host.CreateDefaultBuilder(args);
 
             // Configure NServiceBus
             host.UseNServiceBus(hostBuilderContext =>
@@ -35,7 +35,7 @@ namespace EventualConsistencyDemo
             });
 
             // Configure web-host.
-            host.ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
+            host.ConfigureWebHostDefaults(c => c.UseStartup<Startup>());
             
             await host.Build().RunAsync();
         }

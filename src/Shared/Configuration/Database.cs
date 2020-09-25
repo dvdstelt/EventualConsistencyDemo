@@ -24,22 +24,20 @@ namespace Shared.Configuration
 
         public static void Setup()
         {
-            using (var db = new LiteDatabase(DatabaseLocation))
+            using var db = new LiteDatabase(DatabaseLocation);
+            var movieCollection = db.GetCollection<Movie>("movie");
+            var reviewCollection = db.GetCollection<Review>("review");
+            if (movieCollection.Count() == 0)
             {
-                var movieCollection = db.GetCollection<Movie>("movie");
-                var reviewCollection = db.GetCollection<Review>("review");
-                if (movieCollection.Count() == 0)
-                {
-                    var movies = DefaultData.GetDefaultMovies();
-                    movieCollection.Insert(movies);
-                    reviewCollection.Insert(DefaultData.GetDefaultReviews(movies));
+                var movies = DefaultData.GetDefaultMovies();
+                movieCollection.Insert(movies);
+                reviewCollection.Insert(DefaultData.GetDefaultReviews(movies));
 
-                    movieCollection.EnsureIndex(x => x.Id);
-                    movieCollection.EnsureIndex(x => x.UrlTitle);
+                movieCollection.EnsureIndex(x => x.Id);
+                movieCollection.EnsureIndex(x => x.UrlTitle);
 
-                    reviewCollection.EnsureIndex(x => x.Id);
-                    reviewCollection.EnsureIndex(x => x.MovieIdentifier);
-                }
+                reviewCollection.EnsureIndex(x => x.Id);
+                reviewCollection.EnsureIndex(x => x.MovieIdentifier);
             }
         }
 

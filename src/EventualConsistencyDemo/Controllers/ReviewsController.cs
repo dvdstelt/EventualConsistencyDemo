@@ -22,7 +22,7 @@ namespace EventualConsistencyDemo.Controllers
         // GET: Reviews
         public ActionResult Index()
         {
-            return View(db.Fetch<Movie>());
+            return View(db.Query<Movie>().ToList());
         }
 
         // GET: Reviews/gameofthrones
@@ -30,8 +30,8 @@ namespace EventualConsistencyDemo.Controllers
         {
             var vm = new ReviewViewModel();
 
-            vm.Movie = db.Fetch<Movie>().Single(s => s.UrlTitle == movieurl);
-            vm.Reviews = db.Fetch<Review>().Where(s => s.MovieIdentifier == vm.Movie.Id);
+            vm.Movie = db.Query<Movie>().Where(s => s.UrlTitle == movieurl).Single();
+            vm.Reviews = db.Query<Review>().Where(s => s.MovieIdentifier == vm.Movie.Id).ToEnumerable();
 
             return View(vm);
         }
