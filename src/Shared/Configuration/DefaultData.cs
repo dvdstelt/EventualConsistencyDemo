@@ -29,22 +29,22 @@ namespace Shared.Configuration
                     PopularityScore = 1000,
                     TicketType = TicketType.DrawingTicket,
                 },
-                new Movie
-                {
-                    Id = Guid.NewGuid(),
-                    UrlTitle = "jayandsilentbobreboot",
-                    Title = "Jay and Silent Bob Reboot",
-                    Image = "jayandsilentbobreboot.jpg",
-                    Rating = 2,
-                    Description =
-                        "Jay and Silent Bob return to Hollywood to stop a reboot of &#39;Bluntman and Chronic&#39; movie from getting made.",
-                    Icons = new List<string> {"16", "alcoholdrugabuse", "explicitlanguage"},
-                    MovieDetails = "105 minutes | English, Dutch subtitles",
-                    ReleaseDate = new DateTime(2019, 10, 15),
-                    Showtimes = new List<string> {"10:00", "15:00", "20:00"},
-                    PricePerTicket = 10D,
-                    PopularityScore = 200,
-                },
+                //new Movie
+                //{
+                //    Id = Guid.NewGuid(),
+                //    UrlTitle = "jayandsilentbobreboot",
+                //    Title = "Jay and Silent Bob Reboot",
+                //    Image = "jayandsilentbobreboot.jpg",
+                //    Rating = 2,
+                //    Description =
+                //        "Jay and Silent Bob return to Hollywood to stop a reboot of &#39;Bluntman and Chronic&#39; movie from getting made.",
+                //    Icons = new List<string> {"16", "alcoholdrugabuse", "explicitlanguage"},
+                //    MovieDetails = "105 minutes | English, Dutch subtitles",
+                //    ReleaseDate = new DateTime(2019, 10, 15),
+                //    Showtimes = new List<string> {"10:00", "15:00", "20:00"},
+                //    PricePerTicket = 10D,
+                //    PopularityScore = 200,
+                //},
                 new Movie
                 {
                     Id = Guid.NewGuid(),
@@ -82,17 +82,20 @@ namespace Shared.Configuration
         public static List<Review> GetDefaultReviews(IEnumerable<Movie> movies)
         {
             var gotId = movies.Single(s => s.UrlTitle == "gameofthrones").Id;
-            var jsbId = movies.Single(s => s.UrlTitle == "jayandsilentbobreboot").Id;
+            //var jsbId = movies.Single(s => s.UrlTitle == "jayandsilentbobreboot").Id;
             var tros = movies.Single(s => s.UrlTitle == "riseofskywalker").Id;
+            var tenet = movies.Single(s => s.UrlTitle == "tenet").Id;
 
             return new List<Review>
             {
                 new Review() { Id = Guid.NewGuid(), MovieIdentifier = gotId, Description = "The last episode sucked!", ReviewedAt = new DateTime(2019, 05, 19, 23, 30, 12) },
                 new Review() { Id = Guid.NewGuid(), MovieIdentifier = gotId, Description = "I want more Arya! She's the best!", ReviewedAt = new DateTime(2019, 05, 19, 23, 35, 36) },
-                new Review() { Id = Guid.NewGuid(), MovieIdentifier = jsbId, Description = "Kevin Smith is my favorite director and this movie is another great piece of work.", ReviewedAt = new DateTime(2019, 10, 8, 12, 12, 12) },
-                new Review() { Id = Guid.NewGuid(), MovieIdentifier = jsbId, Description = "Snootch to the nootch!!!", ReviewedAt = new DateTime(2019, 10, 9, 13, 45, 18) },
+                //new Review() { Id = Guid.NewGuid(), MovieIdentifier = jsbId, Description = "Kevin Smith is my favorite director and this movie is another great piece of work.", ReviewedAt = new DateTime(2019, 10, 8, 12, 12, 12) },
+                //new Review() { Id = Guid.NewGuid(), MovieIdentifier = jsbId, Description = "Snootch to the nootch!!!", ReviewedAt = new DateTime(2019, 10, 9, 13, 45, 18) },
                 new Review() { Id = Guid.NewGuid(), MovieIdentifier = tros, Description = "Come on JJ, finish this one good!", ReviewedAt = new DateTime(2019, 10, 8, 8, 14, 56) },
                 new Review() { Id = Guid.NewGuid(), MovieIdentifier = tros, Description = "Can't wait for Picard to return to Mordor!", ReviewedAt = new DateTime(2019, 10, 10, 13, 37, 00) },
+                new Review() { Id = Guid.NewGuid(), MovieIdentifier = tenet, Description = "Mind is blown! I need to see this again!", ReviewedAt = new DateTime(2020, 07, 8, 12, 12, 12) },
+                new Review() { Id = Guid.NewGuid(), MovieIdentifier = tenet, Description = "I didn't get it", ReviewedAt = new DateTime(2020, 07, 9, 13, 45, 18) },
             };
         }
 
