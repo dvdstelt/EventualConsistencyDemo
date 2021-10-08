@@ -17,7 +17,7 @@ namespace EventualConsistencyDemo
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {

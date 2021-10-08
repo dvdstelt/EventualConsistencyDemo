@@ -16,11 +16,8 @@ namespace Server.Handlers
         
         private readonly LiteRepository db;
 
-        public SubmitOrderHandler(LiteRepository db)
-        {
-            this.db = db;
-        }
-        
+        public SubmitOrderHandler(LiteRepository db) => this.db = db;
+
         public async Task Handle(SubmitOrder message, IMessageHandlerContext context)
         {
             log.Info($"Order arrived for movie {message.Movie}");
