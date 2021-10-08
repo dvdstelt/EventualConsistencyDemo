@@ -8,12 +8,15 @@ using System.Threading.Tasks;
 using System.Web;
 using EventualConsistencyDemo.Models;
 using LiteDB;
+using NServiceBus.Logging;
 using Shared.Entities;
 
 namespace EventualConsistencyDemo.Handlers
 {
     public class OrderSubmissionHandler : IHandleMessages<OrderSubmission>
     {
+        static ILog log = LogManager.GetLogger<OrderSubmissionHandler>();
+
         IHubContext<TicketHub> ticketHubContext;
         private readonly LiteRepository db;
 
@@ -25,6 +28,12 @@ namespace EventualConsistencyDemo.Handlers
 
         public Task Handle(OrderSubmission message, IMessageHandlerContext context)
         {
+            if (!context.MessageHeaders.TryGetValue("SignalRConnectionId", out var userConnectionId))
+            {
+                log.Error("Could not find SignalR ConnectionId from message headers.");
+                return Task.CompletedTask;
+            }
+            
             var movie = db.Query<Movie>().Where(s => s.Id == message.Movie).SingleOrDefault();
             var theater = TheatersContext.GetTheaters().Single(s => s.Id == message.Theater);
 
@@ -52,7 +61,7 @@ namespace EventualConsistencyDemo.Handlers
                 MovieTitle = movie.Title
             };
 
-            return ticketHubContext.Clients.All.SendAsync("OrderSubmission", screenMessage);
+            return ticketHubContext.Clients.Client(userConnectionId).SendAsync("OrderSubmission", screenMessage);
         }
     }
 }
