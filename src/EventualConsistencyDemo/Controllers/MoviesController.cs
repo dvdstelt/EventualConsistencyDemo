@@ -29,9 +29,11 @@ namespace EventualConsistencyDemo.Controllers
                             .Where(s => s.UrlTitle == movieurl)
                             .SingleOrDefault();
 
-            var vm = new MovieViewModel();
-            vm.Movie = movie;
-            vm.Theaters = TheatersContext.GetTheaters();
+            var vm = new MovieViewModel
+            {
+                Movie = movie,
+                Theaters = TheatersContext.GetTheaters()
+            };
 
             return View(vm);
         }
