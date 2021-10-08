@@ -12,10 +12,7 @@ namespace Server.Handlers
         private readonly LiteRepository db;
         static ILog log = LogManager.GetLogger<OrderAcceptedHandler>();
 
-        public OrderAcceptedHandler(LiteRepository db)
-        {
-            this.db = db;
-        }
+        public OrderAcceptedHandler(LiteRepository db) => this.db = db;
 
         public Task Handle(OrderAccepted message, IMessageHandlerContext context)
         {

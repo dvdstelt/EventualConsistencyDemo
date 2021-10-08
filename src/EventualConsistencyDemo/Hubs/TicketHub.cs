@@ -10,10 +10,7 @@ namespace EventualConsistencyDemo.Hubs
     {
         readonly IMessageSession messageSession;
 
-        public TicketHub(IMessageSession messageSession)
-        {
-            this.messageSession = messageSession;
-        }
+        public TicketHub(IMessageSession messageSession) => this.messageSession = messageSession;
 
         public Task SubmitOrder(string theater, string movie, string time, int numberOfTickets)
         {
