@@ -14,14 +14,19 @@ namespace EventualConsistencyDemo.Hubs
 
         public Task SubmitOrder(string theater, string movie, string time, int numberOfTickets)
         {
-            return messageSession.Send(new SubmitOrder() 
-            {
-                Theater = Guid.Parse(theater),
-                Movie = Guid.Parse(movie),
-                Time = time,
-                NumberOfTickets = numberOfTickets,
-                UserId = Guid.Parse("218d92c4-9c42-4e61-80fa-198b22461f61") // For now, no other users allowed ;-)
-            });
+            var userConnectionId = this.Context.ConnectionId;
+
+            var sendOptions = new SendOptions();
+            sendOptions.SetHeader("SignalRConnectionId", userConnectionId);
+
+            var order = new SubmitOrder();
+            order.Theater = Guid.Parse(theater);
+            order.Movie = Guid.Parse(movie);
+            order.Time = time;
+            order.NumberOfTickets = numberOfTickets;
+            order.UserId = Guid.Parse("218d92c4-9c42-4e61-80fa-198b22461f61"); // For now, no other users allowed ;-)
+            
+            return messageSession.Send(order, sendOptions);
         }
     }
 }
