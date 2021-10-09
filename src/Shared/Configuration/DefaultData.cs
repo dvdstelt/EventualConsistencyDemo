@@ -58,7 +58,7 @@ namespace Shared.Configuration
                     MovieDetails = "156 minutes | English, Dutch subtitles",
                     ReleaseDate = new DateTime(2021, 9, 16),
                     Showtimes = new List<string> {"10:00", "13:00", "15:00", "20:00", "23:00"},
-                    PricePerTicket = 10D,
+                    PricePerTicket = 20D,
                     PopularityScore = 500,
                 },
                 new Movie
@@ -73,8 +73,8 @@ namespace Shared.Configuration
                     MovieDetails = "115 minutes | English, Dutch subtitles",
                     ReleaseDate = new DateTime(2021,08,11),
                     Showtimes = new List<string> { "15:00", "20:00", "23:00" },
-                    PricePerTicket = 20D,
-                    PopularityScore = 500
+                    PricePerTicket = 10D,
+                    PopularityScore = 250
                 }
             };
         }
