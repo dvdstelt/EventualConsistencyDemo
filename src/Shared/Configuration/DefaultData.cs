@@ -48,15 +48,15 @@ namespace Shared.Configuration
                 new Movie
                 {
                     Id = Guid.NewGuid(),
-                    UrlTitle = "riseofskywalker",
-                    Title = "Star Wars : The Rise of Skywalker",
-                    Image = "riseofskywalker.jpg",
-                    Rating = 3,
+                    UrlTitle = "dune",
+                    Title = "Dune",
+                    Image = "dune.jpg",
+                    Rating = 5,
                     Description =
-                        "The surviving Resistance faces the First Order once more in the final chapter of the Skywalker saga.",
-                    Icons = new List<string>(),
-                    MovieDetails = "152 minutes | English, Dutch subtitles",
-                    ReleaseDate = new DateTime(2019, 10, 15),
+                        "Feature adaptation of Frank Herbert's science fiction novel, about the son of a noble family entrusted with the protection of the most valuable asset and most vital element in the galaxy.",
+                    Icons = new List<string> {"12", "violence", "fear" },
+                    MovieDetails = "156 minutes | English, Dutch subtitles",
+                    ReleaseDate = new DateTime(2021, 9, 16),
                     Showtimes = new List<string> {"10:00", "13:00", "15:00", "20:00", "23:00"},
                     PricePerTicket = 10D,
                     PopularityScore = 500,
@@ -64,15 +64,15 @@ namespace Shared.Configuration
                 new Movie
                 {
                     Id = Guid.NewGuid(),
-                    UrlTitle = "tenet",
-                    Title = "Tenet",
-                    Image = "tenet.jpg",
-                    Rating = 4,
-                    Description = "Armed with only one word, Tenet, and fighting for the survival of the entire world, a Protagonist journeys through a twilight world of international espionage on a mission that will unfold in something beyond real time.",
-                    Icons = new List<string> {"12", "fear", "violence", "explicitlanguage" },
-                    MovieDetails = "150 minutes | English, Dutch subtitles",
-                    ReleaseDate = new DateTime(2020,08,27),
-                    Showtimes = new List<string> { "10:00","13:00","15:00", "20:00", "23:00"},
+                    UrlTitle = "freeguy",
+                    Title = "FreeGuy",
+                    Image = "freeguy.jpg",
+                    Rating = 5,
+                    Description = "A bank teller discovers that he's actually an NPC inside a brutal, open world video game.",
+                    Icons = new List<string> {"12", "violence", "explicitlanguage" },
+                    MovieDetails = "115 minutes | English, Dutch subtitles",
+                    ReleaseDate = new DateTime(2021,08,11),
+                    Showtimes = new List<string> { "15:00", "20:00", "23:00" },
                     PricePerTicket = 20D,
                     PopularityScore = 500
                 }
@@ -83,8 +83,10 @@ namespace Shared.Configuration
         {
             var gotId = movies.Single(s => s.UrlTitle == "gameofthrones").Id;
             //var jsbId = movies.Single(s => s.UrlTitle == "jayandsilentbobreboot").Id;
-            var tros = movies.Single(s => s.UrlTitle == "riseofskywalker").Id;
-            var tenet = movies.Single(s => s.UrlTitle == "tenet").Id;
+            // var tros = movies.Single(s => s.UrlTitle == "riseofskywalker").Id;
+            // var tenet = movies.Single(s => s.UrlTitle == "tenet").Id;
+            var dune = movies.Single(s => s.UrlTitle == "dune").Id;
+            var freeguy = movies.Single(s => s.UrlTitle == "freeguy").Id;
 
             return new List<Review>
             {
@@ -92,10 +94,10 @@ namespace Shared.Configuration
                 new Review() { Id = Guid.NewGuid(), MovieIdentifier = gotId, Description = "I want more Arya! She's the best!", ReviewedAt = new DateTime(2019, 05, 19, 23, 35, 36) },
                 //new Review() { Id = Guid.NewGuid(), MovieIdentifier = jsbId, Description = "Kevin Smith is my favorite director and this movie is another great piece of work.", ReviewedAt = new DateTime(2019, 10, 8, 12, 12, 12) },
                 //new Review() { Id = Guid.NewGuid(), MovieIdentifier = jsbId, Description = "Snootch to the nootch!!!", ReviewedAt = new DateTime(2019, 10, 9, 13, 45, 18) },
-                new Review() { Id = Guid.NewGuid(), MovieIdentifier = tros, Description = "Come on JJ, finish this one good!", ReviewedAt = new DateTime(2019, 10, 8, 8, 14, 56) },
-                new Review() { Id = Guid.NewGuid(), MovieIdentifier = tros, Description = "Can't wait for Picard to return to Mordor!", ReviewedAt = new DateTime(2019, 10, 10, 13, 37, 00) },
-                new Review() { Id = Guid.NewGuid(), MovieIdentifier = tenet, Description = "Mind is blown! I need to see this again!", ReviewedAt = new DateTime(2020, 07, 8, 12, 12, 12) },
-                new Review() { Id = Guid.NewGuid(), MovieIdentifier = tenet, Description = "I didn't get it", ReviewedAt = new DateTime(2020, 07, 9, 13, 45, 18) },
+                new Review() { Id = Guid.NewGuid(), MovieIdentifier = dune, Description = "Great visuals, screenplay adaptation is too close to the books though.", ReviewedAt = new DateTime(2021, 10, 8, 8, 14, 56) },
+                new Review() { Id = Guid.NewGuid(), MovieIdentifier = dune, Description = "Can't wait to go back to Mordor!", ReviewedAt = new DateTime(2021, 10, 9, 13, 37, 00) },
+                new Review() { Id = Guid.NewGuid(), MovieIdentifier = freeguy, Description = "I love Reynolds his humor, this movie is epic!", ReviewedAt = new DateTime(2021, 09, 21, 12, 12, 12) },
+                new Review() { Id = Guid.NewGuid(), MovieIdentifier = freeguy, Description = "May the force be with you, always!", ReviewedAt = new DateTime(2021, 09, 20, 13, 45, 18) },
             };
         }
 
