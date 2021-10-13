@@ -1,36 +1,34 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using EventualConsistencyDemo.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using NServiceBus;
 using Shared.Messages;
 using System.Threading.Tasks;
-using System.Web;
 using EventualConsistencyDemo.Models;
 using LiteDB;
-using NServiceBus.Logging;
+using Microsoft.Extensions.Logging;
 using Shared.Entities;
 
 namespace EventualConsistencyDemo.Handlers
 {
     public class OrderSubmissionHandler : IHandleMessages<OrderSubmission>
     {
-        static ILog log = LogManager.GetLogger<OrderSubmissionHandler>();
-
         IHubContext<TicketHub> ticketHubContext;
         private readonly LiteRepository db;
+        readonly ILogger<OrderSubmissionHandler> logger;
 
-        public OrderSubmissionHandler(IHubContext<TicketHub> ticketHubContext, LiteRepository db)
+        public OrderSubmissionHandler(IHubContext<TicketHub> ticketHubContext, LiteRepository db, ILogger<OrderSubmissionHandler> logger)
         {
             this.ticketHubContext = ticketHubContext;
             this.db = db;
+            this.logger = logger;
         }
 
         public async Task Handle(OrderSubmission message, IMessageHandlerContext context)
         {
             if (!context.MessageHeaders.TryGetValue("SignalRConnectionId", out var userConnectionId))
             {
-                log.Error("Could not find SignalR ConnectionId from message headers.");
+                logger.LogError("Could not find SignalR ConnectionId from message headers.");
                 return;
             }
             
@@ -40,31 +38,17 @@ namespace EventualConsistencyDemo.Handlers
             if (movie.TicketType == TicketType.DrawingTicket)
                 return;
 
-            var screenMessage = "Thank you for your order.<br /><br />";
-            screenMessage += "<table>";
-            screenMessage += $"<tr><td><b>Movie</b></td><td>: {movie.Title}</td></tr>";
-            screenMessage += $"<tr><td><b>Theater</b></td><td>: {theater.Name}</td></tr>";
-            screenMessage += $"<tr><td><b>Time</b></td><td>: {message.MovieTime}</td></tr>";
-            screenMessage += $"<tr><td><b>Tickets</b></td><td>: {message.NumberOfTickets}</td></tr>";
-            screenMessage += "</tr></table><br /><br />";
-
-            if (message.Approved)
+            var ticket = new
             {
-                screenMessage +=
-                    $"Your order will soon arrive in your email.";
-            }
-            else
-            {
-                // For simplicity, it's always 2 weeks in advance.
-                screenMessage += $"On <b>{DateTime.Now.AddDays(14):M}</b>, you'll receive an email and hear if you have been selected.";
-            }
-
-            var returnMessage = new
-            {
-                MovieTitle = movie.Title
+                TheaterId = theater.Id.ToString(),
+                Theater = theater.Name,
+                MovieId = movie.Id.ToString(),
+                MovieTitle = movie.Title,
+                Time = message.MovieTime,
+                NumberOfTickets = message.NumberOfTickets
             };
 
-            await ticketHubContext.Clients.Client(userConnectionId).SendAsync("OrderSubmission", screenMessage);
+            await ticketHubContext.Clients.Client(userConnectionId).SendAsync("OrderedRegularTicket", ticket);
         }
     }
 }
