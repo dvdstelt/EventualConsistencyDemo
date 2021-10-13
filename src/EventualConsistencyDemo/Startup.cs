@@ -23,11 +23,12 @@ namespace EventualConsistencyDemo
         {
             services.AddControllersWithViews();
 
-            services.AddSignalR();
+            services.AddSignalR(o => o.EnableDetailedErrors = true);
 
             services.AddScoped(_ => new LiteRepository(Database.DatabaseConnectionstring));
+            services.AddScoped<MovieTickets>();
          
-            //services.AddMemoryCache();
+            services.AddMemoryCache();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
