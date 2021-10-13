@@ -70,7 +70,7 @@
 
 <section class="movie_header">
     <div id="bgContainer" class="movie_background">
-        <img id="bgImage" src="/img/background/@Model.Movie.Image" />
+        <img id="bgImage" src="/img/background/@Model.Movie.Image"/>
     </div>
     <div class="movie_header_content">
         <div class="movie_header_content_top">
@@ -78,7 +78,9 @@
         </div>
         <div class="movie_header_content_bottom">
             <div class="container">
-                <div class="poster"><img src="/img/posters/@Model.Movie.Image" width="200" /></div>
+                <div class="poster">
+                    <img src="/img/posters/@Model.Movie.Image" width="200"/>
+                </div>
                 <div class="details">
                     <div>
                         <h1>
@@ -101,19 +103,19 @@
                 <div>
                     @for (var i = 1; i <= 5; i++)
                     {
-                        <img src="/img/icons/star-@(i <= Model.Movie.Rating ? "on" : "off").jpg" width="20" />
+                        <img src="/img/icons/star-@(i <= Model.Movie.Rating ? "on" : "off").jpg" width="20"/>
                     }
                 </div>
                 <div style="padding-top: 10px;">
                     @foreach (var icon in Model.Movie.Icons)
                     {
-                        <img src="/img/icons/@(icon)-gray-32.png" style="padding-right: 5px; width: 35px;" />
+                        <img src="/img/icons/@(icon)-gray-32.png" style="padding-right: 5px; width: 35px;"/>
                     }
                 </div>
             </div>
             <div style="flex: 2;">
-                Release: @Model.Movie.ReleaseDate.ToString("dd-MM-yyyy")<br /><br />
-                @HttpUtility.HtmlDecode(Model.Movie.Description)<br /><br />
+                Release: @Model.Movie.ReleaseDate.ToString("dd-MM-yyyy")<br/><br/>
+                @HttpUtility.HtmlDecode(Model.Movie.Description)<br/><br/>
                 <form action="/reviews/@Model.Movie.UrlTitle">
                     <button id="read-reviews" style="line-height: 34px; color: #000; font-size: 16px; background-color: #e0e1e4; width: 164px; border-radius: 6px; border: none;">Reviews</button>
                 </form>
@@ -124,7 +126,9 @@
 <section>
     <div class="container">
         <div class="dennis_owns_this_shit">
-            <a href="https://compilesoftware.nl/" target="_blank"><img src="/img/banner.png" /></a>
+            <a href="https://compilesoftware.nl/" target="_blank">
+                <img src="/img/banner.png"/>
+            </a>
         </div>
         <form id="ticketForm">
             <div class="theatersContext_times" style="display: flex; padding-top: 50px;">
@@ -135,7 +139,7 @@
                         @foreach (var theater in Model.Theaters)
                         {
                             <div class="inputGroup">
-                                <input value="@theater.Id" id="@theater.Id" name="theatersContext_group" type="radio" />
+                                <input value="@theater.Id" id="@theater.Id" name="theatersContext_group" type="radio"/>
                                 <label for="@theater.Id">@theater.Name</label>
                             </div>
                         }
@@ -148,7 +152,7 @@
                             @foreach (var showtime in Model.Movie.Showtimes)
                             {
                                 <div class="inputGroup">
-                                    <input value="@showtime" id="@showtime" name="times_group" type="radio" />
+                                    <input value="@showtime" id="@showtime" name="times_group" type="radio"/>
                                     <label for="@showtime">@showtime</label>
                                 </div>
                             }
@@ -180,14 +184,16 @@
                     </div>
                 </div>
             </div>
-            <input type="hidden" id="movieId" name="movieId" value="@Model.Movie.Id" />
+            <input type="hidden" id="movieId" name="movieId" value="@Model.Movie.Id"/>
         </form>
     </div>
 </section>
 
 <div id="overlay" class="overlay">
     <div class="overlay-content">
-        <div class="poster"><img src="/img/posters/@Model.Movie.Image" width="200" /></div>
+        <div class="poster">
+            <img src="/img/posters/@Model.Movie.Image" width="200"/>
+        </div>
         <div class="details">
             <div>
                 <h1>
@@ -204,3 +210,57 @@
 
     </div>
 </div>
+
+<template id="regularticket">
+    Thank you for your order.<br/><br/>
+    <table>
+        <tr>
+            <td>
+                <b>Movie</b>
+            </td><td>: {movieTitle}</td>
+        </tr>
+        <tr>
+            <td>
+                <b>Theater</b>
+            </td><td>: {theater}</td>
+        </tr>
+        <tr>
+            <td>
+                <b>Time</b>
+            </td><td>: {time}</td>
+        </tr>
+        <tr>
+            <td>
+                <b>Tickets</b>
+            </td><td>: {numberOfTickets}</td>
+        </tr>
+    </table><br/><br/>
+    Your order will soon arrive in your email.
+</template>
+
+<template id="lotteryticket">
+    Thank you for registering. If you win, you'll receive an email with your tickets on <b>{drawingDate}</b>.
+    <br/><br />
+    <table>
+        <tr>
+            <td>
+                <b>Movie</b>
+            </td><td>: {movieTitle}</td>
+        </tr>
+        <tr>
+            <td>
+                <b>Theater</b>
+            </td><td>: {theater}</td>
+        </tr>
+        <tr>
+            <td>
+                <b>Time</b>
+            </td><td>: {time}</td>
+        </tr>
+        <tr>
+            <td>
+                <b>Tickets</b>
+            </td><td>: {numberOfTickets}</td>
+        </tr>
+    </table>
+</template>
