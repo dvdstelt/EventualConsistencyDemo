@@ -1,31 +1,30 @@
-﻿////"use strict";
+﻿"use strict";
 
-//var connection = new signalR.HubConnectionBuilder().withUrl("/ticketHub").build();
+let connection = new signalR.HubConnectionBuilder()
+    .withUrl("/ticketHub")
+    .build();
 
-//$('')
+connection.start().catch(function (err) {
+    return console.error(err.toString());
+});
 
-////Disable send button until connection is established
-//document.getElementById("sendButton").disabled = true;
+connection.on('OrderSubmission', function (message) {
+    console.log('OrderSubmission', message);
+    $('.overlay-content .ordering-details').html(message);
+});
 
-//connection.on("ReceiveMessage", function (user, message) {
-//    var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-//    var encodedMsg = user + " says " + msg;
-//    var li = document.createElement("li");
-//    li.textContent = encodedMsg;
-//    document.getElementById("messagesList").appendChild(li);
-//});
+function registerMovieTicket(formValues)
+{
+    var ticket = {
+        MovieId: formValues["movieId"],
+        TheaterId: formValues["theatersContext_group"],
+        Time: formValues["times_group"],
+        NumberOfTickets: parseInt(formValues["numberOfTickets"])
+    };
 
-//connection.start().then(function () {
-//    document.getElementById("sendButton").disabled = false;
-//}).catch(function (err) {
-//    return console.error(err.toString());
-//});
-
-//document.getElementById("sendButton").addEventListener("click", function (event) {
-//    var user = document.getElementById("userInput").value;
-//    var message = document.getElementById("messageInput").value;
-//    connection.invoke("SendMessage", user, message).catch(function (err) {
-//        return console.error(err.toString());
-//    });
-//    event.preventDefault();
-//});
+    connection.invoke("SubmitOrder", ticket)
+        .catch(function (err) {
+            return console.error(err.toString());
+        });
+   
+}

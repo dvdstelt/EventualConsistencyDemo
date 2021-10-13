@@ -26,16 +26,19 @@ namespace EventualConsistencyDemo.Handlers
             this.db = db;
         }
 
-        public Task Handle(OrderSubmission message, IMessageHandlerContext context)
+        public async Task Handle(OrderSubmission message, IMessageHandlerContext context)
         {
             if (!context.MessageHeaders.TryGetValue("SignalRConnectionId", out var userConnectionId))
             {
                 log.Error("Could not find SignalR ConnectionId from message headers.");
-                return Task.CompletedTask;
+                return;
             }
             
             var movie = db.Query<Movie>().Where(s => s.Id == message.Movie).SingleOrDefault();
             var theater = TheatersContext.GetTheaters().Single(s => s.Id == message.Theater);
+
+            if (movie.TicketType == TicketType.DrawingTicket)
+                return;
 
             var screenMessage = "Thank you for your order.<br /><br />";
             screenMessage += "<table>";
@@ -61,7 +64,7 @@ namespace EventualConsistencyDemo.Handlers
                 MovieTitle = movie.Title
             };
 
-            return ticketHubContext.Clients.Client(userConnectionId).SendAsync("OrderSubmission", screenMessage);
+            await ticketHubContext.Clients.Client(userConnectionId).SendAsync("OrderSubmission", screenMessage);
         }
     }
 }

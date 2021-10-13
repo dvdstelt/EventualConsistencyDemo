@@ -8,18 +8,6 @@
 @section Scripts{
     <script type="text/javascript">
     $(document).ready(function () {
-        var connection = new signalR.HubConnectionBuilder()
-                            .withUrl('/ticketHub')
-                            .build();
-
-        connection.on('OrderSubmission', function (message) {
-            console.log('OrderSubmission', message);
-            $('.overlay-content .ordering-details').html(message);
-        });
-
-        connection.start().catch(function (err) {
-            return console.error(err.toString());
-        });
 
         var theWindow = $(window),
             $bg = $('#bgImage'),
@@ -66,15 +54,8 @@
                 values[field.name] = field.value;
             });
 
-            connection.invoke("SubmitOrder"
-                , values["theatersContext_group"] /* theater */
-                , values["movieId"] /* movie */
-                , values["times_group"] /* time */
-                , parseInt(values["numberOfTickets"]) /* number of tickets */
-            ).catch(function (err) {
-                return console.error(err.toString());
-            });
-
+            registerMovieTicket(values);
+            
             $('#overlay').show();
         });
 
