@@ -4,6 +4,8 @@ This GitHub repository belongs to a presentation called `Dealing with eventual c
 
 I would really appreciate if you took the time to contact me and tell me what you think about the presentation or demo. If there's anything I can help with or explain further, please let me know. I've explained during the presentation distributed systems is where I love to talk about, so don't hesitate to reach out. via my [personal weblog](https://dennis.bloggingabout.net/) or my [freelance business website](https://compilesoftware.nl/).  If you want me to present this or anything else at your company, that is also an option we can discuss.
 
+![](gfx/popcorn-site.png)
+
 ## Technical solution
 
 This section explains the solution chosen and why some technologies were included.
