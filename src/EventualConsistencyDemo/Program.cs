@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -22,6 +23,9 @@ namespace EventualConsistencyDemo
 
             var host = Host.CreateDefaultBuilder(args);
 
+            // Configure web-host.
+            host.ConfigureWebHostDefaults(c => c.UseStartup<Startup>());
+            
             // Configure NServiceBus
             host.UseNServiceBus(hostBuilderContext =>
             {
@@ -34,8 +38,6 @@ namespace EventualConsistencyDemo
                 return endpointConfiguration;
             });
 
-            // Configure web-host.
-            host.ConfigureWebHostDefaults(c => c.UseStartup<Startup>());
             
             await host.Build().RunAsync();
         }
