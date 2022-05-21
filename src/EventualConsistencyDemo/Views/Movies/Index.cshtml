@@ -1,5 +1,4 @@
-﻿@using System.Net
-@using System.Web
+﻿@using System.Web
 @model List<Shared.Entities.Movie>
 @{
     ViewData["Title"] = "Home";
@@ -11,13 +10,13 @@
         <li>
             <div class="moviedetails">
                 <div class="movieposter">
-                    <a href="/movies/@Uri.EscapeUriString(movie.UrlTitle)">
-                        <img src="/img/posters/@Uri.EscapeUriString(movie.Image)" />
+                    <a href="/movies/@Uri.EscapeDataString(movie.UrlTitle)">
+                        <img src="/img/posters/@Uri.EscapeDataString(movie.Image)" />
                     </a>
                 </div>
                 <div class="title"><h2>@movie.Title</h2></div>
                 <div class="description">@HttpUtility.HtmlDecode(movie.Description)</div>
-                <div class="reviews"><a href="/movies/@Uri.EscapeUriString(movie.UrlTitle)">Buy tickets</a> | <a href="/reviews/@Uri.EscapeUriString(movie.UrlTitle)">Check user reviews.</a></div>
+                <div class="reviews"><a href="/movies/@Uri.EscapeDataString(movie.UrlTitle)">Buy tickets</a> | <a href="/reviews/@Uri.EscapeDataString(movie.UrlTitle)">Check user reviews.</a></div>
             </div>
             
         </li>

@@ -10,8 +10,8 @@
         <li>
             <div class="moviedetails">
                 <div class="movieposter">
-                    <a href="/reviews/@Uri.EscapeUriString(movie.UrlTitle)">
-                        <img src="/img/posters/@Uri.EscapeUriString(movie.Image)" />
+                    <a href="/reviews/@Uri.EscapeDataString(movie.UrlTitle)">
+                        <img src="/img/posters/@Uri.EscapeDataString(movie.Image)" />
                     </a>
                 </div>
                 <div class="title"><h2>@movie.Title</h2></div>

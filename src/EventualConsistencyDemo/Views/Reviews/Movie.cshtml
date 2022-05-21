@@ -7,7 +7,7 @@
     <script id="review-template" type="text/x-custom-template">
         <li>
             <div class="comment">
-                <div><img class="gravatar"></div>
+                <div><img src="" alt="profile image" class="gravatar"></div>
                 <div class="commentPostDetails">
                     <div class="commentDescription"></div>
                     <div class="commentDate"></div>
@@ -18,12 +18,12 @@
 
     <script type="text/javascript">
     $(document).ready(function() {
-        var jsonReviews = localStorage.getItem('popcornStoredReviews');
-        var allStoredReviews = JSON.parse(jsonReviews);
+        let jsonReviews = localStorage.getItem('popcornStoredReviews');
+        let allStoredReviews = JSON.parse(jsonReviews);
 
         if (Array.isArray(allStoredReviews) && allStoredReviews.length) {
             $.each(allStoredReviews, function(i, item) {
-                    if (item.MovieIdentifier == '@Model.Movie.Id') {
+                    if (item.MovieIdentifier === '@Model.Movie.Id') {
                         AddComment(item.Description, item.ReviewedAt);
                     }
             });
@@ -38,10 +38,10 @@
         $('#submitReviewButton').on('click', function(e) {
             e.preventDefault();
 
-            var commentGuid = uuidv4();
-            var commentDescription = $('#commentDescription').val();
-            var commentDateTime = new Date();
-            var movieIdentifier = $('#movieId').val();
+            let commentGuid = uuidv4();
+            let commentDescription = $('#commentDescription').val();
+            let commentDateTime = new Date();
+            let movieIdentifier = $('#movieId').val();
 
             var newReview = {
                 Identifier: commentGuid,
@@ -75,7 +75,7 @@
             $(reviewTemplate).children().find('.commentDate').html(email + ' | ' + formatDate(date));
 
             $('#reviews').append(reviewTemplate);
-        };
+        }
 
         function formatDate(date) {
             return date.getDate() +
@@ -94,7 +94,7 @@
         function uuidv4() {
             return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,
                 function(c) {
-                    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                    let r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
                     return v.toString(16);
                 });
         }
@@ -106,7 +106,7 @@
 <div class="commentsPage">
     <div class="row">
         <div class="col-sm-3 movieposter">
-            <img src="/img/posters/@Uri.EscapeUriString(@Model.Movie.Image)" />
+            <img alt="Movie poster" src="/img/posters/@Uri.EscapeDataString(@Model.Movie.Image)" />
             <a href="" id="clearLocalStorage">Clear localstorage</a>
         </div>
         <div class="col-sm-8">
@@ -117,7 +117,7 @@
                 {
                     <li>
                         <div class="comment">
-                            <div><img class="gravatar" src="https://gravatar.com/avatar/9300c92d4bbf31c4a96d345e9712d2a6.jpg?&s=50" /></div>
+                            <div><img alt="Profile icon" class="gravatar" src="https://gravatar.com/avatar/9300c92d4bbf31c4a96d345e9712d2a6.jpg?&s=50" /></div>
                             <div class="commentPostDetails">
                                 <div class="commentDescription">@review.Description</div>
                                 <div class="commentDate">dvdstelt@gmail.com | @review.ReviewedAt</div>
