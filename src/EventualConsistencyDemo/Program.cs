@@ -1,45 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Builder;
+﻿using EventualConsistencyDemo;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Hosting;
 using NServiceBus;
 using Shared.Configuration;
 
-namespace EventualConsistencyDemo
-{
-    public class Program
+
+var host = Host.CreateDefaultBuilder(args)
+    // NServiceBus needs to be configured first!
+    .UseNServiceBus(hostBuilderContext =>
     {
-        public static async Task Main(string[] args)
+        var endpointConfiguration = new EndpointConfiguration("EventualConsistencyDemo");
+        endpointConfiguration.ApplyCommonConfiguration(routingConfig =>
         {
-            // Create the LiteDb database so we can work with some default movies.
-            Database.Setup();
+            routingConfig.RouteToEndpoint(typeof(Shared.Commands.SubmitOrder), "server");
+        });
 
-            var host = Host.CreateDefaultBuilder(args);
+        return endpointConfiguration;
+    })
+    .ConfigureWebHostDefaults(c => c.UseStartup<Startup>())
+    .Build();
 
-            // Configure web-host.
-            host.ConfigureWebHostDefaults(c => c.UseStartup<Startup>());
-            
-            // Configure NServiceBus
-            host.UseNServiceBus(hostBuilderContext =>
-            {
-                var endpointConfiguration = new EndpointConfiguration("EventualConsistencyDemo");
-                endpointConfiguration.ApplyCommonConfiguration(routingConfig =>
-                {
-                    routingConfig.RouteToEndpoint(typeof(Shared.Commands.SubmitOrder), "server");
-                });
+// Create the LiteDb database so we can work with some default movies.
+Database.Setup();
 
-                return endpointConfiguration;
-            });
-
-            
-            await host.Build().RunAsync();
-        }
-    }
-}
+await host.RunAsync();
