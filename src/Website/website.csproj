@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <LangVersion>10</LangVersion>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <ApplicationIcon>wwwroot\favicon.ico</ApplicationIcon>
   </PropertyGroup>
 

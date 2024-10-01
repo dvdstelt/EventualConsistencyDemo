@@ -49,7 +49,7 @@ namespace EventualConsistencyDemo.Hubs
                     DrawingDate = DateTime.Now.AddDays(14).ToString("dddd, dd MMMM", CultureInfo.InvariantCulture)
                 };                
  
-                logger.LogInformation("Sending OrderedLotteryTicket", message);                
+                logger.LogInformation("Sending OrderedLotteryTicket {0}", message.MovieTitle);                
                 
                 await hub.Clients.Client(connectionId).SendAsync("OrderedLotteryTicket", message);
             }
