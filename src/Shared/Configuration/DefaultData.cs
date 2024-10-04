@@ -61,36 +61,36 @@ namespace Shared.Configuration
                     PricePerTicket = 20D,
                     PopularityScore = 500,
                 },
-                // new Movie
-                // {
-                //     Id = Guid.NewGuid(),
-                //     UrlTitle = "freeguy",
-                //     Title = "FreeGuy",
-                //     Image = "freeguy.jpg",
-                //     Rating = 5,
-                //     Description = "A bank teller discovers that he's actually an NPC inside a brutal, open world video game.",
-                //     Icons = new List<string> {"12", "violence", "explicitlanguage" },
-                //     MovieDetails = "115 minutes | English, Dutch subtitles",
-                //     ReleaseDate = new DateTime(2021,08,11),
-                //     Showtimes = new List<string> { "15:00", "20:00", "23:00" },
-                //     PricePerTicket = 10D,
-                //     PopularityScore = 250
-                // }
                 new Movie
                 {
                     Id = Guid.NewGuid(),
-                    UrlTitle = "maverick",
-                    Title = "Top Gun Maverick",
-                    Image = "maverick.jpg",
+                    UrlTitle = "freeguy",
+                    Title = "FreeGuy",
+                    Image = "freeguy.jpg",
                     Rating = 5,
-                    Description = "After thirty years, Maverick is still pushing the envelope as a top naval aviator, but must confront ghosts of his past when he leads TOP GUN's elite graduates on a mission that demands the ultimate sacrifice from those chosen to fly it.",
+                    Description = "A bank teller discovers that he's actually an NPC inside a brutal, open world video game.",
                     Icons = new List<string> {"12", "violence", "explicitlanguage" },
-                    MovieDetails = "2 hours 10 minutes | English, Dutch subtitles",
-                    ReleaseDate = new DateTime(2022,04,27),
+                    MovieDetails = "115 minutes | English, Dutch subtitles",
+                    ReleaseDate = new DateTime(2021,08,11),
                     Showtimes = new List<string> { "15:00", "20:00", "23:00" },
                     PricePerTicket = 10D,
                     PopularityScore = 250
                 }
+                // new Movie
+                // {
+                //     Id = Guid.NewGuid(),
+                //     UrlTitle = "maverick",
+                //     Title = "Top Gun Maverick",
+                //     Image = "maverick.jpg",
+                //     Rating = 5,
+                //     Description = "After thirty years, Maverick is still pushing the envelope as a top naval aviator, but must confront ghosts of his past when he leads TOP GUN's elite graduates on a mission that demands the ultimate sacrifice from those chosen to fly it.",
+                //     Icons = new List<string> {"12", "violence", "explicitlanguage" },
+                //     MovieDetails = "2 hours 10 minutes | English, Dutch subtitles",
+                //     ReleaseDate = new DateTime(2022,04,27),
+                //     Showtimes = new List<string> { "15:00", "20:00", "23:00" },
+                //     PricePerTicket = 10D,
+                //     PopularityScore = 250
+                // }
             };
         }
 
@@ -101,8 +101,8 @@ namespace Shared.Configuration
             // var tros = movies.Single(s => s.UrlTitle == "riseofskywalker").Id;
             // var tenet = movies.Single(s => s.UrlTitle == "tenet").Id;
             var dune = movies.Single(s => s.UrlTitle == "dune").Id;
-            // var freeguy = movies.Single(s => s.UrlTitle == "freeguy").Id;
-            var maverick = movies.Single(s => s.UrlTitle == "maverick").Id;
+            var freeguy = movies.Single(s => s.UrlTitle == "freeguy").Id;
+            // var maverick = movies.Single(s => s.UrlTitle == "maverick").Id;
 
             return new List<Review>
             {
@@ -112,8 +112,10 @@ namespace Shared.Configuration
                 //new Review() { Id = Guid.NewGuid(), MovieIdentifier = jsbId, Description = "Snootch to the nootch!!!", ReviewedAt = new DateTime(2019, 10, 9, 13, 45, 18) },
                 new Review() { Id = Guid.NewGuid(), MovieIdentifier = dune, Description = "Great visuals, screenplay adaptation is too close to the books though.", ReviewedAt = new DateTime(2021, 10, 8, 8, 14, 56) },
                 new Review() { Id = Guid.NewGuid(), MovieIdentifier = dune, Description = "Can't wait to go back to Mordor!", ReviewedAt = new DateTime(2021, 10, 9, 13, 37, 00) },
-                new Review() { Id = Guid.NewGuid(), MovieIdentifier = maverick, Description = "This movie needs to been in IMAX! That sound is incredible!", ReviewedAt = new DateTime(2022, 09, 21, 12, 12, 12) },
-                new Review() { Id = Guid.NewGuid(), MovieIdentifier = maverick, Description = "Maverick is so much better than the original!", ReviewedAt = new DateTime(2022, 09, 20, 13, 45, 18) },
+                new Review() { Id = Guid.NewGuid(), MovieIdentifier = freeguy, Description = "Reynolds is again too funny", ReviewedAt = new DateTime(2021, 10, 8, 8, 14, 56) },
+                new Review() { Id = Guid.NewGuid(), MovieIdentifier = freeguy, Description = "When is Deadpool vs Wolverine coming out!?", ReviewedAt = new DateTime(2021, 10, 9, 13, 42, 00) },
+                // new Review() { Id = Guid.NewGuid(), MovieIdentifier = maverick, Description = "This movie needs to been in IMAX! That sound is incredible!", ReviewedAt = new DateTime(2022, 09, 21, 12, 12, 12) },
+                // new Review() { Id = Guid.NewGuid(), MovieIdentifier = maverick, Description = "Maverick is so much better than the original!", ReviewedAt = new DateTime(2022, 09, 20, 13, 45, 18) },
             };
         }
 
