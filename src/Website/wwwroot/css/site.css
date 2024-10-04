@@ -22,10 +22,10 @@ a.nav-link {
     text-align: center;
 }
 
-    a.nav-link:hover {
-        background-color: #fac70c;
-        color: #e30b1a !important;
-    }
+a.nav-link:hover {
+    background-color: #fac70c;
+    color: #e30b1a !important;
+}
 
 a.navbar-brand {
     white-space: normal;
@@ -40,14 +40,14 @@ a.navbar-brand {
     padding: 0 5px 0px 5px;
 }
 
-    .movieposters li span {
-        color: #fff;
-        font-size: 18px;
-    }
+.movieposters li span {
+    color: #fff;
+    font-size: 18px;
+}
 
 
 .movieposters img {
-    width: 450px;
+    width: 300px;
 }
 
 .movieposters a {
@@ -56,11 +56,11 @@ a.navbar-brand {
     transition: all 0.3s ease 0s;
 }
 
-    .movieposters a:hover {
-        z-index: 1;
-        transition: all 0.3s ease 0s;
-        transform: scale(1.1);
-    }
+.movieposters a:hover {
+    z-index: 1;
+    transition: all 0.3s ease 0s;
+    transform: scale(1.1);
+}
 
 /* Movies page*/
 .movies li {
@@ -146,21 +146,21 @@ a.navbar-brand {
     overflow: hidden;
 }
 
-    .movie_background img {
-        min-width: 100%;
-        min-height: 100%;
-    }
+.movie_background img {
+    min-width: 100%;
+    min-height: 100%;
+}
 
-    .movie_background:after {
-        content: '';
-        background-image: linear-gradient(to bottom,rgba(0,0,0,0),black);
-        background-color: transparent;
-        width: 100%;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        height: 50%;
-    }
+.movie_background:after {
+    content: '';
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), black);
+    background-color: transparent;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 50%;
+}
 
 .trailer_button {
     width: 80px;
@@ -169,21 +169,21 @@ a.navbar-brand {
     top: 50%;
     left: 50%;
     border-radius: 40px;
-    background-color: rgba(0,0,0,.32);
+    background-color: rgba(0, 0, 0, .32);
     border: none;
     padding: 3px 8px;
 }
 
-    .trailer_button:before {
-        background-image: url('/img/icon-play.svg');
-        background-size: 23px 37px;
-        width: 23px;
-        height: 37px;
-        display: inline-block;
-        overflow: visible;
-        margin: 18px 23px;
-        content: '';
-    }
+.trailer_button:before {
+    background-image: url('/img/icon-play.svg');
+    background-size: 23px 37px;
+    width: 23px;
+    height: 37px;
+    display: inline-block;
+    overflow: visible;
+    margin: 18px 23px;
+    content: '';
+}
 
 
 .movie_header_content {
@@ -215,9 +215,9 @@ a.navbar-brand {
     flex: none;
 }
 
-    .movie_header_content_bottom > .container {
-        display: flex;
-    }
+.movie_header_content_bottom > .container {
+    display: flex;
+}
 
 /* Dennis */
 .dennis_owns_this_shit {
@@ -271,11 +271,11 @@ a.movie_button {
     max-width: 360px;
     width: 100%;
     background-color: #ffc426;
-    background-image: -webkit-gradient(linear,left top,left bottom,from(#f7da66),to(#ffc426));
-    background-image: -webkit-linear-gradient(top,#f7da66,#ffc426);
-    background-image: -moz-linear-gradient(top,#f7da66,#ffc426);
-    background-image: -o-linear-gradient(top,#f7da66,#ffc426);
-    background-image: linear-gradient(to bottom,#f7da66,#ffc426);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#f7da66), to(#ffc426));
+    background-image: -webkit-linear-gradient(top, #f7da66, #ffc426);
+    background-image: -moz-linear-gradient(top, #f7da66, #ffc426);
+    background-image: -o-linear-gradient(top, #f7da66, #ffc426);
+    background-image: linear-gradient(to bottom, #f7da66, #ffc426);
     border: none;
     border-radius: 6px;
     cursor: pointer;
@@ -296,11 +296,11 @@ a.movie_button_disabled {
     max-width: 360px;
     width: 100%;
     background-color: #aaa;
-    background-image: -webkit-gradient(linear,left top,left bottom,from(#aaa),to(#999));
-    background-image: -webkit-linear-gradient(top,#aaa,#999);
-    background-image: -moz-linear-gradient(top,#aaa,#999);
-    background-image: -o-linear-gradient(top,#aaa,#999);
-    background-image: linear-gradient(to bottom,#aaa,#999);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#aaa), to(#999));
+    background-image: -webkit-linear-gradient(top, #aaa, #999);
+    background-image: -moz-linear-gradient(top, #aaa, #999);
+    background-image: -o-linear-gradient(top, #aaa, #999);
+    background-image: linear-gradient(to bottom, #aaa, #999);
     border: none;
     border-radius: 6px;
     cursor: default;
@@ -347,8 +347,8 @@ a.movie_button_disabled {
     z-index: 100; /* Sit on top */
     left: 0;
     top: 0;
-    background-color: rgb(0,0,0); /* Black fallback color */
-    background-color: rgba(0,0,0, 0.9); /* Black w/opacity */
+    background-color: rgb(0, 0, 0); /* Black fallback color */
+    background-color: rgba(0, 0, 0, 0.9); /* Black w/opacity */
     overflow-x: hidden; /* Disable horizontal scroll */
     display: none;
     /*display: block;*/
@@ -368,21 +368,21 @@ a.movie_button_disabled {
     padding: 20px;
 }
 
-    .overlay-content .poster {
-        margin-right: 20px;
-    }
+.overlay-content .poster {
+    margin-right: 20px;
+}
 
-    .overlay-content .details {
-        text-align: left;
-    }
+.overlay-content .details {
+    text-align: left;
+}
 
-    .overlay-content .movietitle {
-        color: #000;
-    }
+.overlay-content .movietitle {
+    color: #000;
+}
 
-    .overlay-content .ordering-details {
-        color: #000;
-    }
+.overlay-content .ordering-details {
+    color: #000;
+}
 
 /* Theaters and movie times
 -------------------------------------------------- */
@@ -402,83 +402,83 @@ a.movie_button_disabled {
     position: relative;
 }
 
-    .inputGroup label {
-        padding: 12px 30px;
-        width: 100%;
-        display: block;
-        text-align: left;
-        color: #3C454C;
-        cursor: pointer;
-        position: relative;
-        z-index: 2;
-        transition: color 200ms ease-in;
-        overflow: hidden;
-    }
+.inputGroup label {
+    padding: 12px 30px;
+    width: 100%;
+    display: block;
+    text-align: left;
+    color: #3C454C;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+    transition: color 200ms ease-in;
+    overflow: hidden;
+}
 
-        .inputGroup label:before {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            content: '';
-            background-color: #ffc426;
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            -webkit-transform: translate(-50%, -50%) scale3d(1, 1, 1);
-            transform: translate(-50%, -50%) scale3d(1, 1, 1);
-            transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
-            opacity: 0;
-            z-index: -1;
-        }
+.inputGroup label:before {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    content: '';
+    background-color: #ffc426;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%) scale3d(1, 1, 1);
+    transform: translate(-50%, -50%) scale3d(1, 1, 1);
+    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+    z-index: -1;
+}
 
-        .inputGroup label:after {
-            width: 32px;
-            height: 32px;
-            content: '';
-            border: 2px solid #D1D7DC;
-            background-color: #fff;
-            background-image: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5.414 11L4 12.414l5.414 5.414L20.828 6.414 19.414 5l-10 10z' fill='%23fff' fill-rule='nonzero'/%3E%3C/svg%3E ");
-            background-repeat: no-repeat;
-            background-position: 2px 3px;
-            border-radius: 50%;
-            z-index: 2;
-            position: absolute;
-            right: 30px;
-            top: 50%;
-            -webkit-transform: translateY(-50%);
-            transform: translateY(-50%);
-            cursor: pointer;
-            transition: all 200ms ease-in;
-        }
+.inputGroup label:after {
+    width: 32px;
+    height: 32px;
+    content: '';
+    border: 2px solid #D1D7DC;
+    background-color: #fff;
+    background-image: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5.414 11L4 12.414l5.414 5.414L20.828 6.414 19.414 5l-10 10z' fill='%23fff' fill-rule='nonzero'/%3E%3C/svg%3E ");
+    background-repeat: no-repeat;
+    background-position: 2px 3px;
+    border-radius: 50%;
+    z-index: 2;
+    position: absolute;
+    right: 30px;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    cursor: pointer;
+    transition: all 200ms ease-in;
+}
 
-    .inputGroup input:checked ~ label {
-        color: #fff;
-    }
+.inputGroup input:checked ~ label {
+    color: #fff;
+}
 
-        .inputGroup input:checked ~ label:before {
-            -webkit-transform: translate(-50%, -50%) scale3d(56, 56, 1);
-            transform: translate(-50%, -50%) scale3d(56, 56, 1);
-            opacity: 1;
-        }
+.inputGroup input:checked ~ label:before {
+    -webkit-transform: translate(-50%, -50%) scale3d(56, 56, 1);
+    transform: translate(-50%, -50%) scale3d(56, 56, 1);
+    opacity: 1;
+}
 
-        .inputGroup input:checked ~ label:after {
-            background-color: #e30b1a;
-            border-color: #e30b1a;
-        }
+.inputGroup input:checked ~ label:after {
+    background-color: #e30b1a;
+    border-color: #e30b1a;
+}
 
-    .inputGroup input {
-        width: 32px;
-        height: 32px;
-        order: 1;
-        z-index: 2;
-        position: absolute;
-        right: 30px;
-        top: 50%;
-        -webkit-transform: translateY(-50%);
-        transform: translateY(-50%);
-        cursor: pointer;
-        visibility: hidden;
-    }
+.inputGroup input {
+    width: 32px;
+    height: 32px;
+    order: 1;
+    z-index: 2;
+    position: absolute;
+    right: 30px;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    cursor: pointer;
+    visibility: hidden;
+}
 
 select {
     -webkit-appearance: none;
@@ -492,10 +492,11 @@ select {
     background-image: none;
 }
 
-    /* Remove IE arrow */
-    select::-ms-expand {
-        display: none;
-    }
+/* Remove IE arrow */
+select::-ms-expand {
+    display: none;
+}
+
 /* Custom Select */
 .select {
     margin: 10px 0;
@@ -515,6 +516,7 @@ select {
     color: 000;
     cursor: pointer;
 }
+
 /* Arrow */
 .select::after {
     content: '\25BC';
@@ -530,6 +532,7 @@ select {
     -o-transition: .25s all ease;
     transition: .25s all ease;
 }
+
 /* Transition */
 .select:hover::after {
     color: #fff;
@@ -542,50 +545,50 @@ select {
     margin: 40px 0;
 }
 
-    .commentsPage .movieposter img {
-        width: 100%;
-    }
+.commentsPage .movieposter img {
+    width: 100%;
+}
 
-    .commentsPage .title h2 {
-        color: #000;
-        font-weight: bold;
-        font-size: 50px;
-        line-height: 52px;
-        letter-spacing: 0.05em;
-        font-family: 'Pathway Gothic One', sans-serif;
-        text-transform: uppercase;
-    }
+.commentsPage .title h2 {
+    color: #000;
+    font-weight: bold;
+    font-size: 50px;
+    line-height: 52px;
+    letter-spacing: 0.05em;
+    font-family: 'Pathway Gothic One', sans-serif;
+    text-transform: uppercase;
+}
 
-    .commentsPage .commentForm {
-        margin: 40px 0;
-    }
+.commentsPage .commentForm {
+    margin: 40px 0;
+}
 
-    .commentsPage .reviews {
-        padding-left: 0;
-    }
+.commentsPage .reviews {
+    padding-left: 0;
+}
 
-    .commentsPage .comment {
-        display: flex;
-        /*flex-direction: row;*/
-        padding: 10px 0;
-        border-bottom: 1px solid #aaa;
-    }
+.commentsPage .comment {
+    display: flex;
+    /*flex-direction: row;*/
+    padding: 10px 0;
+    border-bottom: 1px solid #aaa;
+}
 
-    /*.commentsPage .comment {
-        width: 100%;
-    }*/
+/*.commentsPage .comment {
+    width: 100%;
+}*/
 
-    .commentsPage .commentDescription {
-        min-height: 50px;
-    }
+.commentsPage .commentDescription {
+    min-height: 50px;
+}
 
-    .commentsPage .commentPostDetails {
-        flex-direction: row;
-    }
+.commentsPage .commentPostDetails {
+    flex-direction: row;
+}
 
-    .commentsPage .commentDate {
-        font-size: 11px;
-    }
+.commentsPage .commentDate {
+    font-size: 11px;
+}
 
 .gravatar {
     border-radius: 25px;
