@@ -1,0 +1,7 @@
+﻿<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Demo" type="CompoundRunConfigurationType">
+    <toRun name="website: Website" type="LaunchSettings" />
+    <toRun name="Server" type="DotNetProject" />
+    <method v="2" />
+  </configuration>
+</component>
