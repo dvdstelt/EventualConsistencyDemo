@@ -6,11 +6,6 @@ namespace Shared.Events
 {
     public class OrderAccepted
     {
-        public OrderAccepted(Guid orderIdentifier)
-        {
-            this.OrderId = orderIdentifier;
-        }
-
-        public Guid OrderId { get; set; }
+        public Guid OrderId { get; init; }
     }
 }
