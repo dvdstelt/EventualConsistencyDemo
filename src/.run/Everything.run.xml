@@ -1,7 +1,0 @@
-﻿<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Everything" type="CompoundRunConfigurationType">
-    <toRun name="website: https" type="LaunchSettings" />
-    <toRun name="Server" type="DotNetProject" />
-    <method v="2" />
-  </configuration>
-</component>
