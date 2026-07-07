@@ -1,4 +1,5 @@
-﻿using EventualConsistencyDemo.Hubs;
+﻿using EventualConsistencyDemo.Handlers;
+using EventualConsistencyDemo.Hubs;
 using LiteDB;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,11 +11,12 @@ endpointConfiguration.ApplyCommonConfiguration(routingConfig =>
 {
     routingConfig.RouteToEndpoint(typeof(Shared.Commands.SubmitOrder), "server");
 });
+endpointConfiguration.AddHandler<OrderSubmissionHandler>();
 
 var builder = WebApplication.CreateBuilder(args);
-builder.UseNServiceBus(endpointConfiguration);
 
 var services = builder.Services;
+services.AddNServiceBusEndpoint(endpointConfiguration, endpointConfiguration.EndpointName);
 services.AddControllersWithViews();
 
 services.AddSignalR(o => o.EnableDetailedErrors = true);

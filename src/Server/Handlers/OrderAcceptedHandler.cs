@@ -7,7 +7,8 @@ using Shared.Events;
 
 namespace Server.Handlers
 {
-    public class OrderAcceptedHandler : IHandleMessages<OrderAccepted>
+    [Handler]
+    public class OrderAcceptedHandler
     {
         private readonly LiteRepository db;
         static ILog log = LogManager.GetLogger<OrderAcceptedHandler>();

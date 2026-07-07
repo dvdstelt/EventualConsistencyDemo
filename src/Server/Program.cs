@@ -8,6 +8,7 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 using Server.Behaviors;
+using Server.Handlers;
 using Shared.Configuration;
 
 Log.Logger = new LoggerConfiguration()
@@ -22,7 +23,7 @@ Log.Logger = new LoggerConfiguration()
 
 var host = Host.CreateDefaultBuilder(args)
     .UseSerilog()
-    .UseNServiceBus(context =>
+    .ConfigureServices(services =>
     {
         var endpointConfiguration = new EndpointConfiguration("server").ApplyCommonConfiguration();
 
@@ -30,12 +31,11 @@ var host = Host.CreateDefaultBuilder(args)
         pipeline.Register(new SignalR_Incoming(), "Stores SignalR user identifier into context.");
         pipeline.Register(new SignalR_Outgoing(), "Propagates SignalR user identifier to outgoing messages.");
 
-        endpointConfiguration.RegisterComponents(s =>
-        {
-            s.AddScoped(_ => new LiteRepository(Database.DatabaseConnectionstring));
-        });
-        
-        return endpointConfiguration;
+        endpointConfiguration.AddHandler<SubmitOrderHandler>();
+        endpointConfiguration.AddHandler<OrderAcceptedHandler>();
+
+        services.AddScoped(_ => new LiteRepository(Database.DatabaseConnectionstring));
+        services.AddNServiceBusEndpoint(endpointConfiguration, endpointConfiguration.EndpointName);
     })
     .Build();
 

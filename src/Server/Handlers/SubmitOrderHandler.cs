@@ -10,7 +10,8 @@ using Shared.Messages;
 
 namespace Server.Handlers
 {
-    public class SubmitOrderHandler : IHandleMessages<SubmitOrder>
+    [Handler]
+    public class SubmitOrderHandler
     {
         static readonly ILog log = LogManager.GetLogger<SubmitOrderHandler>();
         
