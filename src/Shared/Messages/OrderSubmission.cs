@@ -2,13 +2,13 @@
 
 namespace Shared.Messages
 {
-    public class OrderSubmission
+    public sealed record OrderSubmission
     {
-        public Guid OrderId { get; set; }
-        public Guid Movie { get; set; }
-        public string MovieTime { get; set; } = string.Empty;
-        public Guid Theater { get; set; }
-        public bool Approved { get; set; }
-        public int NumberOfTickets { get; set; }
+        public Guid OrderId { get; init; }
+        public Guid Movie { get; init; }
+        public string MovieTime { get; init; } = string.Empty;
+        public Guid Theater { get; init; }
+        public bool Approved { get; init; }
+        public int NumberOfTickets { get; init; }
     }
 }

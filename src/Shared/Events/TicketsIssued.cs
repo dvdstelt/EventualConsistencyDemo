@@ -2,7 +2,7 @@ using System;
 
 namespace Shared.Events
 {
-    public class TicketsIssued
+    public sealed record TicketsIssued
     {
         public Guid OrderId { get; init; }
     }
