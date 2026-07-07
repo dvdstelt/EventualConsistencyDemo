@@ -49,6 +49,11 @@ app.UseDeveloperExceptionPage();
 app.UseStaticFiles();
 app.UseRouting();
 
+// /admin -> Admin area, Movies list. Registered before the default routes so it wins.
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Movies}/{action=Index}/{id?}");
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}");

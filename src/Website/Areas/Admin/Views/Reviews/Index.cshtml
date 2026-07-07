@@ -1,0 +1,44 @@
+@model AdminReviewsModel
+@{
+    ViewData["Title"] = $"Admin - Reviews for {Model.MovieTitle}";
+}
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Reviews for @Model.MovieTitle</h1>
+        <a class="btn btn-link" asp-area="Admin" asp-controller="Movies" asp-action="Index">Back to movies</a>
+    </div>
+
+    <form asp-area="Admin" asp-controller="Reviews" asp-action="Create" asp-route-movieId="@Model.MovieId" method="post" class="mb-4">
+        <div class="mb-2">
+            <label class="form-label" for="description">New review (stored in the database)</label>
+            <textarea id="description" name="description" class="form-control" rows="2" required></textarea>
+        </div>
+        <div class="mb-2">
+            <label class="form-label" for="postedByEmail">Posted by (email, optional)</label>
+            <input id="postedByEmail" name="postedByEmail" class="form-control" type="email" />
+        </div>
+        <button type="submit" class="btn btn-warning">Add review</button>
+    </form>
+
+    <ul class="list-group">
+        @foreach (var review in Model.Reviews)
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div>
+                    <div>@review.Description</div>
+                    <small class="text-muted">@(review.PostedByEmail ?? "anonymous") | @review.ReviewedAt.ToString("g")</small>
+                </div>
+                <form asp-area="Admin" asp-controller="Reviews" asp-action="Delete" asp-route-id="@review.Id" asp-route-movieId="@Model.MovieId" method="post"
+                      onsubmit="return confirm('Delete this review?');">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                </form>
+            </li>
+        }
+    </ul>
+
+    @if (!Model.Reviews.Any())
+    {
+        <p class="text-muted mt-3">No reviews yet.</p>
+    }
+</div>

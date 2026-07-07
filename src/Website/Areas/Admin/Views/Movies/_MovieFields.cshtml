@@ -1,0 +1,86 @@
+@model MovieEditModel
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label asp-for="Title" class="form-label"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="col-md-6 mb-3">
+        <label asp-for="UrlTitle" class="form-label"></label>
+        <input asp-for="UrlTitle" class="form-control" placeholder="e.g. deadpool" />
+        <span asp-validation-for="UrlTitle" class="text-danger"></span>
+    </div>
+</div>
+
+<div class="mb-3">
+    <label asp-for="Description" class="form-label"></label>
+    <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+    <span asp-validation-for="Description" class="text-danger"></span>
+</div>
+
+<div class="row">
+    <div class="col-md-3 mb-3">
+        <label asp-for="Rating" class="form-label"></label>
+        <input asp-for="Rating" class="form-control" type="number" min="0" max="5" />
+        <span asp-validation-for="Rating" class="text-danger"></span>
+    </div>
+    <div class="col-md-3 mb-3">
+        <label asp-for="TicketType" class="form-label"></label>
+        <select asp-for="TicketType" asp-items="Html.GetEnumSelectList<TicketType>()" class="form-select"></select>
+    </div>
+    <div class="col-md-3 mb-3">
+        <label asp-for="ReleaseDate" class="form-label"></label>
+        <input asp-for="ReleaseDate" class="form-control" type="date" />
+    </div>
+    <div class="col-md-3 mb-3">
+        <label asp-for="MovieDetails" class="form-label"></label>
+        <input asp-for="MovieDetails" class="form-control" placeholder="127 minutes | English" />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label asp-for="PricePerTicket" class="form-label"></label>
+        <input asp-for="PricePerTicket" class="form-control" type="number" step="0.01" min="0" />
+    </div>
+    <div class="col-md-6 mb-3">
+        <label asp-for="PopularityScore" class="form-label"></label>
+        <input asp-for="PopularityScore" class="form-control" type="number" min="0" />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label asp-for="Icons" class="form-label"></label>
+        <input asp-for="Icons" class="form-control" placeholder="16, violence, fear" />
+        <small class="text-muted">Matches icon files under /img/icons.</small>
+    </div>
+    <div class="col-md-6 mb-3">
+        <label asp-for="Showtimes" class="form-label"></label>
+        <input asp-for="Showtimes" class="form-control" placeholder="10:00, 15:00, 20:00" />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label asp-for="PosterFile" class="form-label"></label>
+        <input asp-for="PosterFile" class="form-control" type="file" accept="image/*" />
+        <span asp-validation-for="PosterFile" class="text-danger"></span>
+        @if (!string.IsNullOrEmpty(Model.ExistingImage))
+        {
+            <div class="mt-2"><img src="/img/posters/@Model.ExistingImage" style="height: 80px;" /> <small class="text-muted">current poster</small></div>
+        }
+    </div>
+    <div class="col-md-6 mb-3">
+        <label asp-for="BackgroundFile" class="form-label"></label>
+        <input asp-for="BackgroundFile" class="form-control" type="file" accept="image/*" />
+        <span asp-validation-for="BackgroundFile" class="text-danger"></span>
+        @if (!string.IsNullOrEmpty(Model.ExistingBackground))
+        {
+            <div class="mt-2"><img src="/img/background/@Model.ExistingBackground" style="height: 80px;" /> <small class="text-muted">current background</small></div>
+        }
+    </div>
+</div>

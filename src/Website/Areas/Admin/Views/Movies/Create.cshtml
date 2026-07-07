@@ -1,0 +1,13 @@
+@model MovieEditModel
+@{
+    ViewData["Title"] = "Admin - Add movie";
+}
+
+<div class="container">
+    <h1 class="mb-3">Add movie</h1>
+    <form asp-area="Admin" asp-controller="Movies" asp-action="Create" method="post" enctype="multipart/form-data">
+        <partial name="_MovieFields" model="Model" />
+        <button type="submit" class="btn btn-warning">Create</button>
+        <a class="btn btn-link" asp-area="Admin" asp-controller="Movies" asp-action="Index">Cancel</a>
+    </form>
+</div>

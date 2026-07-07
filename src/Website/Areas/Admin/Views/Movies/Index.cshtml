@@ -1,0 +1,49 @@
+@model List<Movie>
+@{
+    ViewData["Title"] = "Admin - Movies";
+}
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Movies</h1>
+        <a class="btn btn-warning" asp-area="Admin" asp-controller="Movies" asp-action="Create">Add movie</a>
+    </div>
+
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+                <th>URL</th>
+                <th>Ticket type</th>
+                <th>Rating</th>
+                <th class="text-end">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var movie in Model)
+            {
+                <tr>
+                    <td><img src="/img/posters/@movie.Image" alt="@movie.Title" style="height: 48px;" /></td>
+                    <td>@movie.Title</td>
+                    <td>@movie.UrlTitle</td>
+                    <td>@movie.TicketType</td>
+                    <td>@movie.Rating / 5</td>
+                    <td class="text-end text-nowrap">
+                        <a class="btn btn-sm btn-outline-secondary" asp-area="Admin" asp-controller="Movies" asp-action="Edit" asp-route-id="@movie.Id">Edit</a>
+                        <a class="btn btn-sm btn-outline-secondary" asp-area="Admin" asp-controller="Reviews" asp-action="Index" asp-route-movieId="@movie.Id">Reviews</a>
+                        <form asp-area="Admin" asp-controller="Movies" asp-action="Delete" asp-route-id="@movie.Id" method="post" class="d-inline"
+                              onsubmit="return confirm('Delete @movie.Title and its reviews?');">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @if (!Model.Any())
+    {
+        <p class="text-muted">No movies yet. Add one to get started.</p>
+    }
+</div>
