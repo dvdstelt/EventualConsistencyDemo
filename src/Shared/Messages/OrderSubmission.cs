@@ -6,7 +6,7 @@ namespace Shared.Messages
     {
         public Guid OrderId { get; set; }
         public Guid Movie { get; set; }
-        public string MovieTime { get; set; }
+        public string MovieTime { get; set; } = string.Empty;
         public Guid Theater { get; set; }
         public bool Approved { get; set; }
         public int NumberOfTickets { get; set; }

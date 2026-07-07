@@ -11,6 +11,6 @@ namespace Shared.Entities
         public Guid MovieIdentifier { get; set; }
         public Guid TheaterIdentifier { get; set; }
         public int NumberOfTickets { get; set; }
-        public string MovieTime { get; set; }
+        public string MovieTime { get; set; } = string.Empty;
     }
 }

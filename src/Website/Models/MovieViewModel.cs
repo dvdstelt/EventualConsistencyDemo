@@ -5,7 +5,7 @@ namespace EventualConsistencyDemo.Models
 {
     public class MovieViewModel
     {
-        public Movie Movie { get; set; }
-        public List<Theater> Theaters { get; set; }
+        public Movie Movie { get; set; } = null!;
+        public List<Theater> Theaters { get; set; } = [];
     }
 }

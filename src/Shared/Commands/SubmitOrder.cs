@@ -9,7 +9,7 @@ namespace Shared.Commands
         public Guid UserId { get; set; }
         public Guid Movie { get; set; }
         public Guid Theater { get; set; }
-        public string Time { get; set; }
+        public string Time { get; set; } = string.Empty;
         public int NumberOfTickets { get; set; }
     }
 }

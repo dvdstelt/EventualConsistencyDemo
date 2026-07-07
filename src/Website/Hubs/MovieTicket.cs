@@ -4,9 +4,9 @@ namespace EventualConsistencyDemo.Hubs
 {
     public class MovieTicket
     {
-        public string MovieId { get; set; }
-        public string TheaterId { get; set; }
-        public string Time { get; set; }
+        public string MovieId { get; set; } = string.Empty;
+        public string TheaterId { get; set; } = string.Empty;
+        public string Time { get; set; } = string.Empty;
         public int NumberOfTickets { get; set; }
     }
 }

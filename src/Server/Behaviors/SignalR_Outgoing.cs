@@ -8,7 +8,7 @@ namespace Server.Behaviors
     {
         public override Task Invoke(IOutgoingLogicalMessageContext context, Func<Task> next)
         {
-            if (context.Extensions.TryGet("SignalRConnectionId", out string signalRConnectionId))
+            if (context.Extensions.TryGet("SignalRConnectionId", out string? signalRConnectionId))
             {
                 context.Headers["SignalRConnectionId"] = signalRConnectionId;
             }
