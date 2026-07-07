@@ -1,31 +1,22 @@
-﻿using System.Linq;
+using System.Threading.Tasks;
 using EventualConsistencyDemo.Models;
-using LiteDB;
 using Microsoft.AspNetCore.Mvc;
-using Shared.Configuration;
+using Microsoft.EntityFrameworkCore;
+using Shared.Data;
 using Shared.Entities;
 
 namespace EventualConsistencyDemo.Controllers
 {
-    public class MoviesController : Controller
+    public class MoviesController(MoviesDbContext db) : Controller
     {
-        private readonly LiteRepository db;
-
-        public MoviesController(LiteRepository db)
+        public async Task<IActionResult> Index()
         {
-            this.db = db;
+            return View(await db.Movies.ToListAsync());
         }
 
-        public ActionResult Index()
+        public async Task<IActionResult> Movie(string movieurl)
         {
-            return View(db.Query<Movie>().ToList());
-        }
-
-        public ActionResult Movie(string movieurl)
-        {
-            var movie = db.Query<Movie>()
-                            .Where(s => s.UrlTitle == movieurl)
-                            .SingleOrDefault();
+            var movie = await db.Movies.SingleOrDefaultAsync(s => s.UrlTitle == movieurl);
 
             if (movie == null)
                 return NotFound();

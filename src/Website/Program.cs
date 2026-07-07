@@ -1,11 +1,12 @@
 ﻿using System;
 using EventualConsistencyDemo.Handlers;
 using EventualConsistencyDemo.Hubs;
-using LiteDB;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NServiceBus;
 using Shared.Configuration;
+using Shared.Data;
 
 var endpointConfiguration = new EndpointConfiguration("EventualConsistencyDemo");
 endpointConfiguration.ApplyCommonConfiguration(routingConfig =>
@@ -29,16 +30,19 @@ services.AddControllersWithViews();
 
 services.AddSignalR(o => o.EnableDetailedErrors = true);
 
-services.AddScoped(_ => new LiteRepository(Database.DatabaseConnectionstring));
+services.AddDbContext<MoviesDbContext>(o => o.UseSqlite(Database.ConnectionString));
 services.AddScoped<MovieTickets>();
 services.AddSingleton(TimeProvider.System);
 
 services.AddMemoryCache();
 
-// Create the LiteDb database so we can work with some default movies.
-Database.Setup();
-
 var app = builder.Build();
+
+// Create the SQLite database from the entity model and seed it from Seed.sql.
+using (var scope = app.Services.CreateScope())
+{
+    DatabaseInitializer.Initialize(scope.ServiceProvider.GetRequiredService<MoviesDbContext>());
+}
 
 app.UseDeveloperExceptionPage();
 app.UseStaticFiles();

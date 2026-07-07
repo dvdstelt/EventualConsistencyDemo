@@ -2,16 +2,17 @@
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using LiteDB;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Shared.Data;
 using Shared.Entities;
 
 namespace EventualConsistencyDemo.Hubs
 {
     public class MovieTickets(
         IHubContext<TicketHub> hub,
-        LiteRepository db,
+        MoviesDbContext db,
         ILogger<MovieTickets> logger,
         TimeProvider timeProvider)
     {
@@ -23,9 +24,7 @@ namespace EventualConsistencyDemo.Hubs
             var movieId = Guid.Parse(ticket.MovieId);
             var theaterId = Guid.Parse(ticket.TheaterId);
 
-            var movie = db.Query<Movie>()
-                .Where(s => s.Id == movieId)
-                .Single();
+            var movie = await db.Movies.SingleAsync(s => s.Id == movieId);
 
             if (movie.TicketType == TicketType.DrawingTicket)
             {

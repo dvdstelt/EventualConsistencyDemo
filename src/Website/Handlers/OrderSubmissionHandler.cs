@@ -1,30 +1,22 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using EventualConsistencyDemo.Hubs;
 using Microsoft.AspNetCore.SignalR;
-using NServiceBus;
-using Shared.Messages;
-using System.Threading.Tasks;
-using EventualConsistencyDemo.Models;
-using LiteDB;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using NServiceBus;
+using Shared.Data;
 using Shared.Entities;
+using Shared.Messages;
 
 namespace EventualConsistencyDemo.Handlers
 {
     [Handler]
-    public class OrderSubmissionHandler
+    public class OrderSubmissionHandler(
+        IHubContext<TicketHub> ticketHubContext,
+        MoviesDbContext db,
+        ILogger<OrderSubmissionHandler> logger)
     {
-        IHubContext<TicketHub> ticketHubContext;
-        private readonly LiteRepository db;
-        readonly ILogger<OrderSubmissionHandler> logger;
-
-        public OrderSubmissionHandler(IHubContext<TicketHub> ticketHubContext, LiteRepository db, ILogger<OrderSubmissionHandler> logger)
-        {
-            this.ticketHubContext = ticketHubContext;
-            this.db = db;
-            this.logger = logger;
-        }
-
         public async Task Handle(OrderSubmission message, IMessageHandlerContext context)
         {
             if (!context.MessageHeaders.TryGetValue("SignalRConnectionId", out var userConnectionId))
@@ -33,7 +25,13 @@ namespace EventualConsistencyDemo.Handlers
                 return;
             }
             
-            var movie = db.Query<Movie>().Where(s => s.Id == message.Movie).SingleOrDefault();
+            var movie = await db.Movies.SingleOrDefaultAsync(s => s.Id == message.Movie, context.CancellationToken);
+            if (movie == null)
+            {
+                logger.LogWarning("Movie {MovieId} not found; skipping.", message.Movie);
+                return;
+            }
+
             var theater = TheatersContext.GetTheaters().Single(s => s.Id == message.Theater);
 
             if (movie.TicketType == TicketType.DrawingTicket)
