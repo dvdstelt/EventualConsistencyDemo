@@ -28,7 +28,7 @@ namespace EventualConsistencyDemo.Controllers
 
         public IActionResult Privacy()
         {
-            throw new System.NotImplementedException();
+            return View();
         }
     }
 }

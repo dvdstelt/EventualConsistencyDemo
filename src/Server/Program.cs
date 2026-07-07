@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using LiteDB;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -40,7 +41,14 @@ var host = Host.CreateDefaultBuilder(args)
     .Build();
 
 var hostEnvironment = host.Services.GetRequiredService<IHostEnvironment>();
-Console.Title = hostEnvironment.ApplicationName;
+try
+{
+    // Setting the title is not supported when the output is redirected (e.g. a container or CI).
+    Console.Title = hostEnvironment.ApplicationName;
+}
+catch (IOException)
+{
+}
 
 Log.Information("Press CTRL+C to quit the application...");
 

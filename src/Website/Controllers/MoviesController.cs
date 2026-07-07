@@ -1,8 +1,6 @@
 ﻿using System.Linq;
-using System.Text;
 using EventualConsistencyDemo.Models;
 using LiteDB;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Configuration;
 using Shared.Entities;
@@ -29,6 +27,9 @@ namespace EventualConsistencyDemo.Controllers
                             .Where(s => s.UrlTitle == movieurl)
                             .SingleOrDefault();
 
+            if (movie == null)
+                return NotFound();
+
             var vm = new MovieViewModel
             {
                 Movie = movie,
@@ -36,18 +37,6 @@ namespace EventualConsistencyDemo.Controllers
             };
 
             return View(vm);
-        }
-
-        [HttpPost]
-        public string Movie(IFormCollection collection)
-        {
-            var sb = new StringBuilder();
-            foreach (var item in collection)
-            {
-                sb.Append(item + "|");
-            }
-
-            return sb.ToString();
         }
     }
 }

@@ -28,10 +28,16 @@ namespace EventualConsistencyDemo.Controllers
         // GET: Reviews/gameofthrones
         public ActionResult Movie(string movieurl)
         {
-            var vm = new ReviewViewModel();
+            var movie = db.Query<Movie>().Where(s => s.UrlTitle == movieurl).SingleOrDefault();
 
-            vm.Movie = db.Query<Movie>().Where(s => s.UrlTitle == movieurl).Single();
-            vm.Reviews = db.Query<Review>().Where(s => s.MovieIdentifier == vm.Movie.Id).ToEnumerable();
+            if (movie == null)
+                return NotFound();
+
+            var vm = new ReviewViewModel
+            {
+                Movie = movie,
+                Reviews = db.Query<Review>().Where(s => s.MovieIdentifier == movie.Id).ToEnumerable()
+            };
 
             return View(vm);
         }
