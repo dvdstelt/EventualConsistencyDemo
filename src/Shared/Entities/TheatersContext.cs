@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace EventualConsistencyDemo.Models
+namespace Shared.Entities
 {
     public class TheatersContext
     {

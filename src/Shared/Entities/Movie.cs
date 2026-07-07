@@ -26,7 +26,6 @@ namespace Shared.Entities
     public enum TicketType
     {
         RegularTicket,
-        DrawingTicket,
-        MorningTicket
+        DrawingTicket
     }
 }

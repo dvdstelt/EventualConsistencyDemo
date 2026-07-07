@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EventualConsistencyDemo.Models
+namespace Shared.Entities
 {
     public class Theater
     {
