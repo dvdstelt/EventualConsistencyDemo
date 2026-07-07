@@ -1,13 +1,13 @@
 {
   "version": "1.0",
-  "defaultProvider": "unpkg",
+  "defaultProvider": "jsdelivr",
   "libraries": [
     {
-      "library": "@aspnet/signalr@next",
+      "library": "@microsoft/signalr@10.0.0",
       "destination": "wwwroot/lib/signalr/",
       "files": [
         "dist/browser/signalr.js",
-        "dist/browser/signalr.min.js" 
+        "dist/browser/signalr.min.js"
       ]
     }
   ]
