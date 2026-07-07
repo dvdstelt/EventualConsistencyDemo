@@ -20,6 +20,12 @@ namespace Server.Handlers
                 .Where(s => s.Id == message.OrderId)
                 .SingleOrDefault();
 
+            if (order == null)
+            {
+                log.Warn($"Order {message.OrderId} not found; skipping.");
+                return Task.CompletedTask;
+            }
+
             var movie = db.Query<Movie>()
                 .Where(s => s.Id == order.MovieIdentifier)
                 .SingleOrDefault();
