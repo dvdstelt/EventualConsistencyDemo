@@ -1,4 +1,5 @@
-﻿using EventualConsistencyDemo.Hubs;
+﻿using EventualConsistencyDemo.Handlers;
+using EventualConsistencyDemo.Hubs;
 using LiteDB;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,11 +11,19 @@ endpointConfiguration.ApplyCommonConfiguration(routingConfig =>
 {
     routingConfig.RouteToEndpoint(typeof(Shared.Commands.SubmitOrder), "server");
 });
+endpointConfiguration.AddHandler<OrderSubmissionHandler>();
 
 var builder = WebApplication.CreateBuilder(args);
-builder.UseNServiceBus(endpointConfiguration);
 
 var services = builder.Services;
+services.AddNServiceBusEndpoint(endpointConfiguration, endpointConfiguration.EndpointName);
+
+// AddNServiceBusEndpoint registers IMessageSession as a keyed singleton (keyed by the
+// endpoint name) so multiple endpoints can be hosted side by side. This single-endpoint
+// app injects a plain IMessageSession into TicketHub, so expose the keyed session as the default.
+services.AddSingleton<IMessageSession>(sp =>
+    sp.GetRequiredKeyedService<IMessageSession>(endpointConfiguration.EndpointName));
+
 services.AddControllersWithViews();
 
 services.AddSignalR(o => o.EnableDetailedErrors = true);

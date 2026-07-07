@@ -11,7 +11,8 @@ using Shared.Entities;
 
 namespace EventualConsistencyDemo.Handlers
 {
-    public class OrderSubmissionHandler : IHandleMessages<OrderSubmission>
+    [Handler]
+    public class OrderSubmissionHandler
     {
         IHubContext<TicketHub> ticketHubContext;
         private readonly LiteRepository db;

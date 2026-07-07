@@ -7,7 +7,8 @@ using Shared.Events;
 
 namespace Server.Handlers
 {
-    public class OrderAcceptedHandler : IHandleMessages<OrderAccepted>
+    [Handler]
+    public class OrderAcceptedHandler
     {
         private readonly LiteRepository db;
         static ILog log = LogManager.GetLogger<OrderAcceptedHandler>();
@@ -19,6 +20,12 @@ namespace Server.Handlers
             var order = db.Query<Order>()
                 .Where(s => s.Id == message.OrderId)
                 .SingleOrDefault();
+
+            if (order == null)
+            {
+                log.Warn($"Order {message.OrderId} not found; skipping.");
+                return Task.CompletedTask;
+            }
 
             var movie = db.Query<Movie>()
                 .Where(s => s.Id == order.MovieIdentifier)

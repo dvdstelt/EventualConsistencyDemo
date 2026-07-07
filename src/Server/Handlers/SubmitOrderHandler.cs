@@ -10,7 +10,8 @@ using Shared.Messages;
 
 namespace Server.Handlers
 {
-    public class SubmitOrderHandler : IHandleMessages<SubmitOrder>
+    [Handler]
+    public class SubmitOrderHandler
     {
         static readonly ILog log = LogManager.GetLogger<SubmitOrderHandler>();
         
@@ -43,7 +44,7 @@ namespace Server.Handlers
 
             await context.Reply(new OrderSubmission()
             {
-                OrderId = Guid.NewGuid(),
+                OrderId = order.Id,
                 Movie = message.Movie,
                 MovieTime = message.Time,
                 Theater = message.Theater,
@@ -51,13 +52,14 @@ namespace Server.Handlers
                 Approved = immediatelyApproved,
             });
 
+            // Persist the order before publishing OrderAccepted: the event's subscriber
+            // looks the order up by id, so it has to exist by the time the event is handled.
+            db.Insert(order);
+
             // We could prevent publishing if it's a TicketType.DrawingTicket.
             // But what if in the future we do want to get notified? We'd have to change this handler again.
             // So let's put it in right now! :-)
-            await context.Publish(new OrderAccepted(order.Id));
-
-            // Insert last because it's a non-transactional resource that cannot easily be rolled back.
-            db.Insert(order);
+            await context.Publish(new OrderAccepted { OrderId = order.Id });
         }
     }
 }

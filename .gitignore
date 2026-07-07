@@ -47,6 +47,8 @@ project.lock.json
 project.fragment.lock.json
 artifacts/
 **/Properties/launchSettings.json
+# ...but keep the Website launch profile: it backs the shared Rider/VS run configs.
+!src/Website/Properties/launchSettings.json
 
 *_i.c
 *_p.c
