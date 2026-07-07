@@ -7,7 +7,7 @@ namespace Shared.Entities
         public Guid Id { get; set; }
         public Guid MovieIdentifier { get; set; }
         public DateTime ReviewedAt { get; set; }
-        public string Description { get; set; }
-        public string PostedByEmail { get; set; }
+        public string Description { get; set; } = string.Empty;
+        public string? PostedByEmail { get; set; }
     }
 }

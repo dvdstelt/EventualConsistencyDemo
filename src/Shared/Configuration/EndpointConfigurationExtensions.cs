@@ -7,7 +7,7 @@ namespace Shared.Configuration
 {
     public static class EndpointConfigurationExtensions
     {
-        public static EndpointConfiguration ApplyCommonConfiguration(this EndpointConfiguration endpointConfiguration, Action<RoutingSettings> configureRouting = null)
+        public static EndpointConfiguration ApplyCommonConfiguration(this EndpointConfiguration endpointConfiguration, Action<RoutingSettings>? configureRouting = null)
         {
             var routing = endpointConfiguration.UseTransport(new LearningTransport());
             configureRouting?.Invoke(routing);

@@ -30,9 +30,7 @@ Remember though that the user might move on or even closes the browser. As a res
 
 I plan to work more on this demo
 
-- [Add a database in the back-end](https://github.com/dvdstelt/EventualConsistencyDemo/issues/7)
 - Possibly mimic a logged-in user and allow administrative screen
 - Publish events in the back-end to show how the system would continue operating
-- Actually store comments in the database and verify if comments have been processed and remove those from local storage.
 
 If you have alternative ideas you'd like to see worked out, or maybe even contribute fixing some of my (front-end) code, I'd love to hear from you.

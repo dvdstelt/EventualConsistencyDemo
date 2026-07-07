@@ -1,21 +1,16 @@
 ﻿using System.Threading.Tasks;
 using LiteDB;
+using Microsoft.Extensions.Logging;
 using NServiceBus;
-using NServiceBus.Logging;
 using Shared.Entities;
 using Shared.Events;
 
 namespace Server.Handlers
 {
     [Handler]
-    public class OrderAcceptedHandler
+    public class OrderAcceptedHandler(LiteRepository db, ILogger<OrderAcceptedHandler> logger)
     {
-        private readonly LiteRepository db;
-        static ILog log = LogManager.GetLogger<OrderAcceptedHandler>();
-
-        public OrderAcceptedHandler(LiteRepository db) => this.db = db;
-
-        public Task Handle(OrderAccepted message, IMessageHandlerContext context)
+        public async Task Handle(OrderAccepted message, IMessageHandlerContext context)
         {
             var order = db.Query<Order>()
                 .Where(s => s.Id == message.OrderId)
@@ -23,8 +18,8 @@ namespace Server.Handlers
 
             if (order == null)
             {
-                log.Warn($"Order {message.OrderId} not found; skipping.");
-                return Task.CompletedTask;
+                logger.LogWarning("Order {OrderId} not found; skipping.", message.OrderId);
+                return;
             }
 
             var movie = db.Query<Movie>()
@@ -32,11 +27,12 @@ namespace Server.Handlers
                 .SingleOrDefault();
 
             // If there's a drawing for tickets, then leave this handler. We don't want to send an email.
-            if (movie.TicketType == TicketType.DrawingTicket)
-                return Task.CompletedTask;
+            if (movie == null || movie.TicketType == TicketType.DrawingTicket)
+                return;
 
-            // Send email with digital tickets to user
-            return Task.CompletedTask;
+            // The order is confirmed. Publish an event so the rest of the back-end can react
+            // (e.g. email the digital tickets) and keep working even if the user already left.
+            await context.Publish(new TicketsIssued { OrderId = order.Id });
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using EventualConsistencyDemo.Handlers;
+﻿using System;
+using EventualConsistencyDemo.Handlers;
 using EventualConsistencyDemo.Hubs;
 using LiteDB;
 using Microsoft.AspNetCore.Builder;
@@ -30,6 +31,7 @@ services.AddSignalR(o => o.EnableDetailedErrors = true);
 
 services.AddScoped(_ => new LiteRepository(Database.DatabaseConnectionstring));
 services.AddScoped<MovieTickets>();
+services.AddSingleton(TimeProvider.System);
 
 services.AddMemoryCache();
 

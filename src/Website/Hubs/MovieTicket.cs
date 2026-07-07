@@ -1,12 +1,10 @@
-﻿using System;
-
-namespace EventualConsistencyDemo.Hubs
+﻿namespace EventualConsistencyDemo.Hubs
 {
-    public class MovieTicket
+    public sealed record MovieTicket
     {
-        public string MovieId { get; set; }
-        public string TheaterId { get; set; }
-        public string Time { get; set; }
-        public int NumberOfTickets { get; set; }
+        public string MovieId { get; init; } = string.Empty;
+        public string TheaterId { get; init; } = string.Empty;
+        public string Time { get; init; } = string.Empty;
+        public int NumberOfTickets { get; init; }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using LiteDB;
+using Microsoft.Extensions.Logging;
 using NServiceBus;
-using NServiceBus.Logging;
 using Shared.Commands;
 using Shared.Entities;
 using Shared.Events;
@@ -11,17 +11,11 @@ using Shared.Messages;
 namespace Server.Handlers
 {
     [Handler]
-    public class SubmitOrderHandler
+    public class SubmitOrderHandler(LiteRepository db, ILogger<SubmitOrderHandler> logger)
     {
-        static readonly ILog log = LogManager.GetLogger<SubmitOrderHandler>();
-        
-        private readonly LiteRepository db;
-
-        public SubmitOrderHandler(LiteRepository db) => this.db = db;
-
         public async Task Handle(SubmitOrder message, IMessageHandlerContext context)
         {
-            log.Info($"Order arrived for movie {message.Movie}");
+            logger.LogInformation("Order arrived for movie {MovieId}", message.Movie);
 
             var movie = db.Query<Movie>()
                 .Where(s => s.Id == message.Movie)
