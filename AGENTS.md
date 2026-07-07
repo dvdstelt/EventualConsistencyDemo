@@ -52,11 +52,12 @@ queue is NServiceBus LearningTransport in `.learningtransport/`. Both are gitign
   `ICommand`/`IEvent` markers: a type is a command/event/message when its namespace ends
   with `Commands`/`Events`/`Messages` (see `EndpointConfigurationExtensions`). Entities
   stay mutable classes since EF Core hydrates them.
-- **Data is SQLite via EF Core (`MoviesDbContext`).** The schema is created from the entity
-  model (`EnsureCreated`); movies/reviews are seeded by `Shared/Data/Seed.sql` (embedded,
-  run on website startup via `DatabaseInitializer`). Only the website seeds, so the two
-  endpoints don't race on `EnsureCreated`. Guids are stored as lower-case text so the seed
-  ids are deterministic. `Theater`s remain a static list for now.
+- **Data is SQLite via EF Core (`MoviesDbContext`).** Register it with
+  `services.AddMoviesDatabase()`. The schema is created from the entity model; movies/reviews
+  are seeded in code by `SeedData`, wired through EF Core's `UseSeeding`/`UseAsyncSeeding`
+  hooks and triggered when the website calls `EnsureCreatedAsync` on startup. Only the website
+  creates/seeds, so the two endpoints don't race on `EnsureCreated`. Guids are stored as
+  lower-case text so the seeded ids are deterministic. `Theater`s remain a static list for now.
 - **Prefer constructor injection over static/ambient access.** Inject `ILogger<T>` (not
   the NServiceBus `LogManager`) and `TimeProvider` (not `DateTime.Now`). Handlers use
   primary constructors.

@@ -8,10 +8,10 @@ namespace Tests;
 public class DatabaseSeedTests
 {
     [Fact]
-    public void Seed_script_loads_movies_and_reviews()
+    public void Seed_loads_movies_and_reviews()
     {
-        var db = TestDatabase.Create();      // empty in-memory database, schema created from the model
-        DatabaseInitializer.Initialize(db);  // runs Seed.sql
+        var db = TestDatabase.Create();  // empty in-memory database, schema created from the model
+        SeedData.Seed(db);
 
         Assert.Equal(3, db.Movies.Count());
         Assert.Equal(6, db.Reviews.Count());
@@ -23,11 +23,11 @@ public class DatabaseSeedTests
     }
 
     [Fact]
-    public void Initialize_is_idempotent()
+    public void Seed_is_idempotent()
     {
         var db = TestDatabase.Create();
-        DatabaseInitializer.Initialize(db);
-        DatabaseInitializer.Initialize(db);
+        SeedData.Seed(db);
+        SeedData.Seed(db);
 
         Assert.Equal(3, db.Movies.Count());
     }

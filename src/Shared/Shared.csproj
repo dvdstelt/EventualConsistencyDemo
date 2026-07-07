@@ -10,8 +10,4 @@
     <PackageReference Include="NServiceBus" Version="10.2.7" />
   </ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="Data\Seed.sql" />
-  </ItemGroup>
-
 </Project>

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -37,7 +36,7 @@ var host = Host.CreateDefaultBuilder(args)
         endpointConfiguration.AddHandler<OrderAcceptedHandler>();
         endpointConfiguration.AddHandler<TicketsIssuedHandler>();
 
-        services.AddDbContext<MoviesDbContext>(o => o.UseSqlite(Database.ConnectionString));
+        services.AddMoviesDatabase();
         services.AddNServiceBusEndpoint(endpointConfiguration, endpointConfiguration.EndpointName);
     })
     .Build();

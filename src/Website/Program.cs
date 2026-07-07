@@ -30,7 +30,7 @@ services.AddControllersWithViews();
 
 services.AddSignalR(o => o.EnableDetailedErrors = true);
 
-services.AddDbContext<MoviesDbContext>(o => o.UseSqlite(Database.ConnectionString));
+services.AddMoviesDatabase();
 services.AddScoped<MovieTickets>();
 services.AddSingleton(TimeProvider.System);
 
@@ -38,10 +38,11 @@ services.AddMemoryCache();
 
 var app = builder.Build();
 
-// Create the SQLite database from the entity model and seed it from Seed.sql.
+// Create the SQLite database from the entity model; UseAsyncSeeding fills it (see AddMoviesDatabase).
 using (var scope = app.Services.CreateScope())
 {
-    DatabaseInitializer.Initialize(scope.ServiceProvider.GetRequiredService<MoviesDbContext>());
+    var db = scope.ServiceProvider.GetRequiredService<MoviesDbContext>();
+    await db.Database.EnsureCreatedAsync();
 }
 
 app.UseDeveloperExceptionPage();
