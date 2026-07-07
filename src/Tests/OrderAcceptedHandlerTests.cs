@@ -1,4 +1,5 @@
 using LiteDB;
+using Microsoft.Extensions.Logging.Abstractions;
 using NServiceBus.Testing;
 using Server.Handlers;
 using Shared.Entities;
@@ -24,7 +25,7 @@ public class OrderAcceptedHandlerTests
         var orderId = SeedOrder(db, movie);
         var context = new TestableMessageHandlerContext();
 
-        await new OrderAcceptedHandler(db).Handle(new OrderAccepted { OrderId = orderId }, context);
+        await new OrderAcceptedHandler(db, NullLogger<OrderAcceptedHandler>.Instance).Handle(new OrderAccepted { OrderId = orderId }, context);
 
         var published = Assert.IsType<TicketsIssued>(Assert.Single(context.PublishedMessages).Message);
         Assert.Equal(orderId, published.OrderId);
@@ -38,7 +39,7 @@ public class OrderAcceptedHandlerTests
         var orderId = SeedOrder(db, movie);
         var context = new TestableMessageHandlerContext();
 
-        await new OrderAcceptedHandler(db).Handle(new OrderAccepted { OrderId = orderId }, context);
+        await new OrderAcceptedHandler(db, NullLogger<OrderAcceptedHandler>.Instance).Handle(new OrderAccepted { OrderId = orderId }, context);
 
         Assert.Empty(context.PublishedMessages);
     }
@@ -49,7 +50,7 @@ public class OrderAcceptedHandlerTests
         var db = TestDatabase.Create();
         var context = new TestableMessageHandlerContext();
 
-        await new OrderAcceptedHandler(db).Handle(new OrderAccepted { OrderId = Guid.NewGuid() }, context);
+        await new OrderAcceptedHandler(db, NullLogger<OrderAcceptedHandler>.Instance).Handle(new OrderAccepted { OrderId = Guid.NewGuid() }, context);
 
         Assert.Empty(context.PublishedMessages);
     }

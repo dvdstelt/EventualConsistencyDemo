@@ -1,20 +1,15 @@
 ﻿using System.Threading.Tasks;
 using LiteDB;
+using Microsoft.Extensions.Logging;
 using NServiceBus;
-using NServiceBus.Logging;
 using Shared.Entities;
 using Shared.Events;
 
 namespace Server.Handlers
 {
     [Handler]
-    public class OrderAcceptedHandler
+    public class OrderAcceptedHandler(LiteRepository db, ILogger<OrderAcceptedHandler> logger)
     {
-        private readonly LiteRepository db;
-        static ILog log = LogManager.GetLogger<OrderAcceptedHandler>();
-
-        public OrderAcceptedHandler(LiteRepository db) => this.db = db;
-
         public async Task Handle(OrderAccepted message, IMessageHandlerContext context)
         {
             var order = db.Query<Order>()
@@ -23,7 +18,7 @@ namespace Server.Handlers
 
             if (order == null)
             {
-                log.Warn($"Order {message.OrderId} not found; skipping.");
+                logger.LogWarning("Order {OrderId} not found; skipping.", message.OrderId);
                 return;
             }
 

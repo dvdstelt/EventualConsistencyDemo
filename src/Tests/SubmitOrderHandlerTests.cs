@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging.Abstractions;
 using NServiceBus.Testing;
 using Server.Handlers;
 using Shared.Commands;
@@ -26,7 +27,7 @@ public class SubmitOrderHandlerTests
         var db = TestDatabase.Create(movie);
         var context = new TestableMessageHandlerContext();
 
-        await new SubmitOrderHandler(db).Handle(OrderFor(movie), context);
+        await new SubmitOrderHandler(db, NullLogger<SubmitOrderHandler>.Instance).Handle(OrderFor(movie), context);
 
         var reply = Assert.IsType<OrderSubmission>(Assert.Single(context.RepliedMessages).Message);
         Assert.True(reply.Approved);
@@ -39,7 +40,7 @@ public class SubmitOrderHandlerTests
         var db = TestDatabase.Create(movie);
         var context = new TestableMessageHandlerContext();
 
-        await new SubmitOrderHandler(db).Handle(OrderFor(movie), context);
+        await new SubmitOrderHandler(db, NullLogger<SubmitOrderHandler>.Instance).Handle(OrderFor(movie), context);
 
         var reply = Assert.IsType<OrderSubmission>(Assert.Single(context.RepliedMessages).Message);
         Assert.False(reply.Approved);
@@ -52,7 +53,7 @@ public class SubmitOrderHandlerTests
         var db = TestDatabase.Create(movie);
         var context = new TestableMessageHandlerContext();
 
-        await new SubmitOrderHandler(db).Handle(OrderFor(movie), context);
+        await new SubmitOrderHandler(db, NullLogger<SubmitOrderHandler>.Instance).Handle(OrderFor(movie), context);
 
         // The persisted order must be the one referenced by the published event, so the
         // subscriber can look it up (guards the ordering fix).
@@ -68,6 +69,6 @@ public class SubmitOrderHandlerTests
         var context = new TestableMessageHandlerContext();
         var command = new SubmitOrder { Movie = Guid.NewGuid(), Time = "20:00", NumberOfTickets = 1 };
 
-        await Assert.ThrowsAsync<ArgumentException>(() => new SubmitOrderHandler(db).Handle(command, context));
+        await Assert.ThrowsAsync<ArgumentException>(() => new SubmitOrderHandler(db, NullLogger<SubmitOrderHandler>.Instance).Handle(command, context));
     }
 }
