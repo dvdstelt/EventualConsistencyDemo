@@ -2,28 +2,19 @@
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using EventualConsistencyDemo.Models;
 using LiteDB;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Shared.Entities;
 
 namespace EventualConsistencyDemo.Hubs
 {
-    public class MovieTickets
+    public class MovieTickets(
+        IHubContext<TicketHub> hub,
+        LiteRepository db,
+        ILogger<MovieTickets> logger,
+        TimeProvider timeProvider)
     {
-        readonly IHubContext<TicketHub> hub;
-        readonly LiteRepository db;
-        readonly ILogger<MovieTickets> logger;
-
-        public MovieTickets(IHubContext<TicketHub> hub, LiteRepository db, ILogger<MovieTickets> logger)
-        {
-            this.hub = hub;
-            this.db = db;
-            this.logger = logger;
-        }
-
         /// <summary>
         /// After ticket registration, immediately verify if it's a lottery ticket. 
         /// </summary>
@@ -46,10 +37,10 @@ namespace EventualConsistencyDemo.Hubs
                     MovieTitle = movie.Title,
                     Time = ticket.Time,
                     NumberOfTickets = ticket.NumberOfTickets,
-                    DrawingDate = DateTime.Now.AddDays(14).ToString("dddd, dd MMMM", CultureInfo.InvariantCulture)
+                    DrawingDate = timeProvider.GetLocalNow().AddDays(14).ToString("dddd, dd MMMM", CultureInfo.InvariantCulture)
                 };                
  
-                logger.LogInformation("Sending OrderedLotteryTicket {0}", message.MovieTitle);                
+                logger.LogInformation("Sending OrderedLotteryTicket {MovieTitle}", message.MovieTitle);                
                 
                 await hub.Clients.Client(connectionId).SendAsync("OrderedLotteryTicket", message);
             }
