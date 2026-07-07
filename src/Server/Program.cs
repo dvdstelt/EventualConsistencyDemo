@@ -34,6 +34,7 @@ var host = Host.CreateDefaultBuilder(args)
 
         endpointConfiguration.AddHandler<SubmitOrderHandler>();
         endpointConfiguration.AddHandler<OrderAcceptedHandler>();
+        endpointConfiguration.AddHandler<TicketsIssuedHandler>();
 
         services.AddScoped(_ => new LiteRepository(Database.DatabaseConnectionstring));
         services.AddNServiceBusEndpoint(endpointConfiguration, endpointConfiguration.EndpointName);
