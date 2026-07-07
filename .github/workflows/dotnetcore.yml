@@ -18,3 +18,5 @@ jobs:
           dotnet-version: 10.0.x
     - name: Build
       run: dotnet build src --configuration Release
+    - name: Test
+      run: dotnet test src --configuration Release --no-build
