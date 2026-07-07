@@ -48,9 +48,13 @@ NServiceBus LearningTransport in `.learningtransport/`. Both are gitignored.
   handlers are NOT discovered by assembly scanning, so every handler must be registered
   explicitly with `endpointConfiguration.AddHandler<T>()`. Add that line when you add a
   handler.
-- **Messages are plain classes** classified by namespace convention, not `ICommand`/
-  `IEvent` markers: a type is a command/event/message when its namespace ends with
-  `Commands`/`Events`/`Messages` (see `EndpointConfigurationExtensions`).
+- **Messages are immutable `sealed record`s** classified by namespace convention, not
+  `ICommand`/`IEvent` markers: a type is a command/event/message when its namespace ends
+  with `Commands`/`Events`/`Messages` (see `EndpointConfigurationExtensions`). Entities
+  stay mutable classes since LiteDB hydrates them.
+- **Prefer constructor injection over static/ambient access.** Inject `ILogger<T>` (not
+  the NServiceBus `LogManager`) and `TimeProvider` (not `DateTime.Now`). Handlers use
+  primary constructors.
 - **`IMessageSession` is keyed.** `AddNServiceBusEndpoint` registers `IMessageSession`
   as a keyed singleton (keyed by the endpoint name) to allow multiple endpoints per host.
   The website injects a plain `IMessageSession` into `TicketHub`, so `Website/Program.cs`
