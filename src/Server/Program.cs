@@ -32,8 +32,7 @@ var host = Host.CreateDefaultBuilder(args)
 
         endpointConfiguration.RegisterComponents(s =>
         {
-            s.ConfigureComponent(() => new LiteRepository(Database.DatabaseConnectionstring),
-                DependencyLifecycle.InstancePerUnitOfWork);
+            s.AddScoped(_ => new LiteRepository(Database.DatabaseConnectionstring));
         });
         
         return endpointConfiguration;

@@ -12,9 +12,10 @@ namespace Shared.Configuration
             var transport = endpointConfiguration.UseTransport<LearningTransport>();
             var routing = transport.Routing();
             configureRouting?.Invoke(routing);
-
+            
             endpointConfiguration.UsePersistence<LearningPersistence>();
-
+            endpointConfiguration.UseSerialization(new SystemJsonSerializer());
+            
             var conventions = endpointConfiguration.Conventions();
             conventions.DefiningCommandsAs(t => t.Namespace != null && t.Namespace.EndsWith("Commands"));
             conventions.DefiningEventsAs(t => t.Namespace != null && t.Namespace.EndsWith("Events"));
