@@ -1,7 +1,7 @@
-using LiteDB;
 using Microsoft.Extensions.Logging.Abstractions;
 using NServiceBus.Testing;
 using Server.Handlers;
+using Shared.Data;
 using Shared.Entities;
 using Shared.Events;
 using Xunit;
@@ -10,10 +10,11 @@ namespace Tests;
 
 public class OrderAcceptedHandlerTests
 {
-    static Guid SeedOrder(LiteRepository db, Movie movie)
+    static Guid SeedOrder(MoviesDbContext db, Movie movie)
     {
         var order = new Order { Id = Guid.NewGuid(), MovieIdentifier = movie.Id };
-        db.Insert(order);
+        db.Orders.Add(order);
+        db.SaveChanges();
         return order.Id;
     }
 

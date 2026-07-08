@@ -9,6 +9,21 @@
         "dist/browser/signalr.js",
         "dist/browser/signalr.min.js"
       ]
+    },
+    {
+      "library": "cropperjs@1.6.2",
+      "destination": "wwwroot/lib/cropperjs/",
+      "files": [
+        "dist/cropper.min.css",
+        "dist/cropper.min.js"
+      ]
+    },
+    {
+      "library": "sortablejs@1.15.6",
+      "destination": "wwwroot/lib/sortablejs/",
+      "files": [
+        "Sortable.min.js"
+      ]
     }
   ]
 }

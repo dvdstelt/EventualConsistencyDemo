@@ -1,17 +1,33 @@
-using LiteDB;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Shared.Data;
 using Shared.Entities;
 
 namespace Tests;
 
-// An in-memory LiteDB repository, seeded with the given movies. Handlers use
-// db.Query<Movie>()/db.Insert(...), which resolve to the same collection here.
+// An in-memory SQLite MoviesDbContext, optionally seeded with the given movies.
+// The connection stays open for the lifetime of the context so the in-memory
+// database survives across calls.
 static class TestDatabase
 {
-    public static LiteRepository Create(params Movie[] movies)
+    public static MoviesDbContext Create(params Movie[] movies)
     {
-        var db = new LiteRepository(new MemoryStream());
-        foreach (var movie in movies)
-            db.Insert(movie);
+        var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+
+        var options = new DbContextOptionsBuilder<MoviesDbContext>()
+            .UseSqlite(connection)
+            .Options;
+
+        var db = new MoviesDbContext(options);
+        db.Database.EnsureCreated();
+
+        if (movies.Length > 0)
+        {
+            db.Movies.AddRange(movies);
+            db.SaveChanges();
+        }
+
         return db;
     }
 

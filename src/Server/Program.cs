@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using LiteDB;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -11,6 +10,7 @@ using Serilog.Sinks.SystemConsole.Themes;
 using Server.Behaviors;
 using Server.Handlers;
 using Shared.Configuration;
+using Shared.Data;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
@@ -36,7 +36,7 @@ var host = Host.CreateDefaultBuilder(args)
         endpointConfiguration.AddHandler<OrderAcceptedHandler>();
         endpointConfiguration.AddHandler<TicketsIssuedHandler>();
 
-        services.AddScoped(_ => new LiteRepository(Database.DatabaseConnectionstring));
+        services.AddMoviesDatabase();
         services.AddNServiceBusEndpoint(endpointConfiguration, endpointConfiguration.EndpointName);
     })
     .Build();

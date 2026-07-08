@@ -1,0 +1,61 @@
+@model List<Movie>
+@{
+    ViewData["Title"] = "Admin - Movies";
+}
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h1 class="mb-0">Movies</h1>
+            <small class="text-muted">Drag the &#9776; handle to set how movies are ordered on the site. <span id="reorderStatus" class="text-success"></span></small>
+        </div>
+        <a class="btn btn-warning" asp-area="Admin" asp-controller="Movies" asp-action="Create">Add movie</a>
+    </div>
+
+    @Html.AntiForgeryToken()
+
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                <th>Title</th>
+                <th>URL</th>
+                <th>Ticket type</th>
+                <th>Rating</th>
+                <th class="text-end">Actions</th>
+            </tr>
+        </thead>
+        <tbody id="movieList">
+            @foreach (var movie in Model)
+            {
+                <tr data-id="@movie.Id">
+                    <td class="drag-handle text-muted" style="cursor: move; font-size: 1.3rem;" title="Drag to reorder">&#9776;</td>
+                    <td><img src="/img/posters/@movie.Image" alt="@movie.Title" style="height: 48px;" /></td>
+                    <td>@movie.Title</td>
+                    <td>@movie.UrlTitle</td>
+                    <td>@movie.TicketType</td>
+                    <td>@movie.Rating / 5</td>
+                    <td class="text-end text-nowrap">
+                        <a class="btn btn-sm btn-outline-secondary" asp-area="Admin" asp-controller="Movies" asp-action="Edit" asp-route-id="@movie.Id">Edit</a>
+                        <a class="btn btn-sm btn-outline-secondary" asp-area="Admin" asp-controller="Reviews" asp-action="Index" asp-route-movieId="@movie.Id">Reviews</a>
+                        <form asp-area="Admin" asp-controller="Movies" asp-action="Delete" asp-route-id="@movie.Id" method="post" class="d-inline"
+                              onsubmit="return confirm('Delete @movie.Title and its reviews?');">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @if (!Model.Any())
+    {
+        <p class="text-muted">No movies yet. Add one to get started.</p>
+    }
+</div>
+
+@section Scripts {
+    <script src="~/lib/sortablejs/Sortable.min.js"></script>
+    <script src="~/js/admin-movie-list.js"></script>
+}

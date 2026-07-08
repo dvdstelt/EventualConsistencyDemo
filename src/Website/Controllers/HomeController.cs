@@ -1,23 +1,17 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+using System.Threading.Tasks;
 using EventualConsistencyDemo.Models;
-using LiteDB;
-using Shared.Entities;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Shared.Data;
 
 namespace EventualConsistencyDemo.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController(MoviesDbContext db) : Controller
     {
-        private readonly LiteRepository db;
-
-        public HomeController(LiteRepository db)
+        public async Task<IActionResult> Index()
         {
-            this.db = db;
-        }
-
-        public IActionResult Index()
-        {
-            return View(db.Query<Movie>().ToList());
+            return View(await db.Movies.ToListAsync());
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

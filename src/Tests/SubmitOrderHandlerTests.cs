@@ -57,7 +57,7 @@ public class SubmitOrderHandlerTests
 
         // The persisted order must be the one referenced by the published event, so the
         // subscriber can look it up (guards the ordering fix).
-        var order = Assert.Single(db.Query<Order>().ToList());
+        var order = Assert.Single(db.Orders.ToList());
         var published = Assert.IsType<OrderAccepted>(Assert.Single(context.PublishedMessages).Message);
         Assert.Equal(order.Id, published.OrderId);
     }

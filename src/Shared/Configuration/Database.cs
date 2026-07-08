@@ -1,44 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.IO;
 using System.Linq;
-using System.Text;
-using LiteDB;
-using Shared.Entities;
 
 namespace Shared.Configuration
 {
     public static class Database
     {
-        public static string DatabaseConnectionstring
+        public static string ConnectionString
         {
             get
             {
                 var storagePath = FindStoragePath();
                 Directory.CreateDirectory(storagePath);
                 var databaseLocation = Path.Combine(storagePath, DatabaseName);
-                databaseLocation = $"Filename={databaseLocation}; Connection=shared";
-
-                return databaseLocation;
-            }
-        }
-
-        public static void Setup()
-        {
-            using var db = new LiteDatabase(DatabaseConnectionstring);
-            var movieCollection = db.GetCollection<Movie>("movie");
-            var reviewCollection = db.GetCollection<Review>("review");
-            if (movieCollection.Count() == 0)
-            {
-                var movies = DefaultData.GetDefaultMovies();
-                movieCollection.Insert(movies);
-                reviewCollection.Insert(DefaultData.GetDefaultReviews(movies));
-
-                movieCollection.EnsureIndex(x => x.Id);
-                movieCollection.EnsureIndex(x => x.UrlTitle);
-
-                reviewCollection.EnsureIndex(x => x.Id);
-                reviewCollection.EnsureIndex(x => x.MovieIdentifier);
+                return $"Data Source={databaseLocation}";
             }
         }
 
@@ -74,6 +49,6 @@ namespace Shared.Configuration
         }
 
         const string DefaultDatabaseDirectory = ".database";
-        const string DatabaseName = "eventual-consistency.db";
+        const string DatabaseName = "eventual-consistency.sqlite";
     }
 }

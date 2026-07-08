@@ -1,0 +1,24 @@
+@model MovieEditModel
+@{
+    ViewData["Title"] = "Admin - Edit movie";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/lib/cropperjs/dist/cropper.min.css" />
+}
+
+<div class="container">
+    <h1 class="mb-3">Edit movie</h1>
+    <form id="movieForm" data-poster-required="false" asp-area="Admin" asp-controller="Movies" asp-action="Edit" asp-route-id="@Model.Id" method="post" enctype="multipart/form-data">
+        <input type="hidden" asp-for="Id" />
+        <partial name="_MovieFields" model="Model" />
+        <button type="submit" class="btn btn-warning">Save</button>
+        <a class="btn btn-link" asp-area="Admin" asp-controller="Movies" asp-action="Index">Cancel</a>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/lib/cropperjs/dist/cropper.min.js"></script>
+    <script src="~/js/admin-movie-form.js"></script>
+}

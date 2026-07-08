@@ -1,34 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EventualConsistencyDemo.Models;
-using LiteDB;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Shared.Entities;
+using Microsoft.EntityFrameworkCore;
+using Shared.Data;
 
 namespace EventualConsistencyDemo.Controllers
 {
-    public class ReviewsController : Controller
+    public class ReviewsController(MoviesDbContext db) : Controller
     {
-        private readonly LiteRepository db;
-
-        public ReviewsController(LiteRepository db)
-        {
-            this.db = db;
-        }
-
         // GET: Reviews
-        public ActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View(db.Query<Movie>().ToList());
+            return View(await db.Movies.ToListAsync());
         }
 
         // GET: Reviews/gameofthrones
-        public ActionResult Movie(string movieurl)
+        public async Task<IActionResult> Movie(string movieurl)
         {
-            var movie = db.Query<Movie>().Where(s => s.UrlTitle == movieurl).SingleOrDefault();
+            var movie = await db.Movies.SingleOrDefaultAsync(s => s.UrlTitle == movieurl);
 
             if (movie == null)
                 return NotFound();
@@ -36,7 +26,7 @@ namespace EventualConsistencyDemo.Controllers
             var vm = new ReviewViewModel
             {
                 Movie = movie,
-                Reviews = db.Query<Review>().Where(s => s.MovieIdentifier == movie.Id).ToEnumerable()
+                Reviews = await db.Reviews.Where(s => s.MovieIdentifier == movie.Id).ToListAsync()
             };
 
             return View(vm);

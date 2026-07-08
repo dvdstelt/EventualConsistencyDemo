@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-using LiteDB;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NServiceBus;
 using Shared.Commands;
+using Shared.Data;
 using Shared.Entities;
 using Shared.Events;
 using Shared.Messages;
@@ -11,15 +12,14 @@ using Shared.Messages;
 namespace Server.Handlers
 {
     [Handler]
-    public class SubmitOrderHandler(LiteRepository db, ILogger<SubmitOrderHandler> logger)
+    public class SubmitOrderHandler(MoviesDbContext db, ILogger<SubmitOrderHandler> logger)
     {
         public async Task Handle(SubmitOrder message, IMessageHandlerContext context)
         {
             logger.LogInformation("Order arrived for movie {MovieId}", message.Movie);
 
-            var movie = db.Query<Movie>()
-                .Where(s => s.Id == message.Movie)
-                .SingleOrDefault();
+            var movie = await db.Movies
+                .SingleOrDefaultAsync(s => s.Id == message.Movie, context.CancellationToken);
 
             if (movie == null)
                 throw new ArgumentException($"Movie {message.Movie} not found in datastore", nameof(message.Movie));
@@ -48,7 +48,8 @@ namespace Server.Handlers
 
             // Persist the order before publishing OrderAccepted: the event's subscriber
             // looks the order up by id, so it has to exist by the time the event is handled.
-            db.Insert(order);
+            db.Orders.Add(order);
+            await db.SaveChangesAsync(context.CancellationToken);
 
             // We could prevent publishing if it's a TicketType.DrawingTicket.
             // But what if in the future we do want to get notified? We'd have to change this handler again.

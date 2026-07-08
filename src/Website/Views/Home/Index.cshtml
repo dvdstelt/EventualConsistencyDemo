@@ -8,7 +8,7 @@
     <script type="text/javascript">
 
         $('.movieposters li').on('mouseenter', function () {
-            var image = "/img/background/" + $(this).data("img") + "2.jpg";
+            var image = "/img/background/" + $(this).data("img");
             $('#bgImage').fadeOut(200, function() {
                 $(this).attr("src", image);
                 $('#bgImage').fadeIn(200);
@@ -35,7 +35,7 @@
                     <ul class="movieposters">
                         @foreach (var movie in Model.OrderByDescending(m => m.PopularityScore))
                         {
-                            <li data-img="@movie.UrlTitle">
+                            <li data-img="@Uri.EscapeDataString(movie.Background)">
                                 <a href="/movies/@Uri.EscapeDataString(movie.UrlTitle)">
                                     <img src="/img/posters/@Uri.EscapeDataString(movie.Image)"/>
                                 </a>

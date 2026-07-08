@@ -38,8 +38,8 @@ dotnet run --project src/Server
 dotnet run --project src/Website    # https://localhost:7199, http://localhost:5199
 ```
 
-Storage is LiteDB in a `.database/` folder next to the solution; the message queue is
-NServiceBus LearningTransport in `.learningtransport/`. Both are gitignored.
+Storage is SQLite (EF Core) in a `.database/` folder next to the solution; the message
+queue is NServiceBus LearningTransport in `.learningtransport/`. Both are gitignored.
 
 ## Conventions and gotchas
 
@@ -51,7 +51,13 @@ NServiceBus LearningTransport in `.learningtransport/`. Both are gitignored.
 - **Messages are immutable `sealed record`s** classified by namespace convention, not
   `ICommand`/`IEvent` markers: a type is a command/event/message when its namespace ends
   with `Commands`/`Events`/`Messages` (see `EndpointConfigurationExtensions`). Entities
-  stay mutable classes since LiteDB hydrates them.
+  stay mutable classes since EF Core hydrates them.
+- **Data is SQLite via EF Core (`MoviesDbContext`).** Register it with
+  `services.AddMoviesDatabase()`. The schema is created from the entity model; movies/reviews
+  are seeded in code by `SeedData`, wired through EF Core's `UseSeeding`/`UseAsyncSeeding`
+  hooks and triggered when the website calls `EnsureCreatedAsync` on startup. Only the website
+  creates/seeds, so the two endpoints don't race on `EnsureCreated`. Guids are stored as
+  lower-case text so the seeded ids are deterministic. `Theater`s remain a static list for now.
 - **Prefer constructor injection over static/ambient access.** Inject `ILogger<T>` (not
   the NServiceBus `LogManager`) and `TimeProvider` (not `DateTime.Now`). Handlers use
   primary constructors.
