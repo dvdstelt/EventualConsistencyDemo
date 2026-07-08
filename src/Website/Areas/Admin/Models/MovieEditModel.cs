@@ -33,9 +33,6 @@ namespace EventualConsistencyDemo.Areas.Admin.Models
         [Display(Name = "Price per ticket")]
         public double PricePerTicket { get; set; }
 
-        [Display(Name = "Popularity score")]
-        public int PopularityScore { get; set; }
-
         [Display(Name = "Ticket type")]
         public TicketType TicketType { get; set; }
 

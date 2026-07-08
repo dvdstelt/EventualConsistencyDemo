@@ -20,8 +20,29 @@ namespace EventualConsistencyDemo.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var movies = await db.Movies.OrderBy(m => m.Title).ToListAsync();
+            // Same order as the public site so dragging reflects what visitors see.
+            var movies = await db.Movies.OrderByDescending(m => m.PopularityScore).ToListAsync();
             return View(movies);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Reorder([FromBody] Guid[] ids)
+        {
+            var movies = await db.Movies.ToListAsync();
+
+            // First in the list is shown first, so it gets the highest score (site sorts descending).
+            var score = ids.Length;
+            foreach (var id in ids)
+            {
+                var movie = movies.FirstOrDefault(m => m.Id == id);
+                if (movie != null)
+                    movie.PopularityScore = score;
+                score--;
+            }
+
+            await db.SaveChangesAsync();
+            return Ok();
         }
 
         public IActionResult Create() => View(new MovieEditModel());
@@ -43,6 +64,7 @@ namespace EventualConsistencyDemo.Areas.Admin.Controllers
 
             var movie = new Movie { Id = Guid.NewGuid() };
             Apply(model, movie);
+            movie.PopularityScore = await NextPopularityScoreAsync(); // new movies appear first; reorder by dragging
             movie.Image = await SavePosterAsync(model.PosterData!, model.UrlTitle);
             movie.Background = await SaveImageAsync(model.BackgroundFile!, "background", model.UrlTitle);
 
@@ -147,7 +169,6 @@ namespace EventualConsistencyDemo.Areas.Admin.Controllers
             movie.MovieDetails = model.MovieDetails;
             movie.ReleaseDate = model.ReleaseDate;
             movie.PricePerTicket = model.PricePerTicket;
-            movie.PopularityScore = model.PopularityScore;
             movie.TicketType = model.TicketType;
             movie.Icons = SplitCsv(model.Icons);
             movie.Showtimes = SplitCsv(model.Showtimes);
@@ -163,7 +184,6 @@ namespace EventualConsistencyDemo.Areas.Admin.Controllers
             MovieDetails = movie.MovieDetails,
             ReleaseDate = movie.ReleaseDate,
             PricePerTicket = movie.PricePerTicket,
-            PopularityScore = movie.PopularityScore,
             TicketType = movie.TicketType,
             Icons = string.Join(", ", movie.Icons),
             Showtimes = string.Join(", ", movie.Showtimes),
@@ -173,5 +193,8 @@ namespace EventualConsistencyDemo.Areas.Admin.Controllers
 
         static List<string> SplitCsv(string value) =>
             value.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList();
+
+        async Task<int> NextPopularityScoreAsync() =>
+            (await db.Movies.MaxAsync(m => (int?)m.PopularityScore) ?? 0) + 1;
     }
 }

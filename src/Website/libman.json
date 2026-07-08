@@ -17,6 +17,13 @@
         "dist/cropper.min.css",
         "dist/cropper.min.js"
       ]
+    },
+    {
+      "library": "sortablejs@1.15.6",
+      "destination": "wwwroot/lib/sortablejs/",
+      "files": [
+        "Sortable.min.js"
+      ]
     }
   ]
 }
