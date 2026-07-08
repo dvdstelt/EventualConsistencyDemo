@@ -1,6 +1,6 @@
 @model MovieEditModel
 
-<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div asp-validation-summary="All" class="text-danger"></div>
 
 <div class="row">
     <div class="col-md-6 mb-3">
@@ -66,12 +66,17 @@
 
 <div class="row">
     <div class="col-md-6 mb-3">
-        <label asp-for="PosterFile" class="form-label"></label>
-        <input asp-for="PosterFile" class="form-control" type="file" accept="image/*" />
-        <span asp-validation-for="PosterFile" class="text-danger"></span>
+        <label class="form-label">Poster image (cropped to 638&times;900)</label>
+        <input type="file" id="posterInput" class="form-control" accept="image/*" />
+        <input type="hidden" asp-for="PosterData" id="PosterData" />
+        <span asp-validation-for="PosterData" class="text-danger"></span>
+        <div id="posterError" class="text-danger"></div>
+        <div class="mt-2" style="max-width: 320px;">
+            <img id="posterCropImage" style="display: none; max-width: 100%;" alt="Crop the poster" />
+        </div>
         @if (!string.IsNullOrEmpty(Model.ExistingImage))
         {
-            <div class="mt-2"><img src="/img/posters/@Model.ExistingImage" style="height: 80px;" /> <small class="text-muted">current poster</small></div>
+            <div class="mt-2"><img src="/img/posters/@Model.ExistingImage" style="height: 120px;" /> <small class="text-muted">current poster</small></div>
         }
     </div>
     <div class="col-md-6 mb-3">

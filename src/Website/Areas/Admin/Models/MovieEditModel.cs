@@ -45,8 +45,8 @@ namespace EventualConsistencyDemo.Areas.Admin.Models
         [Display(Name = "Showtimes (comma separated)")]
         public string Showtimes { get; set; } = string.Empty;
 
-        [Display(Name = "Poster image")]
-        public IFormFile? PosterFile { get; set; }
+        // The poster cropped in the browser, sent as a data URL (image/jpeg, base64).
+        public string? PosterData { get; set; }
 
         [Display(Name = "Background image")]
         public IFormFile? BackgroundFile { get; set; }

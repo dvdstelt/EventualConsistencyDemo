@@ -30,13 +30,12 @@ namespace EventualConsistencyDemo.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(MovieEditModel model)
         {
-            if (model.PosterFile == null)
-                ModelState.AddModelError(nameof(model.PosterFile), "A poster image is required.");
+            if (string.IsNullOrEmpty(model.PosterData))
+                ModelState.AddModelError(nameof(model.PosterData), "A poster image is required.");
             if (model.BackgroundFile == null)
                 ModelState.AddModelError(nameof(model.BackgroundFile), "A background image is required.");
             if (await db.Movies.AnyAsync(m => m.UrlTitle == model.UrlTitle))
                 ModelState.AddModelError(nameof(model.UrlTitle), "A movie with this URL title already exists.");
-            ValidateImage(model.PosterFile, nameof(model.PosterFile));
             ValidateImage(model.BackgroundFile, nameof(model.BackgroundFile));
 
             if (!ModelState.IsValid)
@@ -44,7 +43,7 @@ namespace EventualConsistencyDemo.Areas.Admin.Controllers
 
             var movie = new Movie { Id = Guid.NewGuid() };
             Apply(model, movie);
-            movie.Image = await SaveImageAsync(model.PosterFile!, "posters", model.UrlTitle);
+            movie.Image = await SavePosterAsync(model.PosterData!, model.UrlTitle);
             movie.Background = await SaveImageAsync(model.BackgroundFile!, "background", model.UrlTitle);
 
             db.Movies.Add(movie);
@@ -71,7 +70,6 @@ namespace EventualConsistencyDemo.Areas.Admin.Controllers
 
             if (await db.Movies.AnyAsync(m => m.UrlTitle == model.UrlTitle && m.Id != id))
                 ModelState.AddModelError(nameof(model.UrlTitle), "A movie with this URL title already exists.");
-            ValidateImage(model.PosterFile, nameof(model.PosterFile));
             ValidateImage(model.BackgroundFile, nameof(model.BackgroundFile));
 
             if (!ModelState.IsValid)
@@ -82,8 +80,8 @@ namespace EventualConsistencyDemo.Areas.Admin.Controllers
             }
 
             Apply(model, movie);
-            if (model.PosterFile != null)
-                movie.Image = await SaveImageAsync(model.PosterFile, "posters", model.UrlTitle);
+            if (!string.IsNullOrEmpty(model.PosterData))
+                movie.Image = await SavePosterAsync(model.PosterData, model.UrlTitle);
             if (model.BackgroundFile != null)
                 movie.Background = await SaveImageAsync(model.BackgroundFile, "background", model.UrlTitle);
 
@@ -123,6 +121,20 @@ namespace EventualConsistencyDemo.Areas.Admin.Controllers
 
             await using var stream = System.IO.File.Create(Path.Combine(directory, fileName));
             await file.CopyToAsync(stream);
+            return fileName;
+        }
+
+        // Saves the cropper's data URL ("data:image/jpeg;base64,....") as {urlTitle}.jpg.
+        async Task<string> SavePosterAsync(string dataUrl, string urlTitle)
+        {
+            var commaIndex = dataUrl.IndexOf(',');
+            var base64 = commaIndex >= 0 ? dataUrl[(commaIndex + 1)..] : dataUrl;
+            var bytes = Convert.FromBase64String(base64);
+
+            var fileName = urlTitle + ".jpg";
+            var directory = Path.Combine(environment.WebRootPath, "img", "posters");
+            Directory.CreateDirectory(directory);
+            await System.IO.File.WriteAllBytesAsync(Path.Combine(directory, fileName), bytes);
             return fileName;
         }
 
