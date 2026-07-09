@@ -13,7 +13,7 @@ namespace EventualConsistencyDemo.Areas.Admin.Models
         public string Title { get; set; } = string.Empty;
 
         [Required]
-        [RegularExpression("^[a-z0-9]+$", ErrorMessage = "Use lower-case letters and digits only, no spaces.")]
+        [RegularExpression("^[a-z0-9]+(-[a-z0-9]+)*$", ErrorMessage = "Use lower-case letters, digits and hyphens only, no spaces (e.g. star-wars-marathon).")]
         [Display(Name = "URL title")]
         public string UrlTitle { get; set; } = string.Empty;
 
