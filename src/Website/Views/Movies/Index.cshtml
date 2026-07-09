@@ -1,24 +1,20 @@
-﻿@using System.Web
 @model List<Shared.Entities.Movie>
 @{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = "Movies";
+    ViewBag.Nav = "movies";
+    Layout = "_LayoutFront";
 }
 
-<ul class="movies">
-    @foreach (var movie in Model.OrderByDescending(m => m.PopularityScore))
-    {
-        <li>
-            <div class="moviedetails">
-                <div class="movieposter">
-                    <a href="/movies/@Uri.EscapeDataString(movie.UrlTitle)">
-                        <img src="/img/posters/@Uri.EscapeDataString(movie.Image)" />
-                    </a>
-                </div>
-                <div class="title"><h2>@movie.Title</h2></div>
-                <div class="description">@HttpUtility.HtmlDecode(movie.Description)</div>
-                <div class="reviews"><a href="/movies/@Uri.EscapeDataString(movie.UrlTitle)">Buy tickets</a> | <a href="/reviews/@Uri.EscapeDataString(movie.UrlTitle)">Check user reviews.</a></div>
-            </div>
-            
-        </li>
-    }
-</ul>
+<section class="section" style="padding-top:96px;">
+    <div class="wrap">
+        <div class="section-head">
+            <h2 class="font-trade">All movies</h2>
+        </div>
+        <div class="movie-grid">
+            @foreach (var movie in Model.OrderByDescending(m => m.PopularityScore))
+            {
+                <partial name="_MovieCard" model="movie" />
+            }
+        </div>
+    </div>
+</section>
