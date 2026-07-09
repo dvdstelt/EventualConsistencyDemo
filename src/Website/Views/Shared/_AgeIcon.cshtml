@@ -1,0 +1,9 @@
+@model string
+@{
+    // Map an age rating ("6"/"9"/"12"/"16", anything else = all ages) to a
+    // kijkwijzer symbol defined in _IconSprite.
+    var known = new[] { "6", "9", "12", "16" };
+    var symbol = known.Contains(Model) ? $"age-{Model}" : "age-al";
+    var title = string.IsNullOrEmpty(Model) || !known.Contains(Model) ? "All ages" : $"{Model} and over";
+}
+<span class="age-icon" title="@title"><svg viewBox="0 0 24 24" role="img" aria-label="@title"><use href="#@symbol" xlink:href="#@symbol"></use></svg></span>

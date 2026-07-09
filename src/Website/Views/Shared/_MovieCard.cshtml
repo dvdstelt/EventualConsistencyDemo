@@ -1,0 +1,17 @@
+@model Shared.Entities.Movie
+@{
+    var age = Model.Icons.FirstOrDefault(i => i.All(char.IsDigit));
+}
+<a class="movie-card" href="/movies/@Uri.EscapeDataString(Model.UrlTitle)">
+    <div class="poster">
+        @if (Model.TicketType == Shared.Entities.TicketType.DrawingTicket)
+        {
+            <span class="badge-corner koop">Raffle</span>
+        }
+        <img src="/img/posters/@Model.Image" alt="@Model.Title" />
+    </div>
+    <div class="card-info">
+        <partial name="_AgeIcon" model="age" />
+        <span class="title">@Model.Title</span>
+    </div>
+</a>

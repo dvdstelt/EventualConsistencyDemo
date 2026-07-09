@@ -1,4 +1,5 @@
 @model List<Shared.Entities.Movie>
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Env
 @{
     ViewData["Title"] = "Home";
     ViewBag.Nav = "home";
@@ -6,16 +7,63 @@
 
     var byPopularity = Model.OrderByDescending(m => m.PopularityScore).ToList();
     var hero = byPopularity.FirstOrDefault();
+    var specials = Model.OrderByDescending(m => m.ReleaseDate).ToList();
+    var theaters = Shared.Entities.TheatersContext.GetTheaters();
+
+    // A movie shows a title logo in the hero when a matching logo image exists.
+    string? HeroLogo(Shared.Entities.Movie m)
+    {
+        var rel = $"img/logos/{m.UrlTitle}.png";
+        return System.IO.File.Exists(System.IO.Path.Combine(Env.WebRootPath, rel)) ? "/" + rel : null;
+    }
 }
 
 @if (hero is not null)
 {
+    var logo = HeroLogo(hero);
     <section class="hero" style="background-image:url('/img/background/@hero.Background')">
         <div class="wrap">
-            <h1 class="hero-title font-trade">@hero.Title</h1>
+            @if (logo is not null)
+            {
+                <img class="hero-logo" src="@logo" alt="@hero.Title" />
+            }
+            else
+            {
+                <h1 class="hero-title font-trade">@hero.Title</h1>
+            }
             <div class="cta-row">
                 <a class="btn btn-yellow btn-lg" href="/movies/@Uri.EscapeDataString(hero.UrlTitle)">🎟️ Buy your tickets</a>
             </div>
+            <partial name="_Formats" />
+        </div>
+
+        <div class="locbar">
+            <span class="waar">Where?</span>
+            <div class="cinema-select" id="cinemaSelect">
+                <button type="button" class="cs-trigger" aria-haspopup="listbox" aria-expanded="false">
+                    <span class="cs-value cs-placeholder">Select a cinema</span>
+                    <svg class="cs-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="cs-panel" hidden>
+                    <div class="cs-head">All cinemas (<span id="csCount">@theaters.Count</span>)</div>
+                    <ul class="cs-list" role="listbox" aria-label="All cinemas">
+                        @foreach (var t in theaters)
+                        {
+                            <li class="cs-option" role="option" data-value="@t.Name">
+                                <span class="cs-name">@t.Name</span>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <a class="pill" href="#">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+                <span class="t">Near me</span>
+            </a>
+            <a class="pill" href="#">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.5-9.3-9C1.2 8.3 2.5 5 5.7 5c2 0 3.3 1.3 4.3 2.5C11 6.3 12.3 5 14.3 5 17.5 5 18.8 8.3 21.3 11c-2.3 4.5-9.3 9-9.3 9z"/></svg>
+                <span class="t">Favourite cinemas</span>
+            </a>
         </div>
     </section>
 }
@@ -23,32 +71,55 @@
 <section class="section">
     <div class="wrap">
         <div class="section-head">
-            <h2>Now showing</h2>
+            <h2 class="font-trade">Now showing</h2>
             <a class="more" asp-controller="Movies" asp-action="Index">All movies &rsaquo;</a>
         </div>
         <div class="carousel">
             @foreach (var movie in byPopularity)
             {
-                <a class="movie-card" href="/movies/@Uri.EscapeDataString(movie.UrlTitle)">
-                    <div class="poster">
-                        @if (movie.TicketType == Shared.Entities.TicketType.DrawingTicket)
-                        {
-                            <span class="badge-corner koop">Raffle</span>
-                        }
-                        <img src="/img/posters/@movie.Image" alt="@movie.Title" />
-                    </div>
-                    <div class="card-info">
-                        @{
-                            var age = movie.Icons.FirstOrDefault(i => i.All(char.IsDigit));
-                        }
-                        @if (age is not null)
-                        {
-                            <span class="age-icon" title="@age+">@age</span>
-                        }
-                        <span class="title">@movie.Title</span>
-                    </div>
-                </a>
+                <partial name="_MovieCard" model="movie" />
             }
         </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="wrap">
+        <div class="section-head">
+            <h2 class="font-trade">Specials &amp; Events</h2>
+        </div>
+        <div class="carousel">
+            @foreach (var movie in specials)
+            {
+                <partial name="_MovieCard" model="movie" />
+            }
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="wrap">
+        <div class="promos">
+            <div class="promo" style="background-image:url('/img/background/freeguy2.jpg')">
+                <h3>School holidays? We'll keep the kids entertained!</h3>
+                <a class="btn btn-yellow" href="#">See the programme</a>
+            </div>
+            <div class="promo" style="background-image:url('/img/background/dune2.jpg')">
+                <h3>Experience One Night Only during our Ladies Night!</h3>
+                <a class="btn btn-yellow" href="#">To Ladies Night</a>
+            </div>
+            <div class="promo" style="background-image:url('/img/background/tenet2.jpg')">
+                <h3>Tickets for the next blockbuster are on sale now!</h3>
+                <a class="btn btn-yellow" href="#">Times &amp; Tickets</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="thuis">
+    <div class="wrap">
+        <div class="lead font-trade">The movie comes to you with Popcorn at Home</div>
+        <p>Discover our video-on-demand catalogue, with nearly <span class="count">6,000 films</span> available to rent or buy.</p>
+        <a class="btn btn-dark btn-lg" href="#">Discover Popcorn at Home &#8599;</a>
     </div>
 </section>

@@ -109,6 +109,94 @@ h1,h2,h3 { margin: 0 0 .5em; line-height: 1.15; }
 .hero .cta-row { display: flex; gap: 12px; align-items: center; margin-bottom: 22px; }
 .hero .cta-row .btn { border-radius: 6px; }
 
+/* format logos */
+.formats { display: flex; gap: 24px; align-items: center; }
+.fmt { display: inline-flex; align-items: center; color: #fff; }
+.fmt-logo { color: #fff; }
+.fmt-logo .tech-logo { width: auto; display: block; color: #fff; }
+/* uniform icon-set sizing */
+.tech-4dx { height: 16px; }
+.tech-imax { height: 16px; }
+.tech-dolby { height: 16px; }
+
+/* location bar — overlaps the hero, blue translucent */
+.locbar {
+  position: absolute; left: 32px; right: 32px; bottom: 26px; z-index: 3;
+  background: rgba(20,29,42,.92); border: 1px solid rgba(255,255,255,.12); border-radius: 8px;
+  display: flex; align-items: center; gap: 16px; padding: 12px 14px 12px 20px;
+  max-width: var(--maxw); margin: 0 auto;
+}
+.locbar .waar {
+  background: var(--yellow); color: #1c2129; font-weight: 800; font-size: 14px;
+  padding: 7px 14px; border-radius: 5px; transform: rotate(-4deg); box-shadow: 0 3px 8px rgba(0,0,0,.25);
+}
+/* custom cinema dropdown */
+.cinema-select { flex: 1; position: relative; min-width: 0; }
+.cs-trigger {
+  width: 100%; display: flex; align-items: center; gap: 10px;
+  background: transparent; border: 0; color: #fff; font-family: inherit;
+  font-weight: 700; font-size: 17px; padding: 8px 4px; cursor: pointer; text-align: left;
+}
+.cs-trigger .cs-value { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cs-trigger .cs-placeholder { color: rgba(255,255,255,.85); }
+.cs-caret { width: 18px; height: 18px; flex: none; transition: transform .2s ease; }
+.cinema-select.open .cs-caret { transform: rotate(180deg); }
+.cs-panel {
+  position: absolute; z-index: 60; top: calc(100% + 14px); left: 0; right: 0;
+  background: #fff; color: #1c2129; border-radius: 8px;
+  box-shadow: 0 18px 50px rgba(0,0,0,.5); overflow: hidden;
+}
+.cs-panel[hidden] { display: none; }
+.cs-head { padding: 20px 24px 14px; font-size: 20px; font-weight: 800; color: #1c2129; }
+.cs-list { list-style: none; margin: 0; padding: 0 8px 8px; max-height: 420px; overflow-y: auto; }
+.cs-list::-webkit-scrollbar { width: 10px; }
+.cs-list::-webkit-scrollbar-thumb { background: #cfd3d9; border-radius: 8px; border: 3px solid #fff; }
+.cs-option {
+  display: flex; align-items: baseline; gap: 8px;
+  padding: 16px 16px; border-bottom: 1px solid #edeef0; cursor: pointer; border-radius: 6px;
+}
+.cs-option:last-child { border-bottom: 0; }
+.cs-option:hover { background: #f2f3f5; }
+.cs-option .cs-name { font-weight: 700; font-size: 16px; color: #1c2129; }
+.cs-option .cs-city { font-size: 15px; color: #98a2b0; }
+.locbar .pill {
+  display: flex; align-items: center; gap: 8px;
+  background: #364659; border: 0;
+  border-radius: 6px; padding: 10px 17px; font-weight: 700; font-size: 14px; color: #fff; white-space: nowrap;
+  transition: background .15s ease;
+}
+.locbar .pill svg { width: 17px; height: 17px; }
+.locbar .pill:hover { background: #545e6b; color: #fff; }
+
+/* ---------- Promo banners ---------- */
+.promos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.promo {
+  position: relative; border-radius: 12px; overflow: hidden; min-height: 260px;
+  display: flex; flex-direction: column; justify-content: flex-end; padding: 22px;
+  background-size: cover; background-position: center; color: #fff;
+}
+.promo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11,15,20,.05), rgba(11,15,20,.9)); }
+.promo > * { position: relative; z-index: 2; }
+.promo h3 { font-size: 20px; margin-bottom: 14px; max-width: 90%; }
+.promo .btn { align-self: flex-start; }
+
+/* ---------- "At home" yellow band ---------- */
+.thuis { background: var(--yellow); color: #1c2129; padding: 46px 0; }
+.thuis .wrap { text-align: center; }
+.thuis .lead { display: inline-flex; align-items: center; gap: 10px; font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+.thuis p { margin: 0 auto 22px; max-width: 560px; font-weight: 500; }
+.thuis .count { font-weight: 800; }
+/* dark button: small radius, top bevel + glow */
+.thuis .btn {
+  border-radius: 6px;
+  background: linear-gradient(180deg, #1a212a 0%, #0b0f14 60%);
+  box-shadow: 0 10px 26px rgba(9,10,11,.4), 0 2px 6px rgba(9,10,11,.3), inset 0 1.5px 0 rgba(255,255,255,.18);
+}
+.thuis .btn:hover {
+  background: linear-gradient(180deg, #222b36 0%, #12171d 60%);
+  box-shadow: 0 12px 32px rgba(9,10,11,.5), 0 0 0 6px rgba(255,255,255,.14), inset 0 1.5px 0 rgba(255,255,255,.24);
+}
+
 /* ---------- Sections ---------- */
 .section { padding: 34px 0; }
 .section-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 18px; }
