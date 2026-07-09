@@ -13,7 +13,7 @@ public class DatabaseSeedTests
         var db = TestDatabase.Create();  // empty in-memory database, schema created from the model
         SeedData.Seed(db);
 
-        Assert.Equal(20, db.Movies.Count());  // tracks the SeedData catalogue
+        Assert.Equal(21, db.Movies.Count());  // tracks the SeedData catalogue
         Assert.Equal(6, db.Reviews.Count());
 
         var got = db.Movies.Single(m => m.UrlTitle == "gameofthrones");
@@ -35,6 +35,6 @@ public class DatabaseSeedTests
         SeedData.Seed(db);
         SeedData.Seed(db);
 
-        Assert.Equal(20, db.Movies.Count());
+        Assert.Equal(21, db.Movies.Count());
     }
 }

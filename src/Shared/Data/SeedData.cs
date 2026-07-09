@@ -54,6 +54,7 @@ namespace Shared.Data
                 PricePerTicket = 0,
                 PopularityScore = 1000,
                 TicketType = TicketType.DrawingTicket,
+                Category = MovieCategory.SpecialEvent,
             },
             new Movie
             {
@@ -141,6 +142,23 @@ namespace Shared.Data
                 PricePerTicket = 22,
                 PopularityScore = 490,
                 Category = MovieCategory.MusicEvent,
+            },
+            new Movie
+            {
+                Id = Guid.Parse("60000000-0000-0000-0000-000000000001"),
+                UrlTitle = "star-wars-marathon",
+                Title = "Star Wars Marathon",
+                Image = "star-wars-marathon.jpg",
+                Background = "star-wars-marathon.jpg",
+                Rating = 5,
+                Description = "Experience the entire Skywalker saga back to back in one epic all-day marathon, from The Phantom Menace to The Rise of Skywalker.",
+                Icons = ["9"],
+                MovieDetails = "Marathon &middot; 9 films | English, Dutch subtitles",
+                ReleaseDate = new DateTime(2026, 8, 1),
+                Showtimes = ["10:00"],
+                PricePerTicket = 45,
+                PopularityScore = 600,
+                Category = MovieCategory.SpecialEvent,
             },
             // Upcoming premieres. PremiereDate is in the future, so these are
             // flagged "Soon". Posters/backgrounds follow the UrlTitle, added later.
