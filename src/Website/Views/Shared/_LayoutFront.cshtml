@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Popcorn Movie Theater</title>
+    <link rel="stylesheet" href="~/css/popcorn.css" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <header class="topbar">
+        <div class="wrap">
+            <a class="logo font-trade" asp-controller="Home" asp-action="Index" style="font-size:22px;font-weight:800;color:#fff;">🍿 Popcorn</a>
+            <nav class="mainnav">
+                <a asp-controller="Home" asp-action="Index" class="@(ViewBag.Nav == "home" ? "active" : "")">Home</a>
+                <a asp-controller="Movies" asp-action="Index" class="@(ViewBag.Nav == "movies" ? "active" : "")">Movies</a>
+            </nav>
+            <div class="spacer"></div>
+            <div class="actions">
+                <a class="icon-btn account" asp-area="Admin" asp-controller="Movies" asp-action="Index" aria-label="Admin" title="Admin">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.4"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></svg>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main role="main">
+        @RenderBody()
+    </main>
+
+    <footer class="footer">
+        <div class="wrap">
+            <div class="base">
+                &copy; @DateTime.Now.Year Popcorn Movie Theater &middot; Dennis van der Stelt &middot;
+                <a href="https://dennis.bloggingabout.net/">Weblog</a>
+                <a href="https://compilesoftware.nl/">Compile Software</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/site.js"></script>
+    <script src="~/js/home.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

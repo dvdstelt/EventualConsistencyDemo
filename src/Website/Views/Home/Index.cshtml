@@ -1,52 +1,54 @@
-﻿@model List<Shared.Entities.Movie>
+@model List<Shared.Entities.Movie>
 @{
     ViewData["Title"] = "Home";
-    ViewBag.Layout = "FullPage";
+    ViewBag.Nav = "home";
+    Layout = "_LayoutFront";
+
+    var byPopularity = Model.OrderByDescending(m => m.PopularityScore).ToList();
+    var hero = byPopularity.FirstOrDefault();
 }
 
-@section Scripts{
-    <script type="text/javascript">
-
-        $('.movieposters li').on('mouseenter', function () {
-            var image = "/img/background/" + $(this).data("img");
-            $('#bgImage').fadeOut(200, function() {
-                $(this).attr("src", image);
-                $('#bgImage').fadeIn(200);
-            });
-                
-        }).on('mouseleave', function() {
-            $('#bgImage').fadeOut(200);
-        });
-
-    </script>
-}
-
-<div align="center">
-
-    <section class="movie_header frontpage">
-        <div id="bgContainer" class="movie_background">
-            <img id="bgImage" class="bgImage" />
-        </div>
-        <div class="movie_header_content">
-            <div><h1>Currently showing:</h1></div>
-            <div class="movie_header_content_bottom">
-                <div class="container">
-
-                    <ul class="movieposters">
-                        @foreach (var movie in Model.OrderByDescending(m => m.PopularityScore))
-                        {
-                            <li data-img="@Uri.EscapeDataString(movie.Background)">
-                                <a href="/movies/@Uri.EscapeDataString(movie.UrlTitle)">
-                                    <img src="/img/posters/@Uri.EscapeDataString(movie.Image)"/>
-                                </a>
-                                <span>@movie.Title</span>
-                            </li>
-                        }
-                    </ul>
-
-                </div>
+@if (hero is not null)
+{
+    <section class="hero" style="background-image:url('/img/background/@hero.Background')">
+        <div class="wrap">
+            <h1 class="hero-title font-trade">@hero.Title</h1>
+            <div class="cta-row">
+                <a class="btn btn-yellow btn-lg" href="/movies/@Uri.EscapeDataString(hero.UrlTitle)">🎟️ Buy your tickets</a>
             </div>
         </div>
     </section>
+}
 
-</div>
+<section class="section">
+    <div class="wrap">
+        <div class="section-head">
+            <h2>Now showing</h2>
+            <a class="more" asp-controller="Movies" asp-action="Index">All movies &rsaquo;</a>
+        </div>
+        <div class="carousel">
+            @foreach (var movie in byPopularity)
+            {
+                <a class="movie-card" href="/movies/@Uri.EscapeDataString(movie.UrlTitle)">
+                    <div class="poster">
+                        @if (movie.TicketType == Shared.Entities.TicketType.DrawingTicket)
+                        {
+                            <span class="badge-corner koop">Raffle</span>
+                        }
+                        <img src="/img/posters/@movie.Image" alt="@movie.Title" />
+                    </div>
+                    <div class="card-info">
+                        @{
+                            var age = movie.Icons.FirstOrDefault(i => i.All(char.IsDigit));
+                        }
+                        @if (age is not null)
+                        {
+                            <span class="age-icon" title="@age+">@age</span>
+                        }
+                        <span class="title">@movie.Title</span>
+                    </div>
+                </a>
+            }
+        </div>
+    </div>
+</section>
