@@ -59,6 +59,11 @@
     });
   });
 
+  // Apply the pre-selected cinema's city on load (the film page defaults to one).
+  if (select.dataset.defaultCity) {
+    filterCinemasByCity(select.dataset.defaultCity);
+  }
+
   document.addEventListener('click', function (e) {
     if (!select.contains(e.target)) close();
   });

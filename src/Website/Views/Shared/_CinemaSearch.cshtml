@@ -1,12 +1,17 @@
 @model List<Shared.Entities.Theater>
 @* Cinema picker, identical on the homepage hero and the film page. Selecting a
    cinema filters the film page's showtimes to that cinema's city (see home.js).
-   On pages without a showtime list it just records the selection. *@
+   On pages without a showtime list it just records the selection.
+   An optional ViewData["DefaultCinemaName"] pre-selects a cinema. *@
+@{
+    var defaultName = ViewData["DefaultCinemaName"] as string;
+    var defaultTheater = defaultName is null ? null : Model.FirstOrDefault(t => t.Name == defaultName);
+}
 <div class="locbar">
     <span class="waar">Where?</span>
-    <div class="cinema-select" id="cinemaSelect">
+    <div class="cinema-select" id="cinemaSelect" data-default-city="@defaultTheater?.City">
         <button type="button" class="cs-trigger" aria-haspopup="listbox" aria-expanded="false">
-            <span class="cs-value cs-placeholder">Select a cinema</span>
+            <span class="cs-value@(defaultTheater is null ? " cs-placeholder" : "")">@(defaultTheater?.Name ?? "Select a cinema")</span>
             <svg class="cs-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
         <div class="cs-panel" hidden>

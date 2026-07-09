@@ -96,8 +96,9 @@
         else
         {
             <h2 class="font-trade">Find showtimes</h2>
-            <p class="sub">Select a cinema to see the showtimes in its city.</p>
+            <p class="sub">Pick a cinema and date to see the available showtimes.</p>
 
+            ViewData["DefaultCinemaName"] = "Rotterdam - Schouwburgplein";
             <partial name="_CinemaSearch" model="Model.Theaters" />
 
             <div class="date-strip">
