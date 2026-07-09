@@ -17,6 +17,7 @@
   const trigger = select.querySelector('.cs-trigger');
   const panel = select.querySelector('.cs-panel');
   const value = select.querySelector('.cs-value');
+  const STORE_KEY = 'popcornCinema';
 
   function open() {
     panel.hidden = false;
@@ -35,8 +36,8 @@
   });
 
   // On the film page, reveal the showtimes for every cinema in the selected
-  // cinema's city. On pages without a showtime list (e.g. the homepage) this
-  // does nothing, so the picker behaves identically everywhere.
+  // cinema's city. No-op on pages without a showtime list (e.g. the homepage),
+  // so the picker behaves identically everywhere.
   function filterCinemasByCity(city) {
     const list = document.getElementById('cinemaList');
     if (!list) return;
@@ -50,17 +51,36 @@
     if (prompt) prompt.style.display = any ? 'none' : '';
   }
 
+  // Show the chosen cinema in the bar and filter the showtimes to its city.
+  function applySelection(name, city) {
+    value.textContent = name;
+    value.classList.remove('cs-placeholder');
+    filterCinemasByCity(city);
+  }
+
+  // Remember the chosen cinema so the same selection carries across pages: pick
+  // one on the homepage and the film page opens on its city, and vice versa.
+  function remember(name, city) {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify({ name: name, city: city })); } catch (e) { /* ignore */ }
+  }
+  function recall() {
+    try { return JSON.parse(localStorage.getItem(STORE_KEY)); } catch (e) { return null; }
+  }
+
   select.querySelectorAll('.cs-option').forEach(function (opt) {
     opt.addEventListener('click', function () {
-      value.textContent = opt.dataset.value;
-      value.classList.remove('cs-placeholder');
+      applySelection(opt.dataset.value, opt.dataset.city);
+      remember(opt.dataset.value, opt.dataset.city);
       close();
-      filterCinemasByCity(opt.dataset.city);
     });
   });
 
-  // Apply the pre-selected cinema's city on load (the film page defaults to one).
-  if (select.dataset.defaultCity) {
+  // On load, restore the previously chosen cinema; otherwise fall back to this
+  // page's default cinema, if it declares one (the film page does).
+  const saved = recall();
+  if (saved && saved.city) {
+    applySelection(saved.name, saved.city);
+  } else if (select.dataset.defaultCity) {
     filterCinemasByCity(select.dataset.defaultCity);
   }
 
