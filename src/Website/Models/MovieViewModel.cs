@@ -7,5 +7,6 @@ namespace EventualConsistencyDemo.Models
     {
         public Movie Movie { get; set; } = null!;
         public List<Theater> Theaters { get; set; } = [];
+        public List<Review> Reviews { get; set; } = [];
     }
 }

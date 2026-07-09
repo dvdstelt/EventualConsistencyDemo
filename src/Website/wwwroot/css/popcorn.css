@@ -285,6 +285,33 @@ h1,h2,h3 { margin: 0 0 .5em; line-height: 1.15; }
 }
 .lightbox-close:hover { color: var(--yellow); }
 
+/* ---------- Reviews lightbox ---------- */
+.reviews-modal {
+  position: relative; background: var(--page-2); color: #fff;
+  border: 1px solid var(--line); border-radius: 14px;
+  width: 100%; max-width: 640px; max-height: 88vh; overflow-y: auto;
+  padding: 26px 28px 28px; box-shadow: 0 24px 60px rgba(0,0,0,.6);
+}
+.reviews-modal h3 { font-size: 22px; margin-bottom: 18px; }
+.review-list { list-style: none; margin: 0 0 22px; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.review-list li { display: flex; gap: 12px; align-items: flex-start; border-bottom: 1px solid var(--line); padding-bottom: 14px; }
+.review-list li:last-child { border-bottom: 0; padding-bottom: 0; }
+.review-list:empty::after { content: 'No reviews yet — be the first.'; color: var(--muted); font-size: 14px; }
+.review-avatar img { width: 40px; height: 40px; border-radius: 50%; display: block; }
+.review-body { min-width: 0; }
+.review-text { font-size: 15px; color: #e2e5ea; margin-bottom: 4px; word-wrap: break-word; }
+.review-meta { font-size: 12px; color: var(--muted); }
+.reviews-form label { display: block; font-weight: 700; font-size: 14px; margin-bottom: 8px; }
+.reviews-form textarea {
+  width: 100%; background: var(--card); border: 1px solid var(--line); border-radius: 8px;
+  color: #fff; font-family: inherit; font-size: 15px; padding: 12px 14px; resize: vertical;
+}
+.reviews-form textarea::placeholder { color: var(--muted-2); }
+.reviews-form textarea:focus { outline: 2px solid var(--yellow); border-color: var(--yellow); }
+.reviews-actions { display: flex; align-items: center; gap: 16px; margin-top: 14px; }
+.reviews-clear { color: var(--muted); font-size: 13px; }
+.reviews-clear:hover { color: var(--red); }
+
 /* ================= FILM DETAIL / TICKETS ================= */
 .film-hero {
   position: relative; color: #fff; min-height: 700px;

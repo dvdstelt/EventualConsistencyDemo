@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using EventualConsistencyDemo.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +25,8 @@ namespace EventualConsistencyDemo.Controllers
             var vm = new MovieViewModel
             {
                 Movie = movie,
-                Theaters = TheatersContext.GetTheaters()
+                Theaters = TheatersContext.GetTheaters(),
+                Reviews = await db.Reviews.Where(r => r.MovieIdentifier == movie.Id).ToListAsync()
             };
 
             return View(vm);

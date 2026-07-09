@@ -36,6 +36,7 @@
     {
         <script src="~/js/trailer.js" asp-append-version="true"></script>
     }
+    <script src="~/js/reviews.js" asp-append-version="true"></script>
 }
 
 <section class="film-hero" style="background-image:url('/img/background/@m.Background')">
@@ -64,7 +65,7 @@
             <partial name="_Formats" />
             <div class="fh-actions" style="margin-top:20px;">
                 <a class="btn btn-yellow btn-lg" href="#booking">🎟️ @(isRaffle ? "Enter the raffle" : "Order tickets")</a>
-                <a class="fh-btn" href="/reviews/@Uri.EscapeDataString(m.UrlTitle)">Reviews</a>
+                <button type="button" class="fh-btn" data-reviews>Reviews</button>
             </div>
         </div>
     </div>
@@ -286,3 +287,31 @@ else
         </div>
     </div>
 }
+
+<div id="reviewsLightbox" class="lightbox" hidden>
+    <div class="reviews-modal">
+        <button type="button" class="flow-close" id="reviewsClose" aria-label="Close">&times;</button>
+        <h3>Reviews &middot; @m.Title</h3>
+        <ul class="review-list" id="reviewList">
+            @foreach (var review in Model.Reviews)
+            {
+                <li>
+                    <div class="review-avatar"><img src="https://gravatar.com/avatar/9300c92d4bbf31c4a96d345e9712d2a6.jpg?&s=50" alt="" /></div>
+                    <div class="review-body">
+                        <div class="review-text">@review.Description</div>
+                        <div class="review-meta">@(review.PostedByEmail ?? "dvdstelt@gmail.com") | @review.ReviewedAt.ToString("dd/MM/yyyy HH:mm")</div>
+                    </div>
+                </li>
+            }
+        </ul>
+        <div class="reviews-form">
+            <input type="hidden" id="reviewMovieId" value="@m.Id" />
+            <label for="reviewText">Add your review</label>
+            <textarea id="reviewText" rows="3" placeholder="What did you think?"></textarea>
+            <div class="reviews-actions">
+                <button type="button" class="btn btn-yellow" id="reviewSubmit">Submit review</button>
+                <a href="#" id="reviewsClear" class="reviews-clear">Clear my reviews</a>
+            </div>
+        </div>
+    </div>
+</div>
