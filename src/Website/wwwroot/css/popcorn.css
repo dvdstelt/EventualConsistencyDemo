@@ -126,9 +126,10 @@ h1,h2,h3 { margin: 0 0 .5em; line-height: 1.15; }
   display: flex; align-items: center; gap: 16px; padding: 12px 14px 12px 20px;
   margin-bottom: 24px;
 }
-/* on the homepage it overlaps the bottom of the hero */
+/* on the homepage it overlaps the bottom of the hero; z-index must beat the
+   hero .wrap (z-index 40) or the wrap swallows clicks on the picker */
 .hero .locbar {
-  position: absolute; left: 32px; right: 32px; bottom: 26px;
+  position: absolute; left: 32px; right: 32px; bottom: 26px; z-index: 45;
   max-width: var(--maxw); margin: 0 auto;
 }
 .locbar .waar {
