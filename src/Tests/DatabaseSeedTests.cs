@@ -13,13 +13,16 @@ public class DatabaseSeedTests
         var db = TestDatabase.Create();  // empty in-memory database, schema created from the model
         SeedData.Seed(db);
 
-        Assert.Equal(3, db.Movies.Count());
+        Assert.Equal(15, db.Movies.Count());  // tracks the SeedData catalogue
         Assert.Equal(6, db.Reviews.Count());
 
         var got = db.Movies.Single(m => m.UrlTitle == "gameofthrones");
         Assert.Equal(TicketType.DrawingTicket, got.TicketType);   // enum round-trips as text
         Assert.Contains("violence", got.Icons);                    // JSON collection round-trips
         Assert.Equal(2, db.Reviews.Count(r => r.MovieIdentifier == got.Id)); // seeded ids match EF's
+
+        var titanic = db.Movies.Single(m => m.UrlTitle == "titanic");
+        Assert.Equal(MovieCategory.SpecialEvent, titanic.Category); // Category enum round-trips as text
     }
 
     [Fact]
@@ -29,6 +32,6 @@ public class DatabaseSeedTests
         SeedData.Seed(db);
         SeedData.Seed(db);
 
-        Assert.Equal(3, db.Movies.Count());
+        Assert.Equal(15, db.Movies.Count());
     }
 }
