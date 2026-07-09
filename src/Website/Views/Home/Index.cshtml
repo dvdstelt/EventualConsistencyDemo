@@ -5,9 +5,13 @@
     ViewBag.Nav = "home";
     Layout = "_LayoutFront";
 
-    var byPopularity = Model.OrderByDescending(m => m.PopularityScore).ToList();
-    var hero = byPopularity.FirstOrDefault();
-    var specials = Model.OrderByDescending(m => m.ReleaseDate).ToList();
+    var nowShowing = Model
+        .Where(m => m.Category == Shared.Entities.MovieCategory.NowShowing)
+        .OrderByDescending(m => m.PopularityScore).ToList();
+    var hero = nowShowing.FirstOrDefault();
+    var specials = Model
+        .Where(m => m.Category != Shared.Entities.MovieCategory.NowShowing)
+        .OrderByDescending(m => m.PopularityScore).ToList();
     var theaters = Shared.Entities.TheatersContext.GetTheaters();
 
     // A movie shows a title logo in the hero when a matching logo image exists.
@@ -75,7 +79,7 @@
             <a class="more" asp-controller="Movies" asp-action="Index">All movies &rsaquo;</a>
         </div>
         <div class="carousel">
-            @foreach (var movie in byPopularity)
+            @foreach (var movie in nowShowing)
             {
                 <partial name="_MovieCard" model="movie" />
             }
@@ -83,19 +87,22 @@
     </div>
 </section>
 
-<section class="section">
-    <div class="wrap">
-        <div class="section-head">
-            <h2 class="font-trade">Specials &amp; Events</h2>
+@if (specials.Count > 0)
+{
+    <section class="section">
+        <div class="wrap">
+            <div class="section-head">
+                <h2 class="font-trade">Specials &amp; Events</h2>
+            </div>
+            <div class="carousel">
+                @foreach (var movie in specials)
+                {
+                    <partial name="_MovieCard" model="movie" />
+                }
+            </div>
         </div>
-        <div class="carousel">
-            @foreach (var movie in specials)
-            {
-                <partial name="_MovieCard" model="movie" />
-            }
-        </div>
-    </div>
-</section>
+    </section>
+}
 
 <section class="section">
     <div class="wrap">

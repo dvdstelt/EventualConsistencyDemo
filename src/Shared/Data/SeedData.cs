@@ -69,7 +69,24 @@ namespace Shared.Data
                 ReleaseDate = new DateTime(2024, 7, 24),
                 Showtimes = ["10:00", "15:00", "20:00"],
                 PricePerTicket = 10,
-                PopularityScore = 200,
+                PopularityScore = 900,
+            },
+            new Movie
+            {
+                // Carried over from the running demo database (was added via /admin).
+                Id = Guid.Parse("45e37bc7-a642-4c71-9410-62a7688834c5"),
+                UrlTitle = "supergirl",
+                Title = "Supergirl",
+                Image = "supergirl.jpg",
+                Background = "supergirl.jpg",
+                Rating = 4,
+                Description = "Bla bla bla",
+                Icons = ["16"],
+                MovieDetails = "127 minutes | English",
+                ReleaseDate = new DateTime(2026, 7, 8),
+                Showtimes = ["10:00"],
+                PricePerTicket = 18,
+                PopularityScore = 850,
             },
             new Movie
             {
@@ -85,9 +102,88 @@ namespace Shared.Data
                 ReleaseDate = new DateTime(2021, 9, 16),
                 Showtimes = ["10:00", "13:00", "15:00", "20:00", "23:00"],
                 PricePerTicket = 20,
+                PopularityScore = 800,
+            },
+            // The complete Star Wars saga. Posters/backgrounds are added later; the
+            // image filenames follow the UrlTitle so they can be dropped in by name.
+            .. StarWars(),
+            // Special (non-film) events, surfaced in the "Specials & Events" section.
+            new Movie
+            {
+                Id = Guid.Parse("70000000-0000-0000-0000-000000000001"),
+                UrlTitle = "titanic",
+                Title = "Titanic",
+                Image = "titanic.jpg",
+                Background = "titanic.jpg",
+                Rating = 5,
+                Description = "A seventeen-year-old aristocrat falls in love with a kind but poor artist aboard the luxurious, ill-fated R.M.S. Titanic. Back on the big screen as a special event.",
+                Icons = ["12"],
+                MovieDetails = "194 minutes | English, Dutch subtitles",
+                ReleaseDate = new DateTime(1997, 12, 19),
+                Showtimes = ["15:00", "19:30"],
+                PricePerTicket = 15,
                 PopularityScore = 500,
+                Category = MovieCategory.SpecialEvent,
+            },
+            new Movie
+            {
+                Id = Guid.Parse("70000000-0000-0000-0000-000000000002"),
+                UrlTitle = "guns-n-roses-use-your-illusion-tokyo",
+                Title = "Guns N' Roses - Use Your Illusion in Tokyo",
+                Image = "guns-n-roses-use-your-illusion-tokyo.jpg",
+                Background = "guns-n-roses-use-your-illusion-tokyo.jpg",
+                Rating = 5,
+                Description = "The legendary Use Your Illusion I &amp; II concert, recorded live at the Tokyo Dome in 1992, on the big screen for one special music event.",
+                Icons = ["12"],
+                MovieDetails = "Concert film &middot; 150 minutes",
+                ReleaseDate = new DateTime(1992, 4, 22),
+                Showtimes = ["20:30"],
+                PricePerTicket = 22,
+                PopularityScore = 490,
+                Category = MovieCategory.MusicEvent,
             },
         ];
+
+        // Episode order; release order lives in ReleaseDate. Rating uses the Dutch
+        // kijkwijzer age icons ("9"/"12"). Episode IX reuses the existing poster.
+        static IEnumerable<Movie> StarWars()
+        {
+            (string urlTitle, string title, int year, int month, int day, int minutes, string age, int score, string desc)[] episodes =
+            [
+                ("star-wars-the-phantom-menace", "Star Wars: Episode I - The Phantom Menace", 1999, 5, 19, 136, "9", 720, "Two Jedi escape a hostile blockade to find allies and come across a young boy who may bring balance to the Force."),
+                ("star-wars-attack-of-the-clones", "Star Wars: Episode II - Attack of the Clones", 2002, 5, 16, 142, "9", 710, "Anakin Skywalker shares a forbidden romance with Padme while the Jedi uncover a secret clone army."),
+                ("star-wars-revenge-of-the-sith", "Star Wars: Episode III - Revenge of the Sith", 2005, 5, 19, 140, "12", 700, "As the Clone Wars near an end, Anakin Skywalker is seduced by the dark side and becomes Darth Vader."),
+                ("star-wars-a-new-hope", "Star Wars: Episode IV - A New Hope", 1977, 5, 25, 121, "9", 690, "Luke Skywalker joins forces with a Jedi Knight, a pilot and two droids to save the galaxy from the Empire's Death Star."),
+                ("star-wars-the-empire-strikes-back", "Star Wars: Episode V - The Empire Strikes Back", 1980, 5, 21, 124, "9", 680, "After the Rebels are overpowered, Luke begins Jedi training with Yoda while his friends are pursued by Darth Vader."),
+                ("star-wars-return-of-the-jedi", "Star Wars: Episode VI - Return of the Jedi", 1983, 5, 25, 131, "9", 670, "The Rebels dispatch to Endor to destroy a more powerful Death Star while Luke tries to turn Vader from the dark side."),
+                ("star-wars-the-force-awakens", "Star Wars: Episode VII - The Force Awakens", 2015, 12, 16, 138, "9", 660, "Three decades after the Empire's defeat, a new threat arises as Rey, Finn and Han Solo search for the missing Luke Skywalker."),
+                ("star-wars-the-last-jedi", "Star Wars: Episode VIII - The Last Jedi", 2017, 12, 13, 152, "12", 650, "Rey develops her abilities with Luke Skywalker as the Resistance prepares for battle with the First Order."),
+                ("star-wars-the-rise-of-skywalker", "Star Wars: Episode IX - The Rise of Skywalker", 2019, 12, 18, 142, "12", 640, "The surviving Resistance faces the First Order once more in the final chapter of the Skywalker saga."),
+            ];
+
+            var index = 1;
+            foreach (var (urlTitle, title, year, month, day, minutes, age, score, desc) in episodes)
+            {
+                var image = urlTitle == "star-wars-the-rise-of-skywalker" ? "riseofskywalker.jpg" : $"{urlTitle}.jpg";
+                yield return new Movie
+                {
+                    Id = Guid.Parse($"e0000000-0000-0000-0000-00000000000{index}"),
+                    UrlTitle = urlTitle,
+                    Title = title,
+                    Image = image,
+                    Background = image,
+                    Rating = 5,
+                    Description = desc,
+                    Icons = [age],
+                    MovieDetails = $"{minutes} minutes | English, Dutch subtitles",
+                    ReleaseDate = new DateTime(year, month, day),
+                    Showtimes = ["13:00", "16:30", "20:00"],
+                    PricePerTicket = 12,
+                    PopularityScore = score,
+                };
+                index++;
+            }
+        }
 
         static IEnumerable<Review> Reviews() =>
         [

@@ -20,6 +20,7 @@ namespace Shared.Entities
         public double PricePerTicket { get; set; }
         public int PopularityScore { get; set; }
         public TicketType TicketType { get; set; } = TicketType.RegularTicket;
+        public MovieCategory Category { get; set; } = MovieCategory.NowShowing;
 
         public List<string> Showtimes { get; set; } = [];
     }
@@ -28,5 +29,13 @@ namespace Shared.Entities
     {
         RegularTicket,
         DrawingTicket
+    }
+
+    // Which homepage section a movie belongs to.
+    public enum MovieCategory
+    {
+        NowShowing,
+        SpecialEvent,
+        MusicEvent
     }
 }

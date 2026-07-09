@@ -20,8 +20,9 @@ namespace Shared.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Store the enum by name ('RegularTicket'/'DrawingTicket') so the seed reads clearly.
+            // Store the enums by name (e.g. 'RegularTicket', 'NowShowing') so the data reads clearly.
             modelBuilder.Entity<Movie>().Property(m => m.TicketType).HasConversion<string>();
+            modelBuilder.Entity<Movie>().Property(m => m.Category).HasConversion<string>();
 
             modelBuilder.Entity<Review>().HasIndex(r => r.MovieIdentifier);
         }
