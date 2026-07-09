@@ -94,6 +94,16 @@
     });
   }
 
+  // City filter: only show cinemas in the selected city (one city at a time).
+  const citySelect = document.getElementById('citySelect');
+  if (citySelect) {
+    citySelect.addEventListener('change', () => {
+      document.querySelectorAll('.city-group').forEach(group => {
+        group.style.display = group.dataset.city === citySelect.value ? '' : 'none';
+      });
+    });
+  }
+
   // Wire every (available) showtime button to open the flow for its cinema/time.
   document.querySelectorAll('.st:not(.sold)').forEach(btn => {
     btn.addEventListener('click', () => {

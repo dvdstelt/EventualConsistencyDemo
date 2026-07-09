@@ -95,8 +95,23 @@
         }
         else
         {
+            var cities = Model.Theaters.Select(t => t.City).Distinct().ToList();
+            var defaultCity = cities.Contains("Rotterdam") ? "Rotterdam" : cities.FirstOrDefault();
+
             <h2 class="font-trade">Find showtimes</h2>
-            <p class="sub">Pick your cinema and date to see the available showtimes.</p>
+            <p class="sub">Pick your city and date to see the available showtimes.</p>
+
+            <div class="filters">
+                <div class="field">
+                    <label for="citySelect">City</label>
+                    <select id="citySelect">
+                        @foreach (var city in cities)
+                        {
+                            <option value="@city" selected="@(city == defaultCity ? "selected" : null)">@city</option>
+                        }
+                    </select>
+                </div>
+            </div>
 
             <div class="date-strip">
                 @for (var d = 0; d < 7; d++)
@@ -110,33 +125,39 @@
                 }
             </div>
 
-            @for (var i = 0; i < Model.Theaters.Count; i++)
+            @foreach (var city in cities)
             {
-                var theater = Model.Theaters[i];
-                <div class="cinema-block @(i == 0 ? "cinema-block--selected" : "")" data-theater-id="@theater.Id">
-                    <div class="head">
-                        <h3>@theater.Name</h3>
-                    </div>
-                    <div class="version-label">Original version</div>
-                    <div class="st-grid">
-                        @for (var s = 0; s < m.Showtimes.Count; s++)
-                        {
-                            var st = m.Showtimes[s];
-                            <button class="st" data-time="@st">
-                                @if (s == 1)
+                var cityTheaters = Model.Theaters.Where(t => t.City == city).ToList();
+                <div class="city-group" data-city="@city" style="@(city == defaultCity ? "" : "display:none;")">
+                    @for (var i = 0; i < cityTheaters.Count; i++)
+                    {
+                        var theater = cityTheaters[i];
+                        <div class="cinema-block @(i == 0 ? "cinema-block--selected" : "")" data-theater-id="@theater.Id">
+                            <div class="head">
+                                <h3>@theater.Name</h3>
+                            </div>
+                            <div class="version-label">Original version</div>
+                            <div class="st-grid">
+                                @for (var s = 0; s < m.Showtimes.Count; s++)
                                 {
-                                    <span class="st-badge">IMAX</span>
+                                    var st = m.Showtimes[s];
+                                    <button class="st" data-time="@st">
+                                        @if (s == 1)
+                                        {
+                                            <span class="st-badge">IMAX</span>
+                                        }
+                                        <span class="st-time">@st</span>
+                                        <span class="st-end">&rarr; @EndTime(st)</span>
+                                    </button>
                                 }
-                                <span class="st-time">@st</span>
-                                <span class="st-end">&rarr; @EndTime(st)</span>
-                            </button>
+                            </div>
+                        </div>
+                        @if (i < cityTheaters.Count - 1)
+                        {
+                            <div class="cinema-divider"><span>More in @city</span></div>
                         }
-                    </div>
+                    }
                 </div>
-                @if (i < Model.Theaters.Count - 1)
-                {
-                    <div class="cinema-divider"><span>Nearby cinemas</span></div>
-                }
             }
         }
     </div>
