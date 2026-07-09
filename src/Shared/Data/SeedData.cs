@@ -96,6 +96,7 @@ namespace Shared.Data
                 Title = "Dune",
                 Image = "dune.jpg",
                 Background = "dune.jpg",
+                Trailer = "https://www.youtube.com/watch?v=8g18jFHCLXk",
                 Rating = 5,
                 Description = "Feature adaptation of Frank Herbert's science fiction novel, about the son of a noble family entrusted with the protection of the most valuable asset and most vital element in the galaxy.",
                 Icons = ["12", "violence", "fear"],

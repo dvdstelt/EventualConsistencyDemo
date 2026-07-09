@@ -26,6 +26,9 @@ namespace EventualConsistencyDemo.Areas.Admin.Models
         [Display(Name = "Movie details")]
         public string MovieDetails { get; set; } = string.Empty;
 
+        [Display(Name = "Trailer URL")]
+        public string? Trailer { get; set; }
+
         [DataType(DataType.Date)]
         [Display(Name = "Release date")]
         public DateTime ReleaseDate { get; set; } = DateTime.Today;

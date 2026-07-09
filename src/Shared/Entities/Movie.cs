@@ -11,6 +11,7 @@ namespace Shared.Entities
         public string Description { get; set; } = string.Empty;
         public string Image { get; set; } = string.Empty;
         public string Background { get; set; } = string.Empty;
+        public string Trailer { get; set; } = string.Empty;
 
         public int Rating { get; set; }
         public List<string> Icons { get; set; } = [];

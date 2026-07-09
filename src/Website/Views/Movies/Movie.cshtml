@@ -35,9 +35,12 @@
 }
 
 <section class="film-hero" style="background-image:url('/img/background/@m.Background')">
-    <button class="fh-play" aria-label="Play trailer" type="button">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
-    </button>
+    @if (!string.IsNullOrWhiteSpace(m.Trailer))
+    {
+        <a class="fh-play" href="@m.Trailer" target="_blank" rel="noopener" aria-label="Play trailer">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+        </a>
+    }
     <div class="wrap">
         <div class="fh-content">
             @if (heroLogo is not null)

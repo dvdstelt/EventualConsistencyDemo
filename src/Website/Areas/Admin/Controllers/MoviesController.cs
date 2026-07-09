@@ -167,6 +167,7 @@ namespace EventualConsistencyDemo.Areas.Admin.Controllers
             movie.Description = model.Description;
             movie.Rating = model.Rating;
             movie.MovieDetails = model.MovieDetails;
+            movie.Trailer = model.Trailer?.Trim() ?? string.Empty;
             movie.ReleaseDate = model.ReleaseDate;
             movie.PricePerTicket = model.PricePerTicket;
             movie.TicketType = model.TicketType;
@@ -182,6 +183,7 @@ namespace EventualConsistencyDemo.Areas.Admin.Controllers
             Description = movie.Description,
             Rating = movie.Rating,
             MovieDetails = movie.MovieDetails,
+            Trailer = movie.Trailer,
             ReleaseDate = movie.ReleaseDate,
             PricePerTicket = movie.PricePerTicket,
             TicketType = movie.TicketType,
