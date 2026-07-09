@@ -115,9 +115,9 @@ h1,h2,h3 { margin: 0 0 .5em; line-height: 1.15; }
 .fmt-logo { color: #fff; }
 .fmt-logo .tech-logo { width: auto; display: block; color: #fff; }
 /* uniform icon-set sizing */
-.tech-4dx { height: 16px; }
-.tech-imax { height: 16px; }
-.tech-dolby { height: 16px; }
+.tech-4dx { height: 12px; }
+.tech-imax { height: 12px; }
+.tech-dolby { height: 12px; }
 
 /* location bar — blue translucent cinema picker (shared: hero + film page) */
 .locbar {
