@@ -297,7 +297,8 @@ h1,h2,h3 { margin: 0 0 .5em; line-height: 1.15; }
 .review-list li { display: flex; gap: 12px; align-items: flex-start; border-bottom: 1px solid var(--line); padding-bottom: 14px; }
 .review-list li:last-child { border-bottom: 0; padding-bottom: 0; }
 .review-list:empty::after { content: 'No reviews yet — be the first.'; color: var(--muted); font-size: 14px; }
-.review-avatar img { width: 40px; height: 40px; border-radius: 50%; display: block; }
+.review-avatar { flex: none; }
+.review-avatar img { width: 40px; height: 40px; border-radius: 50%; display: block; object-fit: cover; }
 .review-body { min-width: 0; }
 .review-text { font-size: 15px; color: #e2e5ea; margin-bottom: 4px; word-wrap: break-word; }
 .review-meta { font-size: 12px; color: var(--muted); }
