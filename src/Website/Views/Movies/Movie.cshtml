@@ -32,14 +32,18 @@
     {
         <script src="~/js/film-booking.js" asp-append-version="true"></script>
     }
+    @if (!string.IsNullOrWhiteSpace(m.Trailer))
+    {
+        <script src="~/js/trailer.js" asp-append-version="true"></script>
+    }
 }
 
 <section class="film-hero" style="background-image:url('/img/background/@m.Background')">
     @if (!string.IsNullOrWhiteSpace(m.Trailer))
     {
-        <a class="fh-play" href="@m.Trailer" target="_blank" rel="noopener" aria-label="Play trailer">
+        <button type="button" class="fh-play" data-trailer="@m.Trailer" aria-label="Play trailer">
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
-        </a>
+        </button>
     }
     <div class="wrap">
         <div class="fh-content">
@@ -271,4 +275,14 @@ else
             <tr><td><strong>Tickets</strong></td><td>{numberOfTickets}</td></tr>
         </table>
     </template>
+}
+
+@if (!string.IsNullOrWhiteSpace(m.Trailer))
+{
+    <div id="trailerLightbox" class="lightbox" hidden>
+        <button type="button" class="lightbox-close" id="trailerClose" aria-label="Close">&times;</button>
+        <div class="lightbox-frame">
+            <iframe id="trailerFrame" src="" title="@m.Title trailer" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>
+        </div>
+    </div>
 }
