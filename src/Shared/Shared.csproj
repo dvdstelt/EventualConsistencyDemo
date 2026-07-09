@@ -8,6 +8,13 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.9" />
     <PackageReference Include="NServiceBus" Version="10.2.7" />
+    <!--
+      Microsoft.EntityFrameworkCore.Sqlite 10.0.9 pulls in SQLitePCLRaw 2.1.11
+      transitively, whose native SQLite library has a known high-severity
+      vulnerability (NU1903 / GHSA-2m69-gcr7-jv3q). Reference the patched 3.x
+      bundle directly to override it; EF Core only needs SQLitePCLRaw.core >= 2.1.11.
+    -->
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="3.0.3" />
   </ItemGroup>
 
 </Project>
