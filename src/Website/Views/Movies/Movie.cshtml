@@ -96,12 +96,9 @@
         else
         {
             <h2 class="font-trade">Find showtimes</h2>
-            <p class="sub">Search for a city or cinema, then pick a date and showtime.</p>
+            <p class="sub">Select a cinema to see the showtimes in its city.</p>
 
-            <div class="cinema-search">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                <input type="text" id="cinemaSearch" value="Rotterdam" placeholder="Search by city or cinema" autocomplete="off" aria-label="Search by city or cinema" />
-            </div>
+            <partial name="_CinemaSearch" model="Model.Theaters" />
 
             <div class="date-strip">
                 @for (var d = 0; d < 7; d++)
@@ -116,9 +113,10 @@
             </div>
 
             <div id="cinemaList">
+                <p id="cinemaPrompt" class="sub">Choose a cinema above to see the showtimes.</p>
                 @foreach (var theater in Model.Theaters)
                 {
-                    <div class="cinema-block" data-theater-id="@theater.Id" data-search="@theater.Name.ToLowerInvariant()">
+                    <div class="cinema-block" data-theater-id="@theater.Id" data-city="@theater.City" style="display:none;">
                         <div class="head">
                             <h3>@theater.Name</h3>
                         </div>
@@ -139,7 +137,6 @@
                         </div>
                     </div>
                 }
-                <p id="noCinemas" class="sub" style="display:none;">No cinemas match your search.</p>
             </div>
         }
     </div>

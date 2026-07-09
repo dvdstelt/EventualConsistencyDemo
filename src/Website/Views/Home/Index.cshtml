@@ -41,34 +41,7 @@
             <partial name="_Formats" />
         </div>
 
-        <div class="locbar">
-            <span class="waar">Where?</span>
-            <div class="cinema-select" id="cinemaSelect">
-                <button type="button" class="cs-trigger" aria-haspopup="listbox" aria-expanded="false">
-                    <span class="cs-value cs-placeholder">Select a cinema</span>
-                    <svg class="cs-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-                </button>
-                <div class="cs-panel" hidden>
-                    <div class="cs-head">All cinemas (<span id="csCount">@theaters.Count</span>)</div>
-                    <ul class="cs-list" role="listbox" aria-label="All cinemas">
-                        @foreach (var t in theaters)
-                        {
-                            <li class="cs-option" role="option" data-value="@t.Name">
-                                <span class="cs-name">@t.Name</span>
-                            </li>
-                        }
-                    </ul>
-                </div>
-            </div>
-            <a class="pill" href="#">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
-                <span class="t">Near me</span>
-            </a>
-            <a class="pill" href="#">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.5-9.3-9C1.2 8.3 2.5 5 5.7 5c2 0 3.3 1.3 4.3 2.5C11 6.3 12.3 5 14.3 5 17.5 5 18.8 8.3 21.3 11c-2.3 4.5-9.3 9-9.3 9z"/></svg>
-                <span class="t">Favourite cinemas</span>
-            </a>
-        </div>
+        <partial name="_CinemaSearch" model="theaters" />
     </section>
 }
 

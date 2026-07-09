@@ -119,11 +119,16 @@ h1,h2,h3 { margin: 0 0 .5em; line-height: 1.15; }
 .tech-imax { height: 16px; }
 .tech-dolby { height: 16px; }
 
-/* location bar — overlaps the hero, blue translucent */
+/* location bar — blue translucent cinema picker (shared: hero + film page) */
 .locbar {
-  position: absolute; left: 32px; right: 32px; bottom: 26px; z-index: 3;
+  z-index: 3;
   background: rgba(20,29,42,.92); border: 1px solid rgba(255,255,255,.12); border-radius: 8px;
   display: flex; align-items: center; gap: 16px; padding: 12px 14px 12px 20px;
+  margin-bottom: 24px;
+}
+/* on the homepage it overlaps the bottom of the hero */
+.hero .locbar {
+  position: absolute; left: 32px; right: 32px; bottom: 26px;
   max-width: var(--maxw); margin: 0 auto;
 }
 .locbar .waar {
@@ -339,19 +344,6 @@ h1,h2,h3 { margin: 0 0 .5em; line-height: 1.15; }
 }
 .field select option { color: #1c2129; }
 .field select:focus, .field input:focus { outline: 2px solid var(--yellow); border-color: var(--yellow); }
-/* cinema search bar */
-.cinema-search {
-  display: flex; align-items: center; gap: 10px; max-width: 420px; margin-bottom: 24px;
-  background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 12px 20px;
-  transition: border-color .15s ease;
-}
-.cinema-search:focus-within { border-color: var(--yellow); }
-.cinema-search svg { width: 18px; height: 18px; color: var(--muted); flex: none; }
-.cinema-search input {
-  flex: 1; min-width: 0; background: transparent; border: 0; outline: none;
-  color: #fff; font-family: inherit; font-size: 15px; font-weight: 500;
-}
-.cinema-search input::placeholder { color: var(--muted-2); }
 .cinema-block { padding: 22px 0; border-bottom: 1px solid var(--line); }
 .cinema-block:last-of-type { border-bottom: 0; }
 .cinema-block--selected { border-bottom: 0; }

@@ -34,11 +34,28 @@
     panel.hidden ? open() : close();
   });
 
+  // On the film page, reveal the showtimes for every cinema in the selected
+  // cinema's city. On pages without a showtime list (e.g. the homepage) this
+  // does nothing, so the picker behaves identically everywhere.
+  function filterCinemasByCity(city) {
+    const list = document.getElementById('cinemaList');
+    if (!list) return;
+    const prompt = document.getElementById('cinemaPrompt');
+    let any = false;
+    list.querySelectorAll('.cinema-block').forEach(function (block) {
+      const match = block.dataset.city === city;
+      block.style.display = match ? '' : 'none';
+      if (match) any = true;
+    });
+    if (prompt) prompt.style.display = any ? 'none' : '';
+  }
+
   select.querySelectorAll('.cs-option').forEach(function (opt) {
     opt.addEventListener('click', function () {
       value.textContent = opt.dataset.value;
       value.classList.remove('cs-placeholder');
       close();
+      filterCinemasByCity(opt.dataset.city);
     });
   });
 
