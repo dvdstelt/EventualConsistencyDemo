@@ -1,10 +1,16 @@
 @model Shared.Entities.Movie
+@inject TimeProvider TimeProvider
 @{
     var age = Model.Icons.FirstOrDefault(i => i.All(char.IsDigit));
+    var isSoon = Model.PremiereDate is { } premiere && premiere.Date > TimeProvider.GetLocalNow().Date;
 }
 <a class="movie-card" href="/movies/@Uri.EscapeDataString(Model.UrlTitle)">
     <div class="poster">
-        @if (Model.TicketType == Shared.Entities.TicketType.DrawingTicket)
+        @if (isSoon)
+        {
+            <span class="badge-corner soon">Soon</span>
+        }
+        else if (Model.TicketType == Shared.Entities.TicketType.DrawingTicket)
         {
             <span class="badge-corner koop">Raffle</span>
         }

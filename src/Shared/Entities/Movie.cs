@@ -17,6 +17,10 @@ namespace Shared.Entities
         public string MovieDetails { get; set; } = string.Empty;
         public DateTime ReleaseDate { get; set; }
 
+        // When the movie premieres. A future date means it isn't showing yet and
+        // is flagged "Soon"; null means it is already in the regular programme.
+        public DateTime? PremiereDate { get; set; }
+
         public double PricePerTicket { get; set; }
         public int PopularityScore { get; set; }
         public TicketType TicketType { get; set; } = TicketType.RegularTicket;

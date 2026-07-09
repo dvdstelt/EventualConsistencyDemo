@@ -236,6 +236,7 @@ h1,h2,h3 { margin: 0 0 .5em; line-height: 1.15; }
 .badge-corner.nieuw { background: var(--red); color: #fff; }
 .badge-corner.spec { background: #1c2129; color: #fff; }
 .badge-corner.koop { background: var(--yellow); color: #1c2129; }
+.badge-corner.soon { background: var(--teal); color: #06231b; }
 .card-info { display: flex; align-items: center; gap: 5px; margin-top: 8px; }
 .movie-card .title {
   font-weight: 500; font-size: 12px; line-height: 1.3; color: #fff;
