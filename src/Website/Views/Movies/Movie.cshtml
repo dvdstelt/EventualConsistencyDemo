@@ -1,266 +1,270 @@
-﻿@using System.Web
+@using System.Web
+@using System.Globalization
+@using Shared.Entities
 @model MovieViewModel
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Env
 @{
-    ViewData["Title"] = Model.Movie.Title;
-    ViewBag.Layout = "FullPage";
+    var m = Model.Movie;
+    ViewData["Title"] = m.Title;
+    ViewBag.Nav = "movies";
+    Layout = "_LayoutFront";
+
+    var isRaffle = m.TicketType == TicketType.DrawingTicket;
+    var age = m.Icons.FirstOrDefault(i => i.All(char.IsDigit));
+    var logoRel = $"img/logos/{m.UrlTitle}.png";
+    var heroLogo = System.IO.File.Exists(System.IO.Path.Combine(Env.WebRootPath, logoRel)) ? "/" + logoRel : null;
+
+    // Runtime (minutes) parsed from "80 minutes | ..." to derive end times.
+    var runtime = 120;
+    var firstNum = new string((m.MovieDetails ?? "").TakeWhile(char.IsDigit).ToArray());
+    if (int.TryParse(firstNum, out var parsed)) { runtime = parsed; }
+
+    string EndTime(string start) =>
+        TimeSpan.TryParse(start, out var t) ? t.Add(TimeSpan.FromMinutes(runtime)).ToString(@"hh\:mm") : "";
 }
 
-@section Scripts{
-    <script type="text/javascript">
-    $(document).ready(function () {
+@section Scripts {
+    @if (isRaffle)
+    {
+        <script src="~/js/film-raffle.js" asp-append-version="true"></script>
+    }
+    else
+    {
+        <script src="~/js/film-booking.js" asp-append-version="true"></script>
+    }
+}
 
-        var theWindow = $(window),
-            $bg = $('#bgImage'),
-            aspectRatio = $bg.width() / $bg.height();
+<section class="film-hero" style="background-image:url('/img/background/@m.Background')">
+    <button class="fh-play" aria-label="Play trailer" type="button">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+    </button>
+    <div class="wrap">
+        <div class="fh-content">
+            @if (heroLogo is not null)
+            {
+                <img class="hero-logo" src="@heroLogo" alt="@m.Title" style="margin-bottom:18px;" />
+            }
+            else
+            {
+                <h1 class="font-trade">@m.Title</h1>
+            }
+            <div class="fh-meta">
+                <partial name="_AgeIcon" model="age" />
+                <span>@m.MovieDetails</span>
+            </div>
+            <p class="fh-line"><strong>Release date:</strong> @m.ReleaseDate.ToString("d MMM yyyy", CultureInfo.InvariantCulture)</p>
+            <p class="fh-synopsis">@Html.Raw(HttpUtility.HtmlDecode(m.Description))</p>
+            <partial name="_Formats" />
+            <div class="fh-actions" style="margin-top:20px;">
+                <a class="btn btn-yellow btn-lg" href="#booking">🎟️ @(isRaffle ? "Enter the raffle" : "Order tickets")</a>
+                <a class="fh-btn" href="/reviews/@Uri.EscapeDataString(m.UrlTitle)">Reviews</a>
+            </div>
+        </div>
+    </div>
+</section>
 
-        function resizeBg() {
-            var navbarHeight = $('.navbar').first().outerHeight();
-            var theWindowHeight = theWindow.height() - navbarHeight;
+<section class="booking" id="booking"
+         data-movie-id="@m.Id"
+         data-movie-title="@m.Title"
+         data-price="@m.PricePerTicket.ToString(CultureInfo.InvariantCulture)">
+    <div class="wrap">
+        @if (isRaffle)
+        {
+            var theater = Model.Theaters.First();
+            var showtime = m.Showtimes.FirstOrDefault() ?? "20:00";
+            <h2 class="font-trade">Sign up for the raffle</h2>
+            <p class="sub">This one-off screening has a single date and showing. Because of the limited capacity you don't buy a ticket here, you enter the raffle instead.</p>
 
-            if ((theWindow.width() / theWindowHeight) < aspectRatio) {
-                $bg.removeClass()
-                    .addClass('bgheight');
-            } else {
-                $bg.removeClass()
-                    .addClass('bgwidth');
+            <div class="raffle-login">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.4"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></svg>
+                <span>Signed in as <strong>Demo User</strong> &middot; Club Popcorn 100428</span>
+            </div>
+
+            <div class="cinema-block" data-theater-id="@theater.Id">
+                <div class="head">
+                    <h3>@theater.Name</h3>
+                    <span class="dist">Special evening screening</span>
+                </div>
+                <div class="version-label">Original version</div>
+                <div class="st-grid">
+                    <button class="st st-raffle" data-time="@showtime"><span class="st-time">@showtime</span><span class="st-end">&rarr; @EndTime(showtime)</span></button>
+                </div>
+            </div>
+
+            <p class="raffle-note">Limited capacity &mdash; tickets are drawn among all entries. Winners are notified automatically with their tickets.</p>
+        }
+        else
+        {
+            <h2 class="font-trade">Find showtimes</h2>
+            <p class="sub">Pick your cinema and date to see the available showtimes.</p>
+
+            <div class="date-strip">
+                @for (var d = 0; d < 7; d++)
+                {
+                    var day = DateTime.Today.AddDays(d);
+                    <div class="date-pill @(d == 0 ? "active" : "")">
+                        <div class="dow">@day.ToString("ddd", CultureInfo.InvariantCulture)</div>
+                        <div class="day">@day.Day</div>
+                        <div class="mon">@day.ToString("MMM", CultureInfo.InvariantCulture)</div>
+                    </div>
+                }
+            </div>
+
+            @for (var i = 0; i < Model.Theaters.Count; i++)
+            {
+                var theater = Model.Theaters[i];
+                <div class="cinema-block @(i == 0 ? "cinema-block--selected" : "")" data-theater-id="@theater.Id">
+                    <div class="head">
+                        <h3>@theater.Name</h3>
+                    </div>
+                    <div class="version-label">Original version</div>
+                    <div class="st-grid">
+                        @for (var s = 0; s < m.Showtimes.Count; s++)
+                        {
+                            var st = m.Showtimes[s];
+                            <button class="st" data-time="@st">
+                                @if (s == 1)
+                                {
+                                    <span class="st-badge">IMAX</span>
+                                }
+                                <span class="st-time">@st</span>
+                                <span class="st-end">&rarr; @EndTime(st)</span>
+                            </button>
+                        }
+                    </div>
+                </div>
+                @if (i < Model.Theaters.Count - 1)
+                {
+                    <div class="cinema-divider"><span>Nearby cinemas</span></div>
+                }
             }
         }
-
-        $('#theaters_group input').click(function () {
-            $('#times_alternative').hide();
-            $('#times').show();
-        });
-
-        $('#times_group input').on("click", function () {
-            $('#tickets_alternative').hide();
-            $('#tickets').show();
-        });
-
-        $("#numberOfTickets").on("change", function () {
-                var price = $(this).val() * @Model.Movie.PricePerTicket;
-                $('#submit_button').removeClass().addClass('movie_button');
-                $('#totalPrice').text('$ ' + price);
-            });
-
-        $('#submit_button').click(function (e) {
-            e.preventDefault();
-
-            if ($(this).hasClass('movie_button_disabled'))
-                return;
-
-            var values = {};
-            $.each($('form#ticketForm').serializeArray(), function (i, field) {
-                console.log(field.name + ' : ' + field.value);
-                values[field.name] = field.value;
-            });
-
-            registerMovieTicket(values);
-            
-            $('#overlay').show();
-        });
-
-        theWindow.scroll(function(){
-            $(".down_arrow").css("opacity", 1 - $(window).scrollTop() / 250);
-        });
-
-        theWindow.resize(resizeBg).trigger("resize");
-    });
-    </script>
-}
-
-<section class="movie_header">
-    <div id="bgContainer" class="movie_background">
-        <img id="bgImage" src="/img/background/@Model.Movie.Background"/>
     </div>
-    <div class="movie_header_content">
-        <div class="movie_header_content_top">
-            <button class="trailer_button"></button>
-        </div>
-        <div class="movie_header_content_bottom">
-            <div class="container">
-                <div class="poster">
-                    <img src="/img/posters/@Model.Movie.Image" width="200"/>
-                </div>
-                <div class="details">
+</section>
+
+@if (isRaffle)
+{
+    <div id="raffle" class="flow-overlay" hidden>
+        <div class="flow-card">
+            <button class="flow-close" id="raffleClose" aria-label="Close" type="button">&times;</button>
+            <div class="flow-steps">
+                <span class="fstep active" data-step="1">1 &middot; Register</span>
+                <span class="fstep" data-step="2">2 &middot; Confirmation</span>
+            </div>
+
+            <div class="flow-panel" data-panel="1">
+                <h3>Enter the raffle</h3>
+                <p class="flow-meta">@m.Title &middot; @Model.Theaters.First().Name</p>
+                <div class="raffle-user">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.4"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></svg>
                     <div>
-                        <h1>
-                            <span class="movietitle">@Model.Movie.Title</span>
-                        </h1>
+                        <strong>Demo User</strong>
+                        <span>Club Popcorn 100428 &middot; your entry is linked to this account</span>
                     </div>
-                    <div class="movie_button_container">
-                        <a href="#ticketForm" class="movie_button">Order tickets</a>
-                    </div>
+                </div>
+                <ul class="raffle-rules">
+                    <li>One entry per account</li>
+                    <li>Winners are drawn after registration closes</li>
+                    <li>Winners are notified automatically with their tickets</li>
+                </ul>
+                <div class="flow-foot">
+                    <div class="summary">Free entry</div>
+                    <button class="btn btn-yellow" id="raffleSubmit" type="button">Enter me in the raffle</button>
+                </div>
+            </div>
+
+            <div class="flow-panel" data-panel="2" hidden>
+                <div class="confirm">
+                    <div class="check">&#10003;</div>
+                    <h3>You're in the raffle!</h3>
+                    <p>Your entry has been registered on your account. There's nothing else you need to do.</p>
+                    <ul class="confirm-status" id="raffleStatus">
+                        <li class="on">Entry received</li>
+                        <li>Registered on your account</li>
+                        <li>Confirmation sent</li>
+                        <li>Draw notification scheduled</li>
+                    </ul>
+                    <div id="raffleDetails" class="order-result"></div>
+                    <button class="btn btn-yellow" id="raffleDone" type="button">Close</button>
                 </div>
             </div>
         </div>
     </div>
-    <span class="down_arrow"></span>
-</section>
-<section class="darkbackground">
-    <div class="container">
-        <div class="rating" style="display: flex;">
-            <div style="flex: 1;">
-                <div>
-                    @for (var i = 1; i <= 5; i++)
-                    {
-                        <img src="/img/icons/star-@(i <= Model.Movie.Rating ? "on" : "off").jpg" width="20"/>
-                    }
+
+    <template id="lotteryticket">
+        <table class="order-summary">
+            <tr><td><strong>Movie</strong></td><td>{movieTitle}</td></tr>
+            <tr><td><strong>Cinema</strong></td><td>{theater}</td></tr>
+            <tr><td><strong>Time</strong></td><td>{time}</td></tr>
+            <tr><td colspan="2">If you win, you'll be emailed your tickets on <strong>{drawingDate}</strong>.</td></tr>
+        </table>
+    </template>
+}
+else
+{
+    <div id="flow" class="flow-overlay" hidden>
+        <div class="flow-card">
+            <button class="flow-close" id="flowClose" aria-label="Close" type="button">&times;</button>
+            <div class="flow-steps">
+                <span class="fstep active" data-step="1">1 &middot; Seats</span>
+                <span class="fstep" data-step="2">2 &middot; Payment</span>
+                <span class="fstep" data-step="3">3 &middot; Confirmation</span>
+            </div>
+
+            <div class="flow-panel" data-panel="1">
+                <h3>Choose your seats</h3>
+                <p class="flow-meta" id="flowMeta"></p>
+                <div class="seatmap" id="seatmap"></div>
+                <div class="screen">SCREEN</div>
+                <div class="seat-legend">
+                    <span><svg class="seat-ico" viewBox="0 0 56 56"><use href="#seat-normal" xlink:href="#seat-normal"></use></svg> Available</span>
+                    <span><svg class="seat-ico" viewBox="0 0 56 56"><use href="#seat-taken" xlink:href="#seat-taken"></use></svg> Taken</span>
+                    <span><svg class="seat-ico" viewBox="0 0 56 56"><use href="#seat-selected" xlink:href="#seat-selected"></use></svg> Selected</span>
                 </div>
-                <div style="padding-top: 10px;">
-                    @foreach (var icon in Model.Movie.Icons)
-                    {
-                        <img src="/img/icons/@(icon)-gray-32.png" style="padding-right: 5px; width: 35px;"/>
-                    }
+                <div class="flow-foot">
+                    <div class="summary"><strong id="seatCount">0</strong> seats &middot; &euro;<span id="seatTotal">0,00</span></div>
+                    <button class="btn btn-yellow" id="toPay" disabled>Continue to payment</button>
                 </div>
             </div>
-            <div style="flex: 2;">
-                Release: @Model.Movie.ReleaseDate.ToString("dd-MM-yyyy")<br/><br/>
-                @HttpUtility.HtmlDecode(Model.Movie.Description)<br/><br/>
-                <form action="/reviews/@Model.Movie.UrlTitle">
-                    <button id="read-reviews" style="line-height: 34px; color: #000; font-size: 16px; background-color: #e0e1e4; width: 164px; border-radius: 6px; border: none;">Reviews</button>
-                </form>
+
+            <div class="flow-panel" data-panel="2" hidden>
+                <h3>Payment</h3>
+                <p class="flow-meta">Your reservation is held for 10 minutes.</p>
+                <div class="pay-methods">
+                    <label class="pay"><input type="radio" name="pay" checked> iDEAL</label>
+                    <label class="pay"><input type="radio" name="pay"> Credit card</label>
+                    <label class="pay"><input type="radio" name="pay"> Popcorn Giftcard</label>
+                </div>
+                <div class="flow-foot">
+                    <div class="summary">To pay: &euro;<span id="payTotal">0,00</span></div>
+                    <button class="btn btn-yellow" id="doPay">Pay now</button>
+                </div>
+            </div>
+
+            <div class="flow-panel" data-panel="3" hidden>
+                <div class="confirm">
+                    <div class="check">&#10003;</div>
+                    <h3>Thanks! Your tickets are on their way</h3>
+                    <p>We've received your order. Your e-tickets are sent by email once the payment is processed.</p>
+                    <ul class="confirm-status" id="confirmStatus">
+                        <li class="on">Payment received</li>
+                        <li>Seats confirmed</li>
+                        <li>E-tickets sent</li>
+                        <li>Confirmation &amp; reminder scheduled</li>
+                    </ul>
+                    <div id="orderDetails" class="order-result"></div>
+                    <button class="btn btn-yellow" id="flowDone">Close</button>
+                </div>
             </div>
         </div>
     </div>
-</section>
-<section>
-    <div class="container">
-        <div class="dennis_owns_this_shit">
-            <a href="https://compilesoftware.nl/" target="_blank">
-                <img src="/img/banner.png"/>
-            </a>
-        </div>
-        <form id="ticketForm">
-            <div class="theatersContext_times" style="display: flex; padding-top: 50px;">
-                <div style="flex: 1; padding-right: 75px;" class="theatersContext">
-                    <span class="title">Theaters</span>
 
-                    <fieldset id="theaters_group">
-                        @foreach (var theater in Model.Theaters)
-                        {
-                            <div class="inputGroup">
-                                <input value="@theater.Id" id="@theater.Id" name="theatersContext_group" type="radio"/>
-                                <label for="@theater.Id">@theater.Name</label>
-                            </div>
-                        }
-                    </fieldset>
-                </div>
-                <div style="flex: 1; padding-right: 75px;" class="times">
-                    <span class="title">Times</span>
-                    <div id="times" style="display:none;">
-                        <fieldset id="times_group">
-                            @foreach (var showtime in Model.Movie.Showtimes)
-                            {
-                                <div class="inputGroup">
-                                    <input value="@showtime" id="@showtime" name="times_group" type="radio"/>
-                                    <label for="@showtime">@showtime</label>
-                                </div>
-                            }
-                        </fieldset>
-                    </div>
-                    <div id="times_alternative">
-                        Choose a movie theater from the list.
-                    </div>
-                </div>
-                <div style="flex: 1;">
-                    <span class="title">Tickets</span>
-                    <div id="tickets" style="display:none;">
-                        <div class="select">
-                            <select id="numberOfTickets" name="numberOfTickets">
-                                <option selected disabled>Number of tickets</option>
-                                <option value="1">1 ticket</option>
-                                <option value="2">2 tickets</option>
-                                <option value="3">3 tickets</option>
-                                <option value="4">4 tickets</option>
-                            </select>
-                        </div>
-                        Total price: <span id="totalPrice">$ 0</span>
-                        <div class="movie_button_container">
-                            <a href="" id="submit_button" class="movie_button_disabled">Order tickets</a>
-                        </div>
-                    </div>
-                    <div id="tickets_alternative">
-                        Select a movie and time.
-                    </div>
-                </div>
-            </div>
-            <input type="hidden" id="movieId" name="movieId" value="@Model.Movie.Id"/>
-        </form>
-    </div>
-</section>
-
-<div id="overlay" class="overlay">
-    <div class="overlay-content">
-        <div class="poster">
-            <img src="/img/posters/@Model.Movie.Image" width="200"/>
-        </div>
-        <div class="details">
-            <div>
-                <h1>
-                    <span class="movietitle">@Model.Movie.Title</span>
-                </h1>
-            </div>
-            <div class="ordering-details">
-                Please wait...
-            </div>
-            <div class="movie_button_container">
-                <a href="" class="movie_button">Back to website</a>
-            </div>
-        </div>
-
-    </div>
-</div>
-
-<template id="regularticket">
-    Thank you for your order.<br/><br/>
-    <table>
-        <tr>
-            <td>
-                <b>Movie</b>
-            </td><td>: {movieTitle}</td>
-        </tr>
-        <tr>
-            <td>
-                <b>Theater</b>
-            </td><td>: {theater}</td>
-        </tr>
-        <tr>
-            <td>
-                <b>Time</b>
-            </td><td>: {time}</td>
-        </tr>
-        <tr>
-            <td>
-                <b>Tickets</b>
-            </td><td>: {numberOfTickets}</td>
-        </tr>
-    </table><br/><br/>
-    Your order will soon arrive in your email.
-</template>
-
-<template id="lotteryticket">
-    Thank you for registering. If you win, you'll receive an email with your tickets on <b>{drawingDate}</b>.
-    <br/><br />
-    <table>
-        <tr>
-            <td>
-                <b>Movie</b>
-            </td><td>: {movieTitle}</td>
-        </tr>
-        <tr>
-            <td>
-                <b>Theater</b>
-            </td><td>: {theater}</td>
-        </tr>
-        <tr>
-            <td>
-                <b>Time</b>
-            </td><td>: {time}</td>
-        </tr>
-        <tr>
-            <td>
-                <b>Tickets</b>
-            </td><td>: {numberOfTickets}</td>
-        </tr>
-    </table>
-</template>
+    <template id="regularticket">
+        <table class="order-summary">
+            <tr><td><strong>Movie</strong></td><td>{movieTitle}</td></tr>
+            <tr><td><strong>Cinema</strong></td><td>{theater}</td></tr>
+            <tr><td><strong>Time</strong></td><td>{time}</td></tr>
+            <tr><td><strong>Tickets</strong></td><td>{numberOfTickets}</td></tr>
+        </table>
+    </template>
+}

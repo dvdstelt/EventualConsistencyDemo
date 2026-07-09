@@ -20,15 +20,21 @@ connection.start().catch(function (err) {
     return console.error(err.toString());
 });
 
+// The confirmation panels reveal a set of "async steps" purely as a visual;
+// these handlers fill in the *real* order detail returned over SignalR once the
+// back-end round-trip completes, proving the messaging actually ran.
 connection.on('OrderedRegularTicket', function (ticket) {
-    var template = $('#regularticket').html().supplant(ticket);
-    $('.overlay-content .ordering-details').html(template);
+    var tmpl = $('#regularticket').html();
+    if (tmpl) {
+        $('#orderDetails').html(tmpl.supplant(ticket));
+    }
 });
 
 connection.on('OrderedLotteryTicket', function (ticket) {
-    console.log('OrderedLotteryTicket');
-    var template = $('#lotteryticket').html().supplant(ticket);
-    $('.overlay-content .ordering-details').html(template);
+    var tmpl = $('#lotteryticket').html();
+    if (tmpl) {
+        $('#raffleDetails').html(tmpl.supplant(ticket));
+    }
 });
 
 function registerMovieTicket(formValues)

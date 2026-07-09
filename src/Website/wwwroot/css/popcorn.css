@@ -299,6 +299,29 @@ h1,h2,h3 { margin: 0 0 .5em; line-height: 1.15; }
 .fh-synopsis { margin: 10px 0 16px; max-width: 600px; font-size: 15px; color: #d4dae2; line-height: 1.55; }
 .fh-details { color: #fff; font-weight: 700; font-size: 15px; text-decoration: underline; }
 .fh-details:hover { color: var(--yellow); }
+.fh-play {
+  position: absolute; z-index: 3; top: 46%; left: 64%; transform: translate(-50%,-50%);
+  padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,.28);
+  background: rgba(255,255,255,.16); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+  box-shadow: 0 6px 20px rgba(0,0,0,.3); color: #fff; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; transition: background .15s ease, transform .15s ease;
+}
+.fh-play:hover { background: rgba(255,255,255,.26); transform: translate(-50%,-50%) scale(1.05); }
+.fh-play svg { width: 40px; height: 40px; display: block; }
+.fh-cinema { flex: 1; font-weight: 700; font-size: 17px; padding: 8px 4px; color: #fff; min-width: 0; }
+
+/* date strip + cinema divider */
+.date-strip { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 24px; }
+.date-pill { flex: none; text-align: center; border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 16px; min-width: 78px; cursor: pointer; background: var(--card); }
+.date-pill.active { background: var(--yellow); color: #1c2129; border-color: var(--yellow); }
+.date-pill .dow { font-size: 12px; text-transform: uppercase; font-weight: 700; }
+.date-pill .day { font-size: 20px; font-weight: 800; }
+.date-pill .mon { font-size: 12px; color: var(--muted); }
+.date-pill.active .mon { color: #4a4327; }
+.cinema-divider { display: flex; align-items: center; gap: 18px; margin: 10px 0 2px; }
+.cinema-divider::before, .cinema-divider::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+.cinema-divider span { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); white-space: nowrap; }
+.seat-cell.picked { background: rgba(255,196,38,.10); }
 
 /* Booking module (dark) */
 .booking { padding: 44px 0; }
@@ -381,6 +404,10 @@ h1,h2,h3 { margin: 0 0 .5em; line-height: 1.15; }
 .confirm-status li::before { content: '\25CB'; position: absolute; left: 4px; color: var(--muted-2); }
 .confirm-status li.on { color: #fff; }
 .confirm-status li.on::before { content: '\2713'; color: var(--teal); font-weight: 800; }
+.order-result { margin: 0 auto 22px; max-width: 380px; }
+.order-summary { width: 100%; border-collapse: collapse; font-size: 14px; color: #d4dae2; }
+.order-summary td { padding: 4px 10px; text-align: left; vertical-align: top; }
+.order-summary td:first-child { color: var(--muted); white-space: nowrap; }
 
 /* ---------- Raffle (Game of Thrones finale) ---------- */
 .raffle-login {
