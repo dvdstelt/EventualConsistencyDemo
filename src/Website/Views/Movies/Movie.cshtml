@@ -95,22 +95,12 @@
         }
         else
         {
-            var cities = Model.Theaters.Select(t => t.City).Distinct().ToList();
-            var defaultCity = cities.Contains("Rotterdam") ? "Rotterdam" : cities.FirstOrDefault();
-
             <h2 class="font-trade">Find showtimes</h2>
-            <p class="sub">Pick your city and date to see the available showtimes.</p>
+            <p class="sub">Search for a city or cinema, then pick a date and showtime.</p>
 
-            <div class="filters">
-                <div class="field">
-                    <label for="citySelect">City</label>
-                    <select id="citySelect">
-                        @foreach (var city in cities)
-                        {
-                            <option value="@city" selected="@(city == defaultCity ? "selected" : null)">@city</option>
-                        }
-                    </select>
-                </div>
+            <div class="cinema-search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" id="cinemaSearch" value="Rotterdam" placeholder="Search by city or cinema" autocomplete="off" aria-label="Search by city or cinema" />
             </div>
 
             <div class="date-strip">
@@ -125,40 +115,32 @@
                 }
             </div>
 
-            @foreach (var city in cities)
-            {
-                var cityTheaters = Model.Theaters.Where(t => t.City == city).ToList();
-                <div class="city-group" data-city="@city" style="@(city == defaultCity ? "" : "display:none;")">
-                    @for (var i = 0; i < cityTheaters.Count; i++)
-                    {
-                        var theater = cityTheaters[i];
-                        <div class="cinema-block @(i == 0 ? "cinema-block--selected" : "")" data-theater-id="@theater.Id">
-                            <div class="head">
-                                <h3>@theater.Name</h3>
-                            </div>
-                            <div class="version-label">Original version</div>
-                            <div class="st-grid">
-                                @for (var s = 0; s < m.Showtimes.Count; s++)
-                                {
-                                    var st = m.Showtimes[s];
-                                    <button class="st" data-time="@st">
-                                        @if (s == 1)
-                                        {
-                                            <span class="st-badge">IMAX</span>
-                                        }
-                                        <span class="st-time">@st</span>
-                                        <span class="st-end">&rarr; @EndTime(st)</span>
-                                    </button>
-                                }
-                            </div>
+            <div id="cinemaList">
+                @foreach (var theater in Model.Theaters)
+                {
+                    <div class="cinema-block" data-theater-id="@theater.Id" data-search="@theater.Name.ToLowerInvariant()">
+                        <div class="head">
+                            <h3>@theater.Name</h3>
                         </div>
-                        @if (i < cityTheaters.Count - 1)
-                        {
-                            <div class="cinema-divider"><span>More in @city</span></div>
-                        }
-                    }
-                </div>
-            }
+                        <div class="version-label">Original version</div>
+                        <div class="st-grid">
+                            @for (var s = 0; s < m.Showtimes.Count; s++)
+                            {
+                                var st = m.Showtimes[s];
+                                <button class="st" data-time="@st">
+                                    @if (s == 1)
+                                    {
+                                        <span class="st-badge">IMAX</span>
+                                    }
+                                    <span class="st-time">@st</span>
+                                    <span class="st-end">&rarr; @EndTime(st)</span>
+                                </button>
+                            }
+                        </div>
+                    </div>
+                }
+                <p id="noCinemas" class="sub" style="display:none;">No cinemas match your search.</p>
+            </div>
         }
     </div>
 </section>

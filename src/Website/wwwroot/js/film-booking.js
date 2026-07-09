@@ -94,14 +94,24 @@
     });
   }
 
-  // City filter: only show cinemas in the selected city (one city at a time).
-  const citySelect = document.getElementById('citySelect');
-  if (citySelect) {
-    citySelect.addEventListener('change', () => {
-      document.querySelectorAll('.city-group').forEach(group => {
-        group.style.display = group.dataset.city === citySelect.value ? '' : 'none';
+  // Cinema search: filter the list by city or cinema name (case-insensitive
+  // substring). data-search holds the lower-cased theater name, which contains
+  // both, so "rott" matches every Rotterdam cinema.
+  const cinemaSearch = document.getElementById('cinemaSearch');
+  if (cinemaSearch) {
+    const noCinemas = document.getElementById('noCinemas');
+    const filter = () => {
+      const q = cinemaSearch.value.trim().toLowerCase();
+      let any = false;
+      document.querySelectorAll('#cinemaList .cinema-block').forEach(block => {
+        const match = block.dataset.search.includes(q);
+        block.style.display = match ? '' : 'none';
+        if (match) { any = true; }
       });
-    });
+      if (noCinemas) { noCinemas.style.display = any ? 'none' : ''; }
+    };
+    cinemaSearch.addEventListener('input', filter);
+    filter(); // apply the initial value ("Rotterdam")
   }
 
   // Wire every (available) showtime button to open the flow for its cinema/time.

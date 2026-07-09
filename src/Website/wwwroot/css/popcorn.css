@@ -339,6 +339,19 @@ h1,h2,h3 { margin: 0 0 .5em; line-height: 1.15; }
 }
 .field select option { color: #1c2129; }
 .field select:focus, .field input:focus { outline: 2px solid var(--yellow); border-color: var(--yellow); }
+/* cinema search bar */
+.cinema-search {
+  display: flex; align-items: center; gap: 10px; max-width: 420px; margin-bottom: 24px;
+  background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 12px 20px;
+  transition: border-color .15s ease;
+}
+.cinema-search:focus-within { border-color: var(--yellow); }
+.cinema-search svg { width: 18px; height: 18px; color: var(--muted); flex: none; }
+.cinema-search input {
+  flex: 1; min-width: 0; background: transparent; border: 0; outline: none;
+  color: #fff; font-family: inherit; font-size: 15px; font-weight: 500;
+}
+.cinema-search input::placeholder { color: var(--muted-2); }
 .cinema-block { padding: 22px 0; border-bottom: 1px solid var(--line); }
 .cinema-block:last-of-type { border-bottom: 0; }
 .cinema-block--selected { border-bottom: 0; }
