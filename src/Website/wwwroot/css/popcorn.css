@@ -316,16 +316,29 @@ h1,h2,h3 { margin: 0 0 .5em; line-height: 1.15; }
 /* ================= FILM DETAIL / TICKETS ================= */
 .film-hero {
   position: relative; color: #fff; min-height: clamp(460px, 58vh, 740px);
-  /* Show the whole image, pinned top-right, scaling with the band but capped by
-     its height so wide images never lose their top and bottom. */
-  background-repeat: no-repeat; background-position: top right; background-size: contain;
+  background: var(--page); overflow: hidden;
+}
+/* The image fills from the title's left edge to the right border and fades out
+   to the background on the left, top and bottom, so it never hard-cuts. */
+.film-hero-media {
+  position: absolute; z-index: 0; top: 0; bottom: 0; right: 0;
+  left: max(32px, calc(50% - 608px));
+  background-position: center; background-size: cover; background-repeat: no-repeat;
+  -webkit-mask-image:
+    linear-gradient(to right, transparent, #000 40%),
+    linear-gradient(to bottom, transparent, #000 15%, #000 85%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to right, transparent, #000 40%),
+    linear-gradient(to bottom, transparent, #000 15%, #000 85%, transparent);
+  mask-composite: intersect;
 }
 .film-hero::before {
-  content: ''; position: absolute; inset: 0;
+  content: ''; position: absolute; z-index: 1; inset: 0;
   background: linear-gradient(90deg, var(--page) 12%, rgba(16,22,29,.62) 46%, rgba(16,22,29,.12) 78%);
 }
 .film-hero::after {
-  content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 200px;
+  content: ''; position: absolute; z-index: 1; left: 0; right: 0; bottom: 0; height: 200px;
   background: linear-gradient(180deg, rgba(16,22,29,0), var(--page));
 }
 .film-hero .wrap {

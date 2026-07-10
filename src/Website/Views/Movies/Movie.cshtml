@@ -39,7 +39,8 @@
     <script src="~/js/reviews.js" asp-append-version="true"></script>
 }
 
-<section class="film-hero" style="background-image:url('/img/background/@m.Background')">
+<section class="film-hero">
+    <div class="film-hero-media" style="background-image:url('/img/background/@m.Background')"></div>
     @if (!string.IsNullOrWhiteSpace(m.Trailer))
     {
         <button type="button" class="fh-play" data-trailer="@m.Trailer" aria-label="Play trailer">
