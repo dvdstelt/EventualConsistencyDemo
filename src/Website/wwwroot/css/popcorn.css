@@ -315,8 +315,10 @@ h1,h2,h3 { margin: 0 0 .5em; line-height: 1.15; }
 
 /* ================= FILM DETAIL / TICKETS ================= */
 .film-hero {
-  position: relative; color: #fff; min-height: 700px;
-  background-size: cover; background-position: center right;
+  position: relative; color: #fff; min-height: clamp(460px, 58vh, 740px);
+  /* Show the whole image, pinned top-right, scaling with the band but capped by
+     its height so wide images never lose their top and bottom. */
+  background-repeat: no-repeat; background-position: top right; background-size: contain;
 }
 .film-hero::before {
   content: ''; position: absolute; inset: 0;
@@ -327,7 +329,7 @@ h1,h2,h3 { margin: 0 0 .5em; line-height: 1.15; }
   background: linear-gradient(180deg, rgba(16,22,29,0), var(--page));
 }
 .film-hero .wrap {
-  position: relative; z-index: 2; min-height: 700px;
+  position: relative; z-index: 2; min-height: inherit;
   display: flex; flex-direction: column; justify-content: center;
   padding: 96px 32px 156px;
 }
