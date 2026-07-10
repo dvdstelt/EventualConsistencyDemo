@@ -10,6 +10,8 @@
     Layout = "_LayoutFront";
 
     var isRaffle = m.TicketType == TicketType.DrawingTicket;
+    // Specials & Events (not the raffle) get a single made-up showing.
+    var isSpecial = !isRaffle && m.Category != MovieCategory.NowShowing;
     var age = m.Icons.FirstOrDefault(i => i.All(char.IsDigit));
     var logoRel = $"img/logos/{m.UrlTitle}.png";
     var heroLogo = System.IO.File.Exists(System.IO.Path.Combine(Env.WebRootPath, logoRel)) ? "/" + logoRel : null;
@@ -21,6 +23,25 @@
 
     string EndTime(string start) =>
         TimeSpan.TryParse(start, out var t) ? t.Add(TimeSpan.FromMinutes(runtime)).ToString(@"hh\:mm") : "";
+}
+
+@functions {
+    static readonly string[] TimePool =
+        { "10:15", "11:30", "13:00", "14:15", "15:45", "17:00", "18:30", "20:00", "21:15", "22:30", "23:15" };
+
+    // A deterministic set of showtimes for a (movie, day): each day differs, but
+    // nothing reshuffles while the demo runs since it's seeded, not random.
+    static List<string> ShowtimesForDay(Guid movieId, int day)
+    {
+        uint seed = (uint)(day + 1) * 2654435761u;
+        foreach (var b in movieId.ToByteArray()) { seed = seed * 31u + b; }
+        uint Next() { seed = seed * 1664525u + 1013904223u; return seed; }
+
+        var count = 3 + (int)(Next() % 3u);
+        var picks = new SortedSet<int>();
+        while (picks.Count < count) { picks.Add((int)(Next() % (uint)TimePool.Length)); }
+        return picks.Select(i => TimePool[i]).ToList();
+    }
 }
 
 @section Scripts {
@@ -102,6 +123,44 @@
 
             <p class="raffle-note">Limited capacity &mdash; tickets are drawn among all entries. Winners are notified automatically with their tickets.</p>
         }
+        else if (isSpecial)
+        {
+            // A single made-up showing: one date, one time.
+            var showDate = DateTime.Today.AddDays(3 + m.Id.ToByteArray().Sum(b => (int)b) % 18);
+            var showtime = m.Showtimes.FirstOrDefault() ?? "20:00";
+
+            <h2 class="font-trade">Get tickets</h2>
+            <p class="sub">A one-off special screening &mdash; one date, one showing.</p>
+
+            <partial name="_CinemaSearch" model="Model.Theaters" />
+
+            <div class="date-strip">
+                <div class="date-pill active">
+                    <div class="dow">@showDate.ToString("ddd", CultureInfo.InvariantCulture)</div>
+                    <div class="day">@showDate.Day</div>
+                    <div class="mon">@showDate.ToString("MMM", CultureInfo.InvariantCulture)</div>
+                </div>
+            </div>
+
+            <div id="cinemaList">
+                <p id="cinemaPrompt" class="sub">Choose a cinema above to see the showing.</p>
+                @foreach (var theater in Model.Theaters)
+                {
+                    <div class="cinema-block" data-theater-id="@theater.Id" data-city="@theater.City" style="display:none;">
+                        <div class="head">
+                            <h3>@theater.Name</h3>
+                        </div>
+                        <div class="version-label">Special screening</div>
+                        <div class="st-grid">
+                            <button class="st" data-time="@showtime">
+                                <span class="st-time">@showtime</span>
+                                <span class="st-end">&rarr; @EndTime(showtime)</span>
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
         else
         {
             <h2 class="font-trade">Find showtimes</h2>
@@ -114,11 +173,11 @@
                 @for (var d = 0; d < 7; d++)
                 {
                     var day = DateTime.Today.AddDays(d);
-                    <div class="date-pill @(d == 0 ? "active" : "")">
+                    <button type="button" class="date-pill @(d == 0 ? "active" : "")" data-day="@d">
                         <div class="dow">@day.ToString("ddd", CultureInfo.InvariantCulture)</div>
                         <div class="day">@day.Day</div>
                         <div class="mon">@day.ToString("MMM", CultureInfo.InvariantCulture)</div>
-                    </div>
+                    </button>
                 }
             </div>
 
@@ -132,17 +191,21 @@
                         </div>
                         <div class="version-label">Original version</div>
                         <div class="st-grid">
-                            @for (var s = 0; s < m.Showtimes.Count; s++)
+                            @for (var d = 0; d < 7; d++)
                             {
-                                var st = m.Showtimes[s];
-                                <button class="st" data-time="@st">
-                                    @if (s == 1)
-                                    {
-                                        <span class="st-badge">IMAX</span>
-                                    }
-                                    <span class="st-time">@st</span>
-                                    <span class="st-end">&rarr; @EndTime(st)</span>
-                                </button>
+                                var times = ShowtimesForDay(m.Id, d);
+                                for (var s = 0; s < times.Count; s++)
+                                {
+                                    var st = times[s];
+                                    <button class="st" data-day="@d" data-time="@st" hidden="@(d != 0 ? "hidden" : null)">
+                                        @if (s == 1)
+                                        {
+                                            <span class="st-badge">IMAX</span>
+                                        }
+                                        <span class="st-time">@st</span>
+                                        <span class="st-end">&rarr; @EndTime(st)</span>
+                                    </button>
+                                }
                             }
                         </div>
                     </div>

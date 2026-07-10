@@ -94,6 +94,20 @@
     });
   }
 
+  // Clickable date strip: each day shows its own (server-rendered, stable) set
+  // of showtimes; picking a day reveals that day's buttons and hides the rest.
+  const datePills = [...document.querySelectorAll('.date-strip .date-pill[data-day]')];
+  if (datePills.length) {
+    const showDay = (day) => {
+      datePills.forEach(p => p.classList.toggle('active', p.dataset.day === String(day)));
+      document.querySelectorAll('#cinemaList .st[data-day]').forEach(st => {
+        st.hidden = st.dataset.day !== String(day);
+      });
+    };
+    datePills.forEach(p => p.addEventListener('click', () => showDay(Number(p.dataset.day))));
+    showDay(0);
+  }
+
   // Wire every (available) showtime button to open the flow for its cinema/time.
   document.querySelectorAll('.st:not(.sold)').forEach(btn => {
     btn.addEventListener('click', () => {

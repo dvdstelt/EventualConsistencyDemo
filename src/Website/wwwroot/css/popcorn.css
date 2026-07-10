@@ -381,7 +381,8 @@ h1,h2,h3 { margin: 0 0 .5em; line-height: 1.15; }
 
 /* date strip + cinema divider */
 .date-strip { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 24px; }
-.date-pill { flex: none; text-align: center; border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 16px; min-width: 78px; cursor: pointer; background: var(--card); }
+.date-pill { flex: none; text-align: center; border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 16px; min-width: 78px; cursor: pointer; background: var(--card); font: inherit; color: #fff; }
+button.date-pill:hover { border-color: var(--muted); }
 .date-pill.active { background: var(--yellow); color: #1c2129; border-color: var(--yellow); }
 .date-pill .dow { font-size: 12px; text-transform: uppercase; font-weight: 700; }
 .date-pill .day { font-size: 20px; font-weight: 800; }
@@ -419,6 +420,8 @@ h1,h2,h3 { margin: 0 0 .5em; line-height: 1.15; }
   background: var(--card); border: 0; border-radius: 8px; padding: 15px 18px;
   color: #fff; font-family: inherit; cursor: pointer; text-align: left; transition: background .15s ease;
 }
+/* display: flex above would otherwise defeat the hidden attribute used for day filtering */
+.st[hidden] { display: none; }
 .st:hover { background: #29323e; }
 .st .st-time { font-size: 21px; font-weight: 800; line-height: 1.05; }
 .st .st-end { font-size: 12px; font-weight: 500; color: var(--muted); }
