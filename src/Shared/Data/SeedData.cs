@@ -45,6 +45,7 @@ namespace Shared.Data
                 Title = "Game of Thrones",
                 Image = "gameofthrones.jpg",
                 Background = "gameofthrones.jpg",
+                Trailer = "https://www.youtube.com/watch?v=rlR4PJn8b8I",
                 Rating = 5,
                 Description = "Watch this last episode on the big screen! In the aftermath of the devastating attack on King&#39;s Landing, Daenerys must face the survivors.",
                 Icons = ["16", "sex", "violence"],
@@ -63,6 +64,7 @@ namespace Shared.Data
                 Title = "Deadpool & Wolverine",
                 Image = "deadpool.jpg",
                 Background = "deadpool.jpg",
+                Trailer = "https://www.youtube.com/watch?v=73_1biulkYk",
                 Rating = 4,
                 Description = "Deadpool is offered a place in the Marvel Cinematic Universe by the Time Variance Authority, but instead recruits a variant of Wolverine to save his universe from extinction.",
                 Icons = ["16", "violence", "explicitlanguage"],
@@ -80,6 +82,7 @@ namespace Shared.Data
                 Title = "Supergirl",
                 Image = "supergirl.jpg",
                 Background = "supergirl.jpg",
+                Trailer = "https://www.youtube.com/watch?v=s1-pfiVMKAs",
                 Rating = 4,
                 Description = "Bla bla bla",
                 Icons = ["16"],
@@ -117,6 +120,7 @@ namespace Shared.Data
                 Title = "Titanic",
                 Image = "titanic.jpg",
                 Background = "titanic.jpg",
+                Trailer = "https://www.youtube.com/watch?v=I7c1etV7D7g",
                 Rating = 5,
                 Description = "A seventeen-year-old aristocrat falls in love with a kind but poor artist aboard the luxurious, ill-fated R.M.S. Titanic. Back on the big screen as a special event.",
                 Icons = ["12"],
@@ -133,7 +137,8 @@ namespace Shared.Data
                 UrlTitle = "guns-n-roses-use-your-illusion-tokyo",
                 Title = "Guns N' Roses - Use Your Illusion in Tokyo",
                 Image = "guns-n-roses-use-your-illusion-tokyo.jpg",
-                Background = "guns-n-roses-use-your-illusion-tokyo.jpg",
+                Background = "guns-n-roses-use-your-illusion-tokyo.webp",
+                Trailer = "https://www.youtube.com/watch?v=0z9wOx9aG8s",
                 Rating = 5,
                 Description = "The legendary Use Your Illusion I &amp; II concert, recorded live at the Tokyo Dome in 1992, on the big screen for one special music event.",
                 Icons = ["12"],
@@ -151,6 +156,7 @@ namespace Shared.Data
                 Title = "Star Wars Marathon",
                 Image = "star-wars-marathon.jpg",
                 Background = "star-wars-marathon.jpg",
+                Trailer = "https://www.youtube.com/watch?v=L38waUt2i9A",
                 Rating = 5,
                 Description = "Experience the entire Skywalker saga back to back in one epic all-day marathon, from The Phantom Menace to The Rise of Skywalker.",
                 Icons = ["9"],
@@ -170,9 +176,10 @@ namespace Shared.Data
                 Title = "Toy Story 5",
                 Image = "toy-story-5.jpg",
                 Background = "toy-story-5.jpg",
+                Trailer = "https://www.youtube.com/watch?v=c51ND9Hdbw0",
                 Rating = 5,
                 Description = "Woody, Buzz and the gang are back for another adventure in the fifth chapter of Pixar's beloved saga.",
-                Icons = [],
+                Icons = ["6"],
                 MovieDetails = "100 minutes | English, Dutch subtitles",
                 ReleaseDate = new DateTime(2026, 8, 15),
                 Showtimes = ["13:00", "15:30", "18:00"],
@@ -186,11 +193,12 @@ namespace Shared.Data
                 Title = "The Odyssey",
                 Image = "the-odyssey.jpg",
                 Background = "the-odyssey.jpg",
+                Trailer = "https://www.youtube.com/watch?v=f_bKjZeJBBI",
                 Rating = 5,
                 Description = "Christopher Nolan's epic adaptation of Homer's myth, following Odysseus on his perilous journey home after the Trojan War.",
                 Icons = ["12", "violence"],
                 MovieDetails = "150 minutes | English, Dutch subtitles",
-                ReleaseDate = new DateTime(2026, 7, 17),
+                ReleaseDate = new DateTime(2026, 7, 16),
                 Showtimes = ["14:00", "20:00"],
                 PricePerTicket = 16,
                 PopularityScore = 770,
@@ -202,6 +210,7 @@ namespace Shared.Data
                 Title = "Spider-Man: Brand New Day",
                 Image = "spider-man-brand-new-day.jpg",
                 Background = "spider-man-brand-new-day.jpg",
+                Trailer = "https://www.youtube.com/watch?v=62bIsvRcPv0",
                 Rating = 4,
                 Description = "Peter Parker swings back into action in a brand new chapter of the friendly neighbourhood Spider-Man.",
                 Icons = ["12", "violence"],
@@ -218,6 +227,7 @@ namespace Shared.Data
                 Title = "Star Wars: Starfighter",
                 Image = "star-wars-starfighter.jpg",
                 Background = "star-wars-starfighter.jpg",
+                Trailer = "https://www.youtube.com/watch?v=O6JLquuQeNs",
                 Rating = 5,
                 Description = "A new standalone adventure set in the Star Wars galaxy, following a band of pilots on the edge of the outer rim.",
                 Icons = ["9"],
@@ -234,6 +244,7 @@ namespace Shared.Data
                 Title = "Zero A.D.",
                 Image = "zero-ad.jpg",
                 Background = "zero-ad.jpg",
+                Trailer = "https://www.youtube.com/watch?v=JpZ7y72u-c8",
                 Rating = 4,
                 Description = "A sweeping historical epic set at the dawn of a new era, where empires clash and a new world order is forged.",
                 Icons = ["16", "violence"],
@@ -246,33 +257,35 @@ namespace Shared.Data
         ];
 
         // Episode order; release order lives in ReleaseDate. Rating uses the Dutch
-        // kijkwijzer age icons ("9"/"12"). Episode IX reuses the existing poster.
+        // kijkwijzer age icons ("9"/"12"). Image is "{urlTitle}.jpg"; a few episodes
+        // use a different background file extension (or filename), given explicitly.
         static IEnumerable<Movie> StarWars()
         {
-            (string urlTitle, string title, int year, int month, int day, int minutes, string age, int score, string desc)[] episodes =
+            (string urlTitle, string title, int year, int month, int day, int minutes, string age, int score, string trailer, string? background, string desc)[] episodes =
             [
-                ("star-wars-the-phantom-menace", "Star Wars: Episode I - The Phantom Menace", 1999, 5, 19, 136, "9", 720, "Two Jedi escape a hostile blockade to find allies and come across a young boy who may bring balance to the Force."),
-                ("star-wars-attack-of-the-clones", "Star Wars: Episode II - Attack of the Clones", 2002, 5, 16, 142, "9", 710, "Anakin Skywalker shares a forbidden romance with Padme while the Jedi uncover a secret clone army."),
-                ("star-wars-revenge-of-the-sith", "Star Wars: Episode III - Revenge of the Sith", 2005, 5, 19, 140, "12", 700, "As the Clone Wars near an end, Anakin Skywalker is seduced by the dark side and becomes Darth Vader."),
-                ("star-wars-a-new-hope", "Star Wars: Episode IV - A New Hope", 1977, 5, 25, 121, "9", 690, "Luke Skywalker joins forces with a Jedi Knight, a pilot and two droids to save the galaxy from the Empire's Death Star."),
-                ("star-wars-the-empire-strikes-back", "Star Wars: Episode V - The Empire Strikes Back", 1980, 5, 21, 124, "9", 680, "After the Rebels are overpowered, Luke begins Jedi training with Yoda while his friends are pursued by Darth Vader."),
-                ("star-wars-return-of-the-jedi", "Star Wars: Episode VI - Return of the Jedi", 1983, 5, 25, 131, "9", 670, "The Rebels dispatch to Endor to destroy a more powerful Death Star while Luke tries to turn Vader from the dark side."),
-                ("star-wars-the-force-awakens", "Star Wars: Episode VII - The Force Awakens", 2015, 12, 16, 138, "9", 660, "Three decades after the Empire's defeat, a new threat arises as Rey, Finn and Han Solo search for the missing Luke Skywalker."),
-                ("star-wars-the-last-jedi", "Star Wars: Episode VIII - The Last Jedi", 2017, 12, 13, 152, "12", 650, "Rey develops her abilities with Luke Skywalker as the Resistance prepares for battle with the First Order."),
-                ("star-wars-the-rise-of-skywalker", "Star Wars: Episode IX - The Rise of Skywalker", 2019, 12, 18, 142, "12", 640, "The surviving Resistance faces the First Order once more in the final chapter of the Skywalker saga."),
+                ("star-wars-the-phantom-menace", "Star Wars: Episode I - The Phantom Menace", 1999, 5, 19, 136, "9", 720, "https://www.youtube.com/watch?v=bD7bpG-zDJQ", null, "Two Jedi escape a hostile blockade to find allies and come across a young boy who may bring balance to the Force."),
+                ("star-wars-attack-of-the-clones", "Star Wars: Episode II - Attack of the Clones", 2002, 5, 16, 142, "9", 710, "https://www.youtube.com/watch?v=gYbW1F_c9eM", null, "Anakin Skywalker shares a forbidden romance with Padme while the Jedi uncover a secret clone army."),
+                ("star-wars-revenge-of-the-sith", "Star Wars: Episode III - Revenge of the Sith", 2005, 5, 19, 140, "12", 700, "https://www.youtube.com/watch?v=5UnjrG_N8hU", "star-wars-revenge-of-the-sith.webp", "As the Clone Wars near an end, Anakin Skywalker is seduced by the dark side and becomes Darth Vader."),
+                ("star-wars-a-new-hope", "Star Wars: Episode IV - A New Hope", 1977, 5, 25, 121, "9", 690, "https://www.youtube.com/watch?v=vZ734NWnAHA", null, "Luke Skywalker joins forces with a Jedi Knight, a pilot and two droids to save the galaxy from the Empire's Death Star."),
+                ("star-wars-the-empire-strikes-back", "Star Wars: Episode V - The Empire Strikes Back", 1980, 5, 21, 124, "9", 680, "https://www.youtube.com/watch?v=JNwNXF9Y6kY", null, "After the Rebels are overpowered, Luke begins Jedi training with Yoda while his friends are pursued by Darth Vader."),
+                ("star-wars-return-of-the-jedi", "Star Wars: Episode VI - Return of the Jedi", 1983, 5, 25, 131, "9", 670, "https://www.youtube.com/watch?v=7L8p7_SLzvU", null, "The Rebels dispatch to Endor to destroy a more powerful Death Star while Luke tries to turn Vader from the dark side."),
+                ("star-wars-the-force-awakens", "Star Wars: Episode VII - The Force Awakens", 2015, 12, 16, 138, "9", 660, "https://www.youtube.com/watch?v=sGbxmsDFVnE", "star-wars-the-force-awakens.jpeg", "Three decades after the Empire's defeat, a new threat arises as Rey, Finn and Han Solo search for the missing Luke Skywalker."),
+                ("star-wars-the-last-jedi", "Star Wars: Episode VIII - The Last Jedi", 2017, 12, 13, 152, "12", 650, "https://www.youtube.com/watch?v=Q0CbN8sfihY", null, "Rey develops her abilities with Luke Skywalker as the Resistance prepares for battle with the First Order."),
+                ("star-wars-the-rise-of-skywalker", "Star Wars: Episode IX - The Rise of Skywalker", 2019, 12, 18, 142, "12", 640, "https://www.youtube.com/watch?v=adzYW5DZoWs", "riseofskywalker.jpg", "The surviving Resistance faces the First Order once more in the final chapter of the Skywalker saga."),
             ];
 
             var index = 1;
-            foreach (var (urlTitle, title, year, month, day, minutes, age, score, desc) in episodes)
+            foreach (var (urlTitle, title, year, month, day, minutes, age, score, trailer, background, desc) in episodes)
             {
-                var image = urlTitle == "star-wars-the-rise-of-skywalker" ? "riseofskywalker.jpg" : $"{urlTitle}.jpg";
+                var image = $"{urlTitle}.jpg";
                 yield return new Movie
                 {
                     Id = Guid.Parse($"e0000000-0000-0000-0000-00000000000{index}"),
                     UrlTitle = urlTitle,
                     Title = title,
                     Image = image,
-                    Background = image,
+                    Background = background ?? image,
+                    Trailer = trailer,
                     Rating = 5,
                     Description = desc,
                     Icons = [age],
