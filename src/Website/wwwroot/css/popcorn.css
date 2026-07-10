@@ -381,8 +381,8 @@ h1,h2,h3 { margin: 0 0 .5em; line-height: 1.15; }
 
 /* date strip + cinema divider */
 .date-strip { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 24px; }
-.date-pill { flex: none; text-align: center; border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 16px; min-width: 78px; cursor: pointer; background: var(--card); font: inherit; color: #fff; }
-button.date-pill:hover { border-color: var(--muted); }
+.date-pill { flex: none; text-align: center; border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 16px; min-width: 78px; cursor: pointer; background: var(--card); font: inherit; color: #fff; transition: background .15s ease; }
+button.date-pill:not(.active):hover { background: #29323e; }
 .date-pill.active { background: var(--yellow); color: #1c2129; border-color: var(--yellow); }
 .date-pill .dow { font-size: 12px; text-transform: uppercase; font-weight: 700; }
 .date-pill .day { font-size: 20px; font-weight: 800; }
