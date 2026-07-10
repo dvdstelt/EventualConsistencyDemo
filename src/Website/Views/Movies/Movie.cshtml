@@ -29,12 +29,12 @@
     static readonly string[] TimePool =
         { "10:15", "11:30", "13:00", "14:15", "15:45", "17:00", "18:30", "20:00", "21:15", "22:30", "23:15" };
 
-    // A deterministic set of showings for a (movie, day): the times differ per day
-    // and some get a format tag (IMAX / 4DX), all seeded so nothing reshuffles
-    // while the demo runs.
-    static List<(string Time, string? Format)> ShowtimesForDay(Guid movieId, int day)
+    // A deterministic set of showings for a (movie, day, cinema): the times differ
+    // per day and per cinema and some get a format tag (IMAX / 4DX), all seeded so
+    // nothing reshuffles while the demo runs.
+    static List<(string Time, string? Format)> ShowtimesForDay(Guid movieId, int day, int cinema)
     {
-        uint seed = (uint)(day + 1) * 2654435761u;
+        uint seed = (uint)(day + 1) * 2654435761u + (uint)(cinema + 1) * 40503u;
         foreach (var b in movieId.ToByteArray()) { seed = seed * 31u + b; }
         uint Next() { seed = seed * 1664525u + 1013904223u; return seed; }
 
@@ -192,8 +192,9 @@
 
             <div id="cinemaList">
                 <p id="cinemaPrompt" class="sub">Choose a cinema above to see the showtimes.</p>
-                @foreach (var theater in Model.Theaters)
+                @for (var ci = 0; ci < Model.Theaters.Count; ci++)
                 {
+                    var theater = Model.Theaters[ci];
                     <div class="cinema-block" data-theater-id="@theater.Id" data-city="@theater.City" style="display:none;">
                         <div class="head">
                             <h3>@theater.Name</h3>
@@ -202,7 +203,7 @@
                         <div class="st-grid">
                             @for (var d = 0; d < 7; d++)
                             {
-                                foreach (var slot in ShowtimesForDay(m.Id, d))
+                                foreach (var slot in ShowtimesForDay(m.Id, d, ci))
                                 {
                                     <button class="st" data-day="@d" data-time="@slot.Time" hidden="@(d != 0 ? "hidden" : null)">
                                         @if (slot.Format is not null)
