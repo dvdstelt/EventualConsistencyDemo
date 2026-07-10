@@ -298,3 +298,7 @@ __pycache__/
 
 # LiteDb database
 .database
+
+html.bak/
+
+html/
