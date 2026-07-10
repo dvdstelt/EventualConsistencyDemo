@@ -2,21 +2,27 @@
 @inject TimeProvider TimeProvider
 @{
     var age = Model.Icons.FirstOrDefault(i => i.All(char.IsDigit));
-    var isSoon = Model.ReleaseDate.Date > TimeProvider.GetLocalNow().Date;
+    var today = TimeProvider.GetLocalNow().Date;
+    var release = Model.ReleaseDate.Date;
+    var isUpcoming = release > today;
+    // Not out yet, but its release falls within the 7-day booking window, so
+    // tickets can already be ordered.
+    var canOrder = isUpcoming && release <= today.AddDays(6);
+    var isRaffle = Model.TicketType == Shared.Entities.TicketType.DrawingTicket;
 }
 <a class="movie-card" href="/movies/@Uri.EscapeDataString(Model.UrlTitle)">
     <div class="poster">
-        @if (isSoon)
-        {
-            <span class="badge-corner soon">Soon</span>
-        }
-        else if (Model.TicketType == Shared.Entities.TicketType.DrawingTicket)
+        @if (isRaffle)
         {
             <span class="badge-corner koop">Raffle</span>
         }
-        else
+        else if (canOrder)
         {
             <span class="badge-corner available">Available</span>
+        }
+        else if (isUpcoming)
+        {
+            <span class="badge-corner soon">Soon</span>
         }
         <img src="/img/posters/@Model.Image" alt="@Model.Title" />
     </div>
