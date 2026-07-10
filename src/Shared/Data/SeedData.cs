@@ -161,7 +161,7 @@ namespace Shared.Data
                 PopularityScore = 600,
                 Category = MovieCategory.SpecialEvent,
             },
-            // Upcoming premieres. PremiereDate is in the future, so these are
+            // Upcoming premieres. ReleaseDate is in the future, so these are
             // flagged "Soon". Posters/backgrounds follow the UrlTitle, added later.
             new Movie
             {
@@ -175,7 +175,6 @@ namespace Shared.Data
                 Icons = [],
                 MovieDetails = "100 minutes | English, Dutch subtitles",
                 ReleaseDate = new DateTime(2026, 8, 15),
-                PremiereDate = new DateTime(2026, 8, 15),
                 Showtimes = ["13:00", "15:30", "18:00"],
                 PricePerTicket = 12,
                 PopularityScore = 780,
@@ -192,7 +191,6 @@ namespace Shared.Data
                 Icons = ["12", "violence"],
                 MovieDetails = "150 minutes | English, Dutch subtitles",
                 ReleaseDate = new DateTime(2026, 7, 17),
-                PremiereDate = new DateTime(2026, 7, 17),
                 Showtimes = ["14:00", "20:00"],
                 PricePerTicket = 16,
                 PopularityScore = 770,
@@ -209,7 +207,6 @@ namespace Shared.Data
                 Icons = ["12", "violence"],
                 MovieDetails = "130 minutes | English, Dutch subtitles",
                 ReleaseDate = new DateTime(2026, 7, 31),
-                PremiereDate = new DateTime(2026, 7, 31),
                 Showtimes = ["15:00", "18:30", "21:00"],
                 PricePerTicket = 14,
                 PopularityScore = 760,
@@ -226,7 +223,6 @@ namespace Shared.Data
                 Icons = ["9"],
                 MovieDetails = "135 minutes | English, Dutch subtitles",
                 ReleaseDate = new DateTime(2027, 5, 28),
-                PremiereDate = new DateTime(2027, 5, 28),
                 Showtimes = ["13:30", "17:00", "20:30"],
                 PricePerTicket = 13,
                 PopularityScore = 750,
@@ -243,7 +239,6 @@ namespace Shared.Data
                 Icons = ["16", "violence"],
                 MovieDetails = "128 minutes | English, Dutch subtitles",
                 ReleaseDate = new DateTime(2026, 9, 25),
-                PremiereDate = new DateTime(2026, 9, 25),
                 Showtimes = ["16:00", "21:15"],
                 PricePerTicket = 14,
                 PopularityScore = 740,

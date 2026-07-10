@@ -172,18 +172,18 @@
         }
         else
         {
-            var premiere = m.PremiereDate?.Date;
-            // First of the next 7 days on which tickets are on sale (>= premiere).
+            var release = m.ReleaseDate.Date;
+            // First of the next 7 days on which tickets are on sale (>= release).
             var firstOnSale = -1;
             for (var d = 0; d < 7; d++)
             {
-                if (premiere is null || DateTime.Today.AddDays(d) >= premiere) { firstOnSale = d; break; }
+                if (DateTime.Today.AddDays(d) >= release) { firstOnSale = d; break; }
             }
 
             <h2 class="font-trade">Find showtimes</h2>
-            @if (premiere is not null && premiere > DateTime.Today)
+            @if (release > DateTime.Today)
             {
-                <p class="sub">Tickets go on sale on @premiere.Value.ToString("d MMM yyyy", CultureInfo.InvariantCulture).</p>
+                <p class="sub">Tickets go on sale on @release.ToString("d MMM yyyy", CultureInfo.InvariantCulture).</p>
             }
             else
             {
@@ -197,7 +197,7 @@
                 @for (var d = 0; d < 7; d++)
                 {
                     var day = DateTime.Today.AddDays(d);
-                    var onSale = premiere is null || day >= premiere;
+                    var onSale = day >= release;
                     <button type="button" class="date-pill @(d == firstOnSale ? "active" : "")" data-day="@d" disabled="@(onSale ? null : "disabled")">
                         <div class="dow">@day.ToString("ddd", CultureInfo.InvariantCulture)</div>
                         <div class="day">@day.Day</div>
@@ -219,8 +219,8 @@
                         <div class="st-grid">
                             @for (var d = 0; d < 7; d++)
                             {
-                                // No showtimes before the movie premieres.
-                                if (premiere is not null && DateTime.Today.AddDays(d) < premiere) { continue; }
+                                // No showtimes before the movie's release date.
+                                if (DateTime.Today.AddDays(d) < release) { continue; }
                                 foreach (var slot in ShowtimesForDay(m.Id, d, ci))
                                 {
                                     <button class="st" data-day="@d" data-time="@slot.Time" hidden="@(d != firstOnSale ? "hidden" : null)">

@@ -24,8 +24,7 @@ public class DatabaseSeedTests
         var titanic = db.Movies.Single(m => m.UrlTitle == "titanic");
         Assert.Equal(MovieCategory.SpecialEvent, titanic.Category); // Category enum round-trips as text
 
-        Assert.Null(got.PremiereDate);                                             // already showing
-        Assert.NotNull(db.Movies.Single(m => m.UrlTitle == "toy-story-5").PremiereDate); // upcoming
+        Assert.Equal(new DateTime(2026, 8, 15), db.Movies.Single(m => m.UrlTitle == "toy-story-5").ReleaseDate); // upcoming
     }
 
     [Fact]

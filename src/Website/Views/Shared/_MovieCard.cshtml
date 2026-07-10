@@ -2,7 +2,7 @@
 @inject TimeProvider TimeProvider
 @{
     var age = Model.Icons.FirstOrDefault(i => i.All(char.IsDigit));
-    var isSoon = Model.PremiereDate is { } premiere && premiere.Date > TimeProvider.GetLocalNow().Date;
+    var isSoon = Model.ReleaseDate.Date > TimeProvider.GetLocalNow().Date;
 }
 <a class="movie-card" href="/movies/@Uri.EscapeDataString(Model.UrlTitle)">
     <div class="poster">

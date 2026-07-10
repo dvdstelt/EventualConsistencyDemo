@@ -16,11 +16,9 @@ namespace Shared.Entities
         public int Rating { get; set; }
         public List<string> Icons { get; set; } = [];
         public string MovieDetails { get; set; } = string.Empty;
+        // A ReleaseDate in the future means the movie isn't showing yet: it is
+        // flagged "Soon" and tickets only go on sale from that date.
         public DateTime ReleaseDate { get; set; }
-
-        // When the movie premieres. A future date means it isn't showing yet and
-        // is flagged "Soon"; null means it is already in the regular programme.
-        public DateTime? PremiereDate { get; set; }
 
         public double PricePerTicket { get; set; }
         public int PopularityScore { get; set; }
