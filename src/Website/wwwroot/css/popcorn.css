@@ -425,8 +425,10 @@ button.date-pill:hover { border-color: var(--muted); }
 .st:hover { background: #29323e; }
 .st .st-time { font-size: 21px; font-weight: 800; line-height: 1.05; }
 .st .st-end { font-size: 12px; font-weight: 500; color: var(--muted); }
+/* Overlays the top-right corner so it doesn't push the time down. */
 .st .st-badge {
-  align-self: flex-start; margin-bottom: 5px; font-size: 10px; font-weight: 800; letter-spacing: .5px;
+  position: absolute; top: 8px; right: 8px;
+  font-size: 10px; font-weight: 800; letter-spacing: .5px;
   text-transform: uppercase; background: rgba(255,255,255,.16); color: #fff; padding: 2px 7px; border-radius: 3px;
 }
 .st.sold { background: #141b23; cursor: not-allowed; }

@@ -29,9 +29,10 @@
     static readonly string[] TimePool =
         { "10:15", "11:30", "13:00", "14:15", "15:45", "17:00", "18:30", "20:00", "21:15", "22:30", "23:15" };
 
-    // A deterministic set of showtimes for a (movie, day): each day differs, but
-    // nothing reshuffles while the demo runs since it's seeded, not random.
-    static List<string> ShowtimesForDay(Guid movieId, int day)
+    // A deterministic set of showings for a (movie, day): the times differ per day
+    // and some get a format tag (IMAX / 4DX), all seeded so nothing reshuffles
+    // while the demo runs.
+    static List<(string Time, string? Format)> ShowtimesForDay(Guid movieId, int day)
     {
         uint seed = (uint)(day + 1) * 2654435761u;
         foreach (var b in movieId.ToByteArray()) { seed = seed * 31u + b; }
@@ -40,7 +41,15 @@
         var count = 3 + (int)(Next() % 3u);
         var picks = new SortedSet<int>();
         while (picks.Count < count) { picks.Add((int)(Next() % (uint)TimePool.Length)); }
-        return picks.Select(i => TimePool[i]).ToList();
+
+        var showings = new List<(string, string?)>();
+        foreach (var i in picks)
+        {
+            var roll = Next() % 6u;
+            string? format = roll == 0u ? "IMAX" : roll == 1u ? "4DX" : null;
+            showings.Add((TimePool[i], format));
+        }
+        return showings;
     }
 }
 
@@ -193,17 +202,15 @@
                         <div class="st-grid">
                             @for (var d = 0; d < 7; d++)
                             {
-                                var times = ShowtimesForDay(m.Id, d);
-                                for (var s = 0; s < times.Count; s++)
+                                foreach (var slot in ShowtimesForDay(m.Id, d))
                                 {
-                                    var st = times[s];
-                                    <button class="st" data-day="@d" data-time="@st" hidden="@(d != 0 ? "hidden" : null)">
-                                        @if (s == 1)
+                                    <button class="st" data-day="@d" data-time="@slot.Time" hidden="@(d != 0 ? "hidden" : null)">
+                                        @if (slot.Format is not null)
                                         {
-                                            <span class="st-badge">IMAX</span>
+                                            <span class="st-badge">@slot.Format</span>
                                         }
-                                        <span class="st-time">@st</span>
-                                        <span class="st-end">&rarr; @EndTime(st)</span>
+                                        <span class="st-time">@slot.Time</span>
+                                        <span class="st-end">&rarr; @EndTime(slot.Time)</span>
                                     </button>
                                 }
                             }
