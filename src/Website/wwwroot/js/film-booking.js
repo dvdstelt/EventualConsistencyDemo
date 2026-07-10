@@ -94,8 +94,22 @@
     });
   }
 
+  // Grey out today's showtimes whose start time has already passed; re-check
+  // periodically so they drop out while the demo is running.
+  function markPastShowtimes() {
+    const now = new Date();
+    const nowMinutes = now.getHours() * 60 + now.getMinutes();
+    document.querySelectorAll('#cinemaList .st[data-day="0"][data-time]').forEach(st => {
+      const [h, mn] = st.dataset.time.split(':').map(Number);
+      if (h * 60 + mn <= nowMinutes) st.classList.add('past');
+    });
+  }
+  markPastShowtimes();
+  setInterval(markPastShowtimes, 30000);
+
   // Clickable date strip: each day shows its own (server-rendered, stable) set
   // of showtimes; picking a day reveals that day's buttons and hides the rest.
+  // Days before a movie's premiere are disabled, so default to the first open one.
   const datePills = [...document.querySelectorAll('.date-strip .date-pill[data-day]')];
   if (datePills.length) {
     const showDay = (day) => {
@@ -104,13 +118,17 @@
         st.hidden = st.dataset.day !== String(day);
       });
     };
-    datePills.forEach(p => p.addEventListener('click', () => showDay(Number(p.dataset.day))));
-    showDay(0);
+    datePills.forEach(p => {
+      if (!p.disabled) p.addEventListener('click', () => showDay(Number(p.dataset.day)));
+    });
+    const firstOpen = datePills.find(p => !p.disabled);
+    if (firstOpen) showDay(Number(firstOpen.dataset.day));
   }
 
   // Wire every (available) showtime button to open the flow for its cinema/time.
   document.querySelectorAll('.st:not(.sold)').forEach(btn => {
     btn.addEventListener('click', () => {
+      if (btn.classList.contains('past')) return;   // showing has already started
       const block = btn.closest('.cinema-block');
       openFlow({
         theaterId: block.dataset.theaterId,

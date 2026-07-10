@@ -382,7 +382,8 @@ h1,h2,h3 { margin: 0 0 .5em; line-height: 1.15; }
 /* date strip + cinema divider */
 .date-strip { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 24px; }
 .date-pill { flex: none; text-align: center; border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 16px; min-width: 78px; cursor: pointer; background: var(--card); font: inherit; color: #fff; transition: background .15s ease; }
-button.date-pill:not(.active):hover { background: #29323e; }
+button.date-pill:not(.active):not(:disabled):hover { background: #29323e; }
+.date-pill:disabled { opacity: .45; cursor: not-allowed; }
 .date-pill.active { background: var(--yellow); color: #1c2129; border-color: var(--yellow); }
 .date-pill .dow { font-size: 12px; text-transform: uppercase; font-weight: 700; }
 .date-pill .day { font-size: 20px; font-weight: 800; }
@@ -431,9 +432,10 @@ button.date-pill:not(.active):hover { background: #29323e; }
   font-size: 10px; font-weight: 800; letter-spacing: .5px;
   text-transform: uppercase; background: rgba(255,255,255,.16); color: #fff; padding: 2px 7px; border-radius: 3px;
 }
-.st.sold { background: #141b23; cursor: not-allowed; }
-.st.sold:hover { background: #141b23; }
-.st.sold .st-time, .st.sold .st-end { color: var(--muted-2); }
+.st.sold, .st.past { background: #141b23; cursor: not-allowed; }
+.st.sold:hover, .st.past:hover { background: #141b23; }
+.st.sold .st-time, .st.sold .st-end,
+.st.past .st-time, .st.past .st-end { color: var(--muted-2); }
 
 /* ---------- Booking flow modal ---------- */
 .flow-overlay { position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,.78); display: flex; align-items: center; justify-content: center; padding: 20px; }

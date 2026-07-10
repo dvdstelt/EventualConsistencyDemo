@@ -172,8 +172,23 @@
         }
         else
         {
+            var premiere = m.PremiereDate?.Date;
+            // First of the next 7 days on which tickets are on sale (>= premiere).
+            var firstOnSale = -1;
+            for (var d = 0; d < 7; d++)
+            {
+                if (premiere is null || DateTime.Today.AddDays(d) >= premiere) { firstOnSale = d; break; }
+            }
+
             <h2 class="font-trade">Find showtimes</h2>
-            <p class="sub">Pick a cinema and date to see the available showtimes.</p>
+            @if (premiere is not null && premiere > DateTime.Today)
+            {
+                <p class="sub">Tickets go on sale on @premiere.Value.ToString("d MMM yyyy", CultureInfo.InvariantCulture).</p>
+            }
+            else
+            {
+                <p class="sub">Pick a cinema and date to see the available showtimes.</p>
+            }
 
             ViewData["DefaultCinemaName"] = "Rotterdam - Schouwburgplein";
             <partial name="_CinemaSearch" model="Model.Theaters" />
@@ -182,7 +197,8 @@
                 @for (var d = 0; d < 7; d++)
                 {
                     var day = DateTime.Today.AddDays(d);
-                    <button type="button" class="date-pill @(d == 0 ? "active" : "")" data-day="@d">
+                    var onSale = premiere is null || day >= premiere;
+                    <button type="button" class="date-pill @(d == firstOnSale ? "active" : "")" data-day="@d" disabled="@(onSale ? null : "disabled")">
                         <div class="dow">@day.ToString("ddd", CultureInfo.InvariantCulture)</div>
                         <div class="day">@day.Day</div>
                         <div class="mon">@day.ToString("MMM", CultureInfo.InvariantCulture)</div>
@@ -203,9 +219,11 @@
                         <div class="st-grid">
                             @for (var d = 0; d < 7; d++)
                             {
+                                // No showtimes before the movie premieres.
+                                if (premiere is not null && DateTime.Today.AddDays(d) < premiere) { continue; }
                                 foreach (var slot in ShowtimesForDay(m.Id, d, ci))
                                 {
-                                    <button class="st" data-day="@d" data-time="@slot.Time" hidden="@(d != 0 ? "hidden" : null)">
+                                    <button class="st" data-day="@d" data-time="@slot.Time" hidden="@(d != firstOnSale ? "hidden" : null)">
                                         @if (slot.Format is not null)
                                         {
                                             <span class="st-badge">@slot.Format</span>
