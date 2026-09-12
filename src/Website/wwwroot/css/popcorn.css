@@ -469,11 +469,27 @@ button.date-pill:not(.active):not(:disabled):hover { background: #29323e; }
 .flow-foot { display: flex; align-items: center; gap: 16px; border-top: 1px solid var(--line); padding-top: 18px; }
 .flow-foot .summary { font-size: 15px; }
 .flow-foot .btn { margin-left: auto; }
-.pay-methods { display: flex; flex-direction: column; gap: 10px; margin: 18px 0 24px; }
-.pay { display: flex; align-items: center; gap: 12px; border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; font-weight: 700; cursor: pointer; }
-.pay:has(input:checked) { border-color: var(--yellow); background: rgba(255,196,38,.08); }
 .confirm { text-align: center; padding: 8px 0; }
 .confirm .check { width: 64px; height: 64px; border-radius: 50%; background: var(--teal); color: #fff; font-size: 34px; line-height: 64px; margin: 0 auto 14px; }
+.confirm .cross { width: 64px; height: 64px; border-radius: 50%; background: var(--red); color: #fff; font-size: 34px; font-weight: 800; line-height: 64px; margin: 0 auto 14px; }
+.confirm .spinner {
+  width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 14px;
+  border: 5px solid var(--line); border-top-color: var(--yellow);
+  animation: spin 900ms linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+/* The order's state decides which of the three badges is on screen; the spinner
+   keeps turning while unconfirmed, because the reply may still arrive. */
+.confirm[data-state="pending"] .check,
+.confirm[data-state="pending"] .cross,
+.confirm[data-state="unconfirmed"] .check,
+.confirm[data-state="unconfirmed"] .cross,
+.confirm[data-state="confirmed"] .spinner,
+.confirm[data-state="confirmed"] .cross,
+.confirm[data-state="unreachable"] .spinner,
+.confirm[data-state="unreachable"] .check { display: none; }
+.confirm[data-state="unconfirmed"] .spinner { border-top-color: var(--red); }
+.confirm[data-state="unconfirmed"] p { color: #e3b9bd; }
 .confirm h3 { font-size: 22px; }
 .confirm p { color: var(--muted); max-width: 420px; margin: 0 auto 20px; }
 .confirm-status { list-style: none; padding: 0; max-width: 340px; margin: 0 auto 24px; text-align: left; }
@@ -484,7 +500,9 @@ button.date-pill:not(.active):not(:disabled):hover { background: #29323e; }
 .order-result { margin: 0 auto 22px; max-width: 380px; }
 .order-summary { width: 100%; border-collapse: collapse; font-size: 14px; color: #d4dae2; }
 .order-summary td { padding: 4px 10px; text-align: left; vertical-align: top; }
-.order-summary td:first-child { color: var(--muted); white-space: nowrap; }
+/* Label column only: the full-width note row ([colspan]) has to wrap. */
+.order-summary td:first-child:not([colspan]) { color: var(--muted); white-space: nowrap; }
+.order-summary td[colspan] { padding-top: 12px; color: var(--muted); }
 
 /* ---------- Raffle (Game of Thrones finale) ---------- */
 .raffle-login {

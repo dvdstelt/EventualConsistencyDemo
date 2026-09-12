@@ -1,4 +1,4 @@
-@using System.Web
+﻿@using System.Web
 @using System.Globalization
 @using Shared.Entities
 @model MovieViewModel
@@ -275,8 +275,8 @@
             <div class="flow-panel" data-panel="2" hidden>
                 <div class="confirm">
                     <div class="check">&#10003;</div>
-                    <h3>You're in the raffle!</h3>
-                    <p>Your entry has been registered on your account. There's nothing else you need to do.</p>
+                    <h3>Thanks, you're registered!</h3>
+                    <p>Your entry is on your account. There's nothing else you need to do &mdash; in time you'll get an email telling you whether you won any seats.</p>
                     <ul class="confirm-status" id="raffleStatus">
                         <li class="on">Entry received</li>
                         <li>Registered on your account</li>
@@ -295,7 +295,7 @@
             <tr><td><strong>Movie</strong></td><td>{movieTitle}</td></tr>
             <tr><td><strong>Cinema</strong></td><td>{theater}</td></tr>
             <tr><td><strong>Time</strong></td><td>{time}</td></tr>
-            <tr><td colspan="2">If you win, you'll be emailed your tickets on <strong>{drawingDate}</strong>.</td></tr>
+            <tr><td colspan="2">The draw is on <strong>{drawingDate}</strong>. If you're picked, your tickets are emailed to you.</td></tr>
         </table>
     </template>
 }
@@ -306,8 +306,7 @@ else
             <button class="flow-close" id="flowClose" aria-label="Close" type="button">&times;</button>
             <div class="flow-steps">
                 <span class="fstep active" data-step="1">1 &middot; Seats</span>
-                <span class="fstep" data-step="2">2 &middot; Payment</span>
-                <span class="fstep" data-step="3">3 &middot; Confirmation</span>
+                <span class="fstep" data-step="2">2 &middot; Confirmation</span>
             </div>
 
             <div class="flow-panel" data-panel="1">
@@ -322,37 +321,30 @@ else
                 </div>
                 <div class="flow-foot">
                     <div class="summary"><strong id="seatCount">0</strong> seats &middot; &euro;<span id="seatTotal">0,00</span></div>
-                    <button class="btn btn-yellow" id="toPay" disabled>Continue to payment</button>
+                    <button class="btn btn-yellow" id="placeOrder" disabled>Confirm &amp; pay</button>
                 </div>
             </div>
 
+            @* One panel, three states (see film-booking.js): while the back-end reply is
+               outstanding it stays "pending", after a few seconds it degrades to
+               "unconfirmed" - the order is safely on the queue, but the seats cannot be
+               promised - and it only becomes "confirmed" when the real reply arrives,
+               however long that takes. *@
             <div class="flow-panel" data-panel="2" hidden>
-                <h3>Payment</h3>
-                <p class="flow-meta">Your reservation is held for 10 minutes.</p>
-                <div class="pay-methods">
-                    <label class="pay"><input type="radio" name="pay" checked> iDEAL</label>
-                    <label class="pay"><input type="radio" name="pay"> Credit card</label>
-                    <label class="pay"><input type="radio" name="pay"> Popcorn Giftcard</label>
-                </div>
-                <div class="flow-foot">
-                    <div class="summary">To pay: &euro;<span id="payTotal">0,00</span></div>
-                    <button class="btn btn-yellow" id="doPay">Pay now</button>
-                </div>
-            </div>
-
-            <div class="flow-panel" data-panel="3" hidden>
-                <div class="confirm">
+                <div class="confirm" id="orderConfirm" data-state="pending">
+                    <div class="spinner" aria-hidden="true"></div>
                     <div class="check">&#10003;</div>
-                    <h3>Thanks! Your tickets are on their way</h3>
-                    <p>We've received your order. Your e-tickets are sent by email once the payment is processed.</p>
+                    <div class="cross">!</div>
+                    <h3 id="confirmTitle">Confirming your order&hellip;</h3>
+                    <p id="confirmText">Hang on, we're reserving your seats with the ticketing service.</p>
                     <ul class="confirm-status" id="confirmStatus">
-                        <li class="on">Payment received</li>
+                        <li>Order received</li>
                         <li>Seats confirmed</li>
                         <li>E-tickets sent</li>
                         <li>Confirmation &amp; reminder scheduled</li>
                     </ul>
                     <div id="orderDetails" class="order-result"></div>
-                    <button class="btn btn-yellow" id="flowDone">Close</button>
+                    <button class="btn btn-yellow" id="flowDone" hidden>Close</button>
                 </div>
             </div>
         </div>

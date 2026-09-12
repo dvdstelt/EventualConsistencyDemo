@@ -1,4 +1,7 @@
 // Raffle sign-up flow (single logged-in user, so no login/email step).
+// Unlike the regular booking flow, this confirmation is composed by the website
+// itself (MovieTickets.ReportOnLottery) and promises nothing more than an email
+// after the draw, so it completes even when the back-end endpoint is down.
 // The confirmation reveals the post-registration work as separate asynchronous
 // steps (received -> registered on account -> confirmation sent -> draw
 // notification scheduled) as the visual for the messaging story. The actual
@@ -53,7 +56,7 @@
       theatersContext_group: selection.theaterId,
       times_group: selection.time,
       numberOfTickets: 1
-    });
+    }).catch(err => console.error(err.toString()));
 
     showStep(2);
     const steps = overlay.querySelectorAll('#raffleStatus li');

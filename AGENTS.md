@@ -66,6 +66,16 @@ queue is NServiceBus LearningTransport in `.learningtransport/`. Both are gitign
   The website injects a plain `IMessageSession` into `TicketHub`, so `Website/Program.cs`
   aliases the keyed session as the default registration. Keep that alias if you touch the
   hosting setup.
+- **The demo switch is stopping the `Server` endpoint.** The regular booking flow's
+  confirmation is driven entirely by the real `OrderedRegularTicket` reply: with the
+  back-end down the reply never comes, and after five seconds the panel degrades to
+  "we can't confirm your seats yet" (`film-booking.js`). It never fakes success, and
+  it never declares failure either — the command is durably queued, so the listener
+  stays armed and the very same panel flips to "confirmed" when the endpoint is
+  started mid-talk. Do not "fix" that timeout into an error path. The raffle
+  (`film-raffle.js`) is the deliberate contrast: its confirmation is composed by the
+  website itself (`MovieTickets.ReportOnLottery`) and promises nothing but an email
+  after the draw, so it completes happily on a back-end that is down.
 - Transport and persistence are `LearningTransport`/`LearningPersistence` — for demos
   only, never production.
 

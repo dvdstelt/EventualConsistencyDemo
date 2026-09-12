@@ -1,9 +1,14 @@
-// Film booking flow: seat map -> payment -> confirmation.
-// The confirmation deliberately reveals the post-payment work as separate
-// asynchronous steps (payment received -> seats reserved -> e-tickets sent ->
-// reminder scheduled). That is the visual for the messaging story. The actual
-// order is submitted over SignalR (see registerMovieTicket in site.js), and the
-// real server confirmation is rendered into #orderDetails when it returns.
+// Film booking flow: seat map -> confirmation.
+// The confirmation is never faked: it stays "pending" until the back-end's real
+// reply arrives over SignalR (OrderedRegularTicket). If the back-end endpoint is
+// not running, the reply never comes and after CONFIRM_TIMEOUT_MS the panel
+// degrades to "unconfirmed" - the command is safely on the queue, so the order is
+// not lost, but the seats cannot be promised and the visitor is left hanging.
+// That is the point of the demo: compare it with the raffle (film-raffle.js),
+// which is designed to promise nothing more than an email later and therefore
+// completes happily on a back-end that is down.
+// The listener stays armed, so starting the back-end mid-demo flips the very same
+// panel to "confirmed" without the visitor doing anything.
 (function () {
   const flow = document.getElementById('flow');
   if (!flow) return;
@@ -17,11 +22,28 @@
   const flowMeta = document.getElementById('flowMeta');
   const seatCountEl = document.getElementById('seatCount');
   const seatTotalEl = document.getElementById('seatTotal');
-  const payTotalEl = document.getElementById('payTotal');
-  const toPay = document.getElementById('toPay');
+  const placeOrder = document.getElementById('placeOrder');
+
+  const confirmPanel = document.getElementById('orderConfirm');
+  const confirmTitle = document.getElementById('confirmTitle');
+  const confirmText = document.getElementById('confirmText');
+  const confirmSteps = [...document.querySelectorAll('#confirmStatus li')];
+  const orderDetails = document.getElementById('orderDetails');
+  const flowDone = document.getElementById('flowDone');
+
+  // How long to wait for the back-end reply before admitting we cannot confirm.
+  const CONFIRM_TIMEOUT_MS = 5000;
 
   let picked = new Set();
   let selection = null; // { theaterId, theaterName, time }
+
+  // Only the submission that is currently on screen may update the panel: closing
+  // the overlay (or starting another order) invalidates the previous one, so a late
+  // reply is dropped instead of landing in the wrong confirmation.
+  let currentOrder = 0;
+  let awaitingReply = false;
+  let unconfirmedTimer = null;
+  let stepTimer = null;
 
   const money = (n) => n.toFixed(2).replace('.', ',');
 
@@ -62,8 +84,8 @@
     const n = picked.size;
     seatCountEl.textContent = n;
     seatTotalEl.textContent = money(n * price);
-    payTotalEl.textContent = money(n * price);
-    toPay.disabled = n === 0;
+    placeOrder.disabled = n === 0;
+    placeOrder.textContent = n === 0 ? 'Confirm & pay' : 'Confirm & pay \u20ac' + money(n * price);
   }
 
   function openFlow(sel) {
@@ -72,17 +94,51 @@
     buildSeats();
     seatCountEl.textContent = '0';
     seatTotalEl.textContent = '0,00';
-    toPay.disabled = true;
+    placeOrder.disabled = true;
+    placeOrder.textContent = 'Confirm & pay';
     flowMeta.textContent = movieTitle + ' · ' + sel.theaterName + ' · ' + sel.time;
-    document.getElementById('orderDetails').innerHTML = '';
+    resetConfirmation();
     showStep(1);
     flow.hidden = false;
     document.body.style.overflow = 'hidden';
   }
 
   function closeFlow() {
+    // Walking away from an unconfirmed order abandons it as far as the screen is
+    // concerned; the command keeps its own course in the back-end regardless.
+    currentOrder++;
+    awaitingReply = false;
+    clearTimers();
     flow.hidden = true;
     document.body.style.overflow = '';
+  }
+
+  function clearTimers() {
+    clearTimeout(unconfirmedTimer);
+    clearInterval(stepTimer);
+  }
+
+  function resetConfirmation() {
+    clearTimers();
+    awaitingReply = false;
+    orderDetails.innerHTML = '';
+    confirmSteps.forEach(li => li.classList.remove('on'));
+    flowDone.hidden = true;
+    confirmPanel.dataset.state = 'pending';
+    confirmTitle.textContent = 'Confirming your order\u2026';
+    confirmText.textContent = "Hang on, we're reserving your seats with the ticketing service.";
+  }
+
+  // Light the remaining status lines one by one: with the reply in hand, the rest of
+  // the back-end work (tickets issued, mail sent) really is under way.
+  function revealRemainingSteps() {
+    let i = confirmSteps.findIndex(li => !li.classList.contains('on'));
+    if (i < 0) return;
+    stepTimer = setInterval(() => {
+      if (i >= confirmSteps.length) { clearInterval(stepTimer); return; }
+      confirmSteps[i].classList.add('on');
+      i++;
+    }, 900);
   }
 
   function showStep(n) {
@@ -142,26 +198,60 @@
   document.getElementById('flowDone').addEventListener('click', closeFlow);
   flow.addEventListener('click', (e) => { if (e.target === flow) closeFlow(); });
 
-  toPay.addEventListener('click', () => showStep(2));
+  placeOrder.addEventListener('click', () => {
+    const order = ++currentOrder;
+    resetConfirmation();
+    awaitingReply = true;
+    showStep(2);
 
-  document.getElementById('doPay').addEventListener('click', () => {
     // Submit the real order over SignalR -> NServiceBus.
     registerMovieTicket({
       movieId: movieId,
       theatersContext_group: selection.theaterId,
       times_group: selection.time,
       numberOfTickets: picked.size
+    }).then(() => {
+      if (order !== currentOrder) return;
+      // The website accepted the order and the command is on the queue. Whether the
+      // back-end is there to handle it is a different question entirely.
+      confirmSteps[0].classList.add('on');
+      unconfirmedTimer = setTimeout(() => showUnconfirmed(order), CONFIRM_TIMEOUT_MS);
+    }).catch(err => {
+      console.error(err.toString());
+      if (order !== currentOrder) return;
+      awaitingReply = false;
+      showUnreachable();
     });
+  });
 
-    showStep(3);
-    // Reveal the post-purchase async steps one by one, as independent messages
-    // being processed after the payment is confirmed.
-    const steps = document.querySelectorAll('#confirmStatus li');
-    let i = 1; // first item ("Payment received") already .on
-    const timer = setInterval(() => {
-      if (i >= steps.length) { clearInterval(timer); return; }
-      steps[i].classList.add('on');
-      i++;
-    }, 900);
+  function showUnconfirmed(order) {
+    if (order !== currentOrder) return;
+    confirmPanel.dataset.state = 'unconfirmed';
+    confirmTitle.textContent = "We can't confirm your seats yet";
+    confirmText.textContent = "Your order has been received and it won't get lost, but the ticketing service hasn't confirmed it yet. You'll be emailed as soon as your tickets are issued \u2014 please don't travel to the cinema until you have them.";
+    flowDone.hidden = false;
+  }
+
+  function showUnreachable() {
+    confirmPanel.dataset.state = 'unreachable';
+    confirmTitle.textContent = "We couldn't place your order";
+    confirmText.textContent = 'Nothing was reserved and nothing was charged. Please reload the page and try again.';
+    flowDone.hidden = false;
+  }
+
+  // The real back-end reply, whenever it turns up: seconds later, or minutes later
+  // because the endpoint was only just started.
+  onRegularTicket(ticket => {
+    if (!awaitingReply || flow.hidden) return;
+    awaitingReply = false;
+    clearTimers();
+    confirmPanel.dataset.state = 'confirmed';
+    confirmTitle.textContent = 'Thanks! Your tickets are on their way';
+    confirmText.textContent = 'Your seats are confirmed. The e-tickets are emailed to you.';
+    const tmpl = document.getElementById('regularticket');
+    if (tmpl) { orderDetails.innerHTML = tmpl.innerHTML.supplant(ticket); }
+    confirmSteps[0].classList.add('on');
+    revealRemainingSteps();
+    flowDone.hidden = false;
   });
 })();
